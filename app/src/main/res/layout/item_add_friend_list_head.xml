@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_add_phone_contact"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_1"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/px_70"
+            android:layout_height="@dimen/px_70"
+            android:layout_marginLeft="@dimen/px_26"
+            android:layout_marginTop="@dimen/px_14"
+            android:layout_marginBottom="@dimen/px_14"
+            android:src="@mipmap/ic_phone_contact" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_1"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/px_30"
+            android:layout_marginTop="@dimen/px_14"
+            android:layout_marginBottom="@dimen/px_14"
+            android:textColor="#4d5359"
+            android:textSize="@dimen/px_30"
+            android:text="添加手机联系人"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_80"
+        android:background="#eaeaea">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/px_34"
+            android:textColor="#aab1b8"
+            android:textSize="@dimen/px_30"
+            android:text="已经添加我的人" />
+        <TextView
+            android:id="@+id/tv_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/px_26"
+            android:textColor="#aab1b8"
+            android:textSize="@dimen/px_30"
+            android:text="换一批"/>
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_user_photo"
+        android:layout_width="@dimen/px_70"
+        android:layout_height="@dimen/px_70"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/px_14"
+        android:layout_marginLeft="@dimen/px_26"
+        android:layout_marginTop="@dimen/px_14"
+        android:src="@mipmap/ic_default_aimi_1"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/px_14"
+        android:layout_marginLeft="@dimen/px_30"
+        android:layout_marginTop="@dimen/px_14"
+        android:layout_toRightOf="@id/iv_user_photo"
+        android:text="同学"
+        android:textColor="#4d5359"
+        android:textSize="@dimen/px_30"/>
+
+    <Button
+        android:id="@+id/btn_accept"
+        android:layout_width="@dimen/px_116"
+        android:layout_height="@dimen/px_50"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/px_30"
+        android:background="@drawable/shape_btn_login"
+        android:text="接受"
+        android:textColor="@color/white"
+        android:textSize="@dimen/px_24"/>
+
+</RelativeLayout>

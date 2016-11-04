@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+    <com.ybg.yxym.yueshow.view.CircleImageView
+        android:id="@+id/iv_user_photo"
+        android:layout_width="@dimen/px_70"
+        android:layout_height="@dimen/px_70"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/px_14"
+        android:layout_marginLeft="@dimen/px_26"
+        android:layout_marginTop="@dimen/px_14"
+        android:src="@mipmap/ic_circle_photo"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/px_14"
+        android:layout_marginLeft="@dimen/px_30"
+        android:layout_marginTop="@dimen/px_14"
+        android:layout_toRightOf="@id/iv_user_photo"
+        android:text="同学"
+        android:textColor="#4d5359"
+        android:textSize="@dimen/px_30"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_2"
+        android:layout_below="@id/iv_user_photo"
+        android:background="#dedede"/>
+
+</RelativeLayout>

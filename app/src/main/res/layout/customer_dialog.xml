@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="250dp"
+        android:layout_height="118dp"
+        android:background="@drawable/shape_dialog"
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="标题"
+            android:textColor="#5d6268"/>
+
+        <LinearLayout
+            android:id="@+id/ll_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_neg"
+                android:layout_width="97dp"
+                android:layout_height="35dp"
+                android:layout_marginRight="11dp"
+                android:background="@drawable/selector_dialog_button"
+                android:text="取消"
+                android:textColor="#7dcf2d"/>
+
+            <Button
+                android:id="@+id/btn_pos"
+                android:layout_width="97dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="11dp"
+                android:background="@drawable/selector_dialog_button"
+                android:text="确定"
+                android:textColor="#7dcf2d"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/ll_btn"
+            android:gravity="center"
+            android:paddingBottom="25dp"
+            android:text="信息"
+            android:textColor="#5d6268"
+            android:textSize="15dp"/>
+    </RelativeLayout>
+
+</LinearLayout>

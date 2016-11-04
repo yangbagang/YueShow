@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_120">
+
+        <com.ybg.yxym.yueshow.view.CircleImageView
+            android:id="@+id/iv_user_photo"
+            android:layout_width="@dimen/px_80"
+            android:layout_height="@dimen/px_80"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/px_30"
+            android:src="@mipmap/ic_default_girl"/>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px_30"
+            android:layout_toRightOf="@id/iv_user_photo"
+            android:layout_marginTop="@dimen/px_20"
+            android:textSize="@dimen/px_18"
+            android:textColor="#aab1b8"
+            android:text="邓肯"/>
+
+        <TextView
+            android:id="@+id/tv_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:textSize="@dimen/px_20"
+            android:layout_marginBottom="@dimen/px_20"
+            android:textColor="#4d5359"
+            android:text="邓肯"
+            android:layout_alignLeft="@+id/tv_name"
+            android:layout_alignStart="@+id/tv_name" />
+
+        <ImageView
+            android:id="@+id/iv_praise"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/px_20"
+            android:layout_marginRight="@dimen/px_30"
+            android:layout_width="@dimen/px_38"
+            android:layout_height="@dimen/px_36"
+            android:src="@mipmap/ic_show_comment"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/px_20"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/px_30"
+            android:text="1小时前"/>
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_2"
+        android:background="#ecedf3"></View>
+    <View
+        android:id="@+id/v_white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_98"
+        android:background="@color/white"
+        android:visibility="gone"></View>
+</LinearLayout>

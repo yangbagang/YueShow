@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <include layout="@layout/item_show_h_line"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_88">
+        <RelativeLayout
+            android:id="@+id/rl_fridend_show_all"
+            android:layout_width="@dimen/px_80"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/px_50">
+            <ImageView
+                android:layout_width="@dimen/px_42"
+                android:layout_height="@dimen/px_36"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/ic_all"/>
+            <View
+                android:id="@+id/v_all"
+                android:layout_alignParentBottom="true"
+                android:layout_width="@dimen/px_80"
+                android:layout_height="@dimen/px_4"
+                android:background="@color/color_main"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_fridend_show_fans"
+            android:layout_width="@dimen/px_80"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/px_66">
+            <ImageView
+                android:layout_width="@dimen/px_42"
+                android:layout_height="@dimen/px_36"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/ic_fans"/>
+            <View
+                android:id="@+id/v_fans"
+                android:layout_alignParentBottom="true"
+                android:layout_width="@dimen/px_80"
+                android:layout_height="@dimen/px_4"
+                android:background="@color/color_main"
+                android:visibility="gone"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_fridend_show_care"
+            android:layout_width="@dimen/px_80"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/px_66">
+            <ImageView
+                android:layout_width="@dimen/px_42"
+                android:layout_height="@dimen/px_36"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/ic_focus"/>
+            <View
+                android:id="@+id/v_care"
+                android:layout_alignParentBottom="true"
+                android:layout_width="@dimen/px_80"
+                android:layout_height="@dimen/px_4"
+                android:background="@color/color_main"
+                android:visibility="gone"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_2"
+        android:background="#ecedf3"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_30"/>
+</LinearLayout>

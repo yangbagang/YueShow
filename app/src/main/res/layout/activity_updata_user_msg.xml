@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/met_msg"
+        android:paddingTop="@dimen/px_18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/px_26"
+        android:textSize="@dimen/px_24"
+        app:met_primaryColor="@color/color_main"
+        app:met_floatingLabel="normal"
+        app:met_singleLineEllipsis="true"
+        app:met_minCharacters="1"
+        app:met_maxCharacters="20"
+        app:met_errorColor="@color/color_main"
+        android:hint="请输入..." />
+
+</LinearLayout>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="@dimen/px_600"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shape_bg_login"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/px_60"
+        android:paddingRight="@dimen/px_60">
+
+        <EditText
+            android:id="@+id/et_register_mobile"
+            style="@style/et_30pt_afb6bc_4d5359"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px_60"
+            android:layout_marginTop="@dimen/px_50"
+            android:background="@null"
+            android:drawableLeft="@mipmap/ic_mobile"
+            android:drawablePadding="@dimen/px_30"
+            android:hint="@string/login_account"
+            android:inputType="number"
+            android:maxLength="11"
+            android:paddingLeft="@dimen/px_20"/>
+
+        <View
+            style="@style/horizontal_line"
+            android:layout_marginTop="@dimen/px_10"/>
+
+        <EditText
+            android:id="@+id/et_register_password"
+            style="@style/et_30pt_afb6bc_4d5359"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px_60"
+            android:layout_marginTop="@dimen/px_34"
+            android:background="@null"
+            android:drawableLeft="@mipmap/ic_password"
+            android:drawablePadding="@dimen/px_30"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:maxLength="20"
+            android:paddingLeft="@dimen/px_20"/>
+
+        <View
+            style="@style/horizontal_line"
+            android:layout_marginTop="@dimen/px_10"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px_60"
+            android:layout_marginTop="@dimen/px_30">
+
+            <EditText
+                android:id="@+id/et_register_captcha"
+                style="@style/et_30pt_afb6bc_4d5359"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/px_60"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="@string/input_captcha"
+                android:inputType="number"
+                android:maxLength="6"
+                android:paddingLeft="@dimen/px_20"/>
+
+            <Button
+                android:id="@+id/btn_get_captcha"
+                style="@style/btn_24pt_7dcf2c_white"
+                android:layout_width="@dimen/px_172"
+                android:layout_height="@dimen/px_56"
+                android:text="@string/get_captcha"
+                android:onClick="onClick"/>
+
+        </LinearLayout>
+
+        <View
+            style="@style/horizontal_line"
+            android:layout_marginTop="@dimen/px_10"/>
+
+        <Button
+            android:id="@+id/btn_register"
+            style="@style/btn_30pt_7dcf2c_white"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px_88"
+            android:layout_marginBottom="@dimen/px_56"
+            android:layout_marginTop="@dimen/px_50"
+            android:text="@string/register"
+            android:onClick="onClick"/>
+    </LinearLayout>
+</RelativeLayout>

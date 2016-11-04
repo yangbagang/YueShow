@@ -1,0 +1,98 @@
+<resources>
+    <string name="app_name">悦秀</string>
+
+    <string name="navigation_drawer_open">打开侧滑菜单</string>
+    <string name="navigation_drawer_close">关闭侧滑菜单</string>
+    <string name="action_settings">设置</string>
+
+    <string name="pull_refresh_text">下拉刷新</string>
+    <string name="release_refresh_text">释放更新</string>
+    <string name="refreshing_text">加载中...</string>
+    <string name="tab_home">悦秀厅</string>
+    <string name="tab_charts">悦美榜</string>
+    <string name="tab_find">发现</string>
+    <string name="tab_friend">朋友</string>
+
+    <!--登陆页面-->
+    <string name="login_account">手机号/悦美号</string>
+    <string name="login">登陆</string>
+    <string name="forget_password">忘记密码</string>
+    <string name="register_now">立即注册</string>
+    <string name="or">或</string>
+    <string name="password">密码</string>
+    <string name="input_mobile_error">请输入正确的11位手机号</string>
+    <string name="input_password_error">请输入正确的6-20位密码</string>
+    <string name="input_captcha">输入验证码</string>
+    <string name="get_captcha">获取验证码</string>
+    <string name="register">注册</string>
+    <string name="input_captcha_error">请输入正确的验证码</string>
+    <string name="get_captcha_later">%dS重新获取</string>
+    <string name="get_captcha_again">重新获取</string>
+    <string name="user_name">用户名</string>
+    <string name="choose_birthday">请选择生日</string>
+    <string name="choose_gender">请选择性别</string>
+    <string name="complete_register">完成注册</string>
+    <string name="gender_choose_tips">性别一旦确认,不可修改哦~</string>
+    <string name="request_error">请求失败,请稍后重试!</string>
+
+    <!--图片选择器-->
+    <string name="folder_all">所有照片</string>
+    <string name="preview">预览</string>
+    <string name="msg_no_camera">没有系统相机</string>
+    <string name="msg_amount_limit">已经达到最高选择数量</string>
+
+    <string name="pickerview_cancel">取消</string>
+    <string name="pickerview_submit">确定</string>
+    <string name="pickerview_year">年</string>
+    <string name="pickerview_month">月</string>
+    <string name="pickerview_day">日</string>
+    <string name="pickerview_hours">时</string>
+    <string name="pickerview_minutes">分</string>
+    <string name="pickerview_seconds">秒</string>
+
+    <string name="tv_time">时长:</string>
+    <string name="tv_rate">码率:</string>
+    <string name="more_music">更多音乐:</string>
+    <string name="tv_more_music">更多音乐</string>
+    <string name="lead_in">开启导入:</string>
+    <string name="tv_watermark">水印:</string>
+    <string name="tv_need_edit_page">是否需要编辑界面:</string>
+    <string name="camera_font_on">摄像头方向</string>
+    <string name="beauty_skin_on">美颜是否开启</string>
+    <string name="beauty_skin_progress">美颜比例</string>
+    <string name="default_time">默认时长为8秒</string>
+    <string name="defalut_rate">默认码率为2兆,码率越小质量越差，合成更快</string>
+    <string name="defalut_watermark">传1和2，分别代表右上，右下，默认1</string>
+    <string name="defalut_beauty_progress">默认的美颜参数设置，1-100，不设默认为80</string>
+    <string name="btn_record">record</string>
+    <string name="output_video_size">输出分辨率：</string>
+    <!--开始直播页面-->
+    <string name="live_title_hint">#写一个好话题可获得更多关注#</string>
+    <string name="live_conversation_hint">请选择板块</string>
+    <string name="live_select_hint">(必选)></string>
+    <string name="live_start">立即直播</string>
+    <string name="live_edit_cover">编辑封面</string>
+    <!--直播话题板块-->
+    <string name="live_topic_doumeng">逗萌乐悠悠</string>
+    <string name="live_topic_shishi">温湿暖潮潮</string>
+    <string name="live_topic_rensheng">人生要BIBI</string>
+    <string name="live_topic_qizhi">有颜有气质</string>
+    <string name="live_topic_changyan">唱演兼懂言</string>
+    <string name="live_topic_huixiu">会秀更会美</string>
+    <string name="live_title_select_topic">选择一个版块</string>
+    <string name="error_code_prefix">错误码：</string>
+    <!--拍摄入口-->
+    <string name="film_entey_upload_photo">上传图片</string>
+    <string name="film_entey_upload_video">上传视频</string>
+    <string name="film_entey_photograph">拍照</string>
+    <string name="film_entey_live">直播</string>
+    <string name="film_entey_video">视频</string>
+    <string name="init_video_record_fail">初始化失败</string>
+    <string name="photo_process_music">配乐</string>
+    <string name="photo_process_text">题字</string>
+    <string name="photos_process_stickers">贴纸</string>
+    <string name="photos_process_filter">滤镜</string>
+    <string name="edit">编辑</string>
+    <!--好友通讯录搜索-->
+    <string name="no_results">没有搜索到匹配的内容</string>
+</resources>

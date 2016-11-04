@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/content_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.ybg.yxym.yueshow.activity.MainActivity"
+    tools:showIn="@layout/app_bar_main">
+
+    <com.ybg.yxym.yueshow.view.AdvanceViewPager
+        android:id="@+id/vp_main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp" />
+
+    <com.ybg.yxym.yueshow.view.CircleImageView
+        android:id="@+id/iv_tab_publish"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/ic_publish" />
+    <RelativeLayout
+        android:id="@+id/rl_tab_publish"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClick">
+
+        <com.ybg.yxym.yueshow.view.CircleImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:src="@color/color_main" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/ic_publish" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_main_tab"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:paddingTop="2dp">
+
+        <RelativeLayout
+            android:id="@+id/rl_tab_menu_0"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="onClick">
+
+            <ImageView
+                android:id="@+id/iv_tab_menu_0"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@mipmap/ic_tab_home" />
+
+            <TextView
+                android:id="@+id/tv_tab_menu_0"
+                style="@style/text_main_tab"
+                android:layout_below="@+id/iv_tab_menu_0"
+                android:text="@string/tab_home" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="@dimen/px_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_tab_menu_1"
+            android:layout_width="@dimen/px_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="onClick">
+
+            <ImageView
+                android:id="@+id/iv_tab_menu_1"
+                android:layout_width="@dimen/px_44"
+                android:layout_height="@dimen/px_44"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@mipmap/ic_tab_charts" />
+
+            <TextView
+                android:id="@+id/tv_tab_menu_1"
+                style="@style/text_main_tab"
+                android:layout_below="@+id/iv_tab_menu_1"
+                android:text="@string/tab_charts" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</RelativeLayout>

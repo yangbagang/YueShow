@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:id="@+id/lv_user"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <!-- 浮动布局 -->
+        <LinearLayout
+            android:id="@+id/ll_floating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <include layout="@layout/item_list_user_floating_bar"/>
+
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

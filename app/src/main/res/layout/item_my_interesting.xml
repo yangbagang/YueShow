@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_biaoqian"
+        android:layout_width="@dimen/px_144"
+        android:layout_height="@dimen/px_54"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shape_biaoqian_blue_bg"
+        android:gravity="center"
+        android:text="篮球"
+        android:textColor="@color/white"
+        android:textSize="@dimen/px_30"/>
+
+</RelativeLayout>

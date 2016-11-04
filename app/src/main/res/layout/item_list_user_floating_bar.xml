@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="horizontal">
+
+    <RelativeLayout
+        android:id="@+id/rl_dynamic"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/px_88"
+        android:layout_weight="1">
+
+        <View
+            android:id="@+id/v_dynamic"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px_4"
+            android:layout_alignParentBottom="true"
+            android:background="@color/color_f84f21"/>
+
+        <TextView
+            android:id="@+id/tv_dynamic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="动态"
+            android:textColor="#afb6bc"
+            android:textSize="@dimen/px_30"/>
+
+        <TextView
+            android:id="@+id/tv_dynamic_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px_16"
+            android:layout_toRightOf="@id/tv_dynamic"
+            android:text="15"
+            android:textColor="@color/color_7dcf2c"
+            android:textSize="@dimen/px_20"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_join_game"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/px_88"
+        android:layout_weight="1">
+
+        <View
+            android:id="@+id/v_join_game"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px_4"
+            android:layout_alignParentBottom="true"
+            android:background="#ecedf3"/>
+
+        <TextView
+            android:id="@+id/tv_join_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="参加比赛"
+            android:textColor="#afb6bc"
+            android:textSize="@dimen/px_30"/>
+
+        <TextView
+            android:id="@+id/tv_join_game_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px_16"
+            android:layout_toRightOf="@id/tv_join_game"
+            android:text="15"
+            android:textColor="@color/color_7dcf2c"
+            android:textSize="@dimen/px_20"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_achievement"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/px_88"
+        android:layout_weight="1">
+
+        <View
+            android:id="@+id/v_achievement"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px_4"
+            android:layout_alignParentBottom="true"
+            android:background="#ecedf3"/>
+
+        <TextView
+            android:id="@+id/tv_achievement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:text="成就"
+            android:textColor="#afb6bc"
+            android:textSize="@dimen/px_30"/>
+
+        <TextView
+            android:id="@+id/tv_achievement_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px_16"
+            android:layout_toRightOf="@id/tv_achievement"
+            android:text="15"
+            android:textColor="@color/color_7dcf2c"
+            android:textSize="@dimen/px_20"/>
+    </RelativeLayout>
+
+</LinearLayout>

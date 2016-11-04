@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_118"
+        android:background="#eaeaea">
+        <RelativeLayout
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px_82"
+            android:layout_marginRight="@dimen/px_10"
+            android:layout_marginLeft="@dimen/px_10"
+            android:background="@drawable/shape_edittext_white_bg">
+
+            <ImageView
+                android:id="@+id/iv_search_logo"
+                android:layout_width="@dimen/px_30"
+                android:layout_height="@dimen/px_30"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/px_48"
+                android:src="@mipmap/ic_search_logo"/>
+            <EditText
+                android:id="@+id/et_im_center_search"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px_82"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/iv_search_logo"
+                android:layout_marginRight="@dimen/px_128"
+                android:layout_marginLeft="@dimen/px_20"
+                android:hint="搜悦美号或手机号"
+                android:textSize="@dimen/px_24"
+                android:maxLines="1"
+                android:background="@color/white" />
+            <TextView
+                android:id="@+id/tv_im_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/px_30"
+                android:textColor="#545866"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/px_48"
+                android:text="搜索"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_qinyoutuan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/px_18"
+        android:paddingBottom="@dimen/px_18"
+        android:paddingLeft="@dimen/px_26"
+        android:background="@color/white">
+        <ImageView
+            android:id="@+id/iv_1"
+            android:layout_width="@dimen/px_70"
+            android:layout_height="@dimen/px_70"
+            android:src="@mipmap/ic_qinyoutuan"/>
+        <TextView
+            android:layout_toRightOf="@id/iv_1"
+            android:layout_marginLeft="@dimen/px_26"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/px_30"
+            android:textColor="#ff85b9"
+            android:text="亲友团" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_2"
+        android:background="#dedede"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_zhinangtuan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/px_18"
+        android:paddingBottom="@dimen/px_18"
+        android:paddingLeft="@dimen/px_26"
+        android:background="@color/white">
+        <ImageView
+            android:id="@+id/iv_2"
+            android:layout_width="@dimen/px_70"
+            android:layout_height="@dimen/px_70"
+            android:src="@mipmap/ic_zhinangtuan"/>
+        <TextView
+            android:layout_toRightOf="@id/iv_2"
+            android:layout_marginLeft="@dimen/px_26"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/px_30"
+            android:textColor="#9acffb"
+            android:text="智囊团" />
+    </RelativeLayout>
+</LinearLayout>

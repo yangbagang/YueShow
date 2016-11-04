@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/sliding_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="@color/color_main"
+        app:tabSelectedTextColor="#545866"
+        app:tabTextColor="#AFB6BC"
+        app:tabGravity="fill"
+        app:tabMode="fixed" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_1"
+        android:background="#ecedf3"></View>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_88"
+        android:gravity="center"
+        android:textSize="@dimen/px_24"
+        android:textColor="#afb6bc"
+        android:background="#ecedf3"
+        android:text="美力值12万=人气值5万+活力值3万+亲善值4万"
+        android:visibility="gone"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>
