@@ -4,11 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.text.TextUtils
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-
+import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.utils.DateUtil
 import com.ybg.yxym.yb.utils.LogUtil
 import com.ybg.yxym.yueshow.R
@@ -23,24 +19,17 @@ import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.gallery.MultiImageSelectorActivity
 import com.ybg.yxym.yueshow.view.pickerview.OptionsPopupWindow
 import com.ybg.yxym.yueshow.view.pickerview.TimePopupWindow
-
-import java.util.Date
+import kotlinx.android.synthetic.main.activity_complete_data.*
+import java.util.*
 
 /**
  * 完善资料页面
  */
 class CompleteDataActivity : BaseActivity() {
 
-    private var m_ivUserAvatar: ImageView? = null
-    private var m_etUserNickName: EditText? = null
-    private var m_tvUserBirthday: TextView? = null
-    private var m_tvUserGender: TextView? = null
-    private var m_btnCompleteRegister: Button? = null
-    private var mUserName: String? = null//用户手机号
-    private var mPassword: String? = null//密码
-    private var mNickName: String? = null//昵称
-    private val mAvatar: String? = null//头像
-    private val mMotto: String? = null//签名
+    private var mNickName: String = ""//昵称
+    private val mAvatar: String = ""//头像
+    private val mMotto: String = ""//签名
     private var mSex = -1//性别
     private val mType = 0//登录类型(0 默认 1 微信 2 qq 3 微博)
     private var mBirthday: String? = null//生日
@@ -52,40 +41,33 @@ class CompleteDataActivity : BaseActivity() {
     }
 
     override fun setUpView() {
-        m_ivUserAvatar = findViewById(R.id.iv_user_avatar) as ImageView
-        m_etUserNickName = findViewById(R.id.et_user_nickName) as EditText
-        m_tvUserBirthday = findViewById(R.id.tv_user_birthday) as TextView
-        m_tvUserGender = findViewById(R.id.tv_user_gender) as TextView
-        m_btnCompleteRegister = findViewById(R.id.btn_complete_register) as Button
+
     }
 
     override fun init() {
-        if (intent != null) {
-            mUserName = intent.getStringExtra(IntentExtra.EXTRA_MOBILE)
-            mPassword = intent.getStringExtra(IntentExtra.EXTRA_PASSWORD)
-        }
+
     }
 
     fun onClick(view: View) {
         when (view.id) {
             R.id.iv_user_avatar -> MultiImageSelectorActivity.start(mContext!!, true, 1,
-        MultiImageSelectorActivity.MODE_SINGLE)
-            R.id.tv_user_birthday -> OnoptionsUtils.showDateSelect(mContext!!, m_tvUserBirthday!!,
-        object : TimePopupWindow.OnTimeSelectListener {
-                override fun onTimeSelect(date: Date) {
-                    m_tvUserBirthday!!.text = DateUtil.format(date)
-                    mBirthday = DateUtil.format(date)
-                }
-            })
-            R.id.tv_user_gender -> OnoptionsUtils.showGardenSelect(mContext!!, m_tvUserGender!!,
-        object : OptionsPopupWindow.OnOptionsSelectListener {
-                override fun onOptionsSelect(options1: Int, option2: Int, options3: Int, options4: Int) {
-                    m_tvUserGender!!.text = if (options1 == 1) "男" else "女"
-                    mSex = options1
-                }
-            })
+                    MultiImageSelectorActivity.MODE_SINGLE)
+            R.id.tv_user_birthday -> OnoptionsUtils.showDateSelect(mContext!!, tv_user_birthday,
+                    object : TimePopupWindow.OnTimeSelectListener {
+                        override fun onTimeSelect(date: Date) {
+                            tv_user_birthday.text = DateUtil.format(date)
+                            mBirthday = DateUtil.format(date)
+                        }
+                    })
+            R.id.tv_user_gender -> OnoptionsUtils.showGardenSelect(mContext!!, tv_user_gender,
+                    object : OptionsPopupWindow.OnOptionsSelectListener {
+                        override fun onOptionsSelect(options1: Int, option2: Int, options3: Int, options4: Int) {
+                            tv_user_gender.text = if (options1 == 1) "男" else "女"
+                            mSex = options1
+                        }
+                    })
             R.id.btn_complete_register -> {
-                mNickName = getTextViewString(m_etUserNickName!!)
+                mNickName = getTextViewString(et_user_nickName)
                 if (TextUtils.isEmpty(mNickName)) {
                     ToastUtil.show("请输入用户名!")
                     return
@@ -98,7 +80,7 @@ class CompleteDataActivity : BaseActivity() {
                     ToastUtil.show("请选择性别!")
                     return
                 }
-                userRegister()
+                completeUserInfo()
             }
         }
     }
@@ -108,20 +90,23 @@ class CompleteDataActivity : BaseActivity() {
         if (requestCode == IntentExtra.RequestCode.REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK) {
             if (data == null) return
             val path = data.getStringExtra(MultiImageSelectorActivity.EXTRA_RESULT)
-            ImageLoaderUtils.instance.loadFileBitmap(m_ivUserAvatar!!, path)
+            ImageLoaderUtils.instance.loadFileBitmap(iv_user_avatar!!, path)
         }
     }
 
-    private fun userRegister() {
-        SendRequest.userRegister(mContext!!, mUserName!!, mPassword!!, object : OkCallback<String>
+    private fun completeUserInfo() {
+        hideKeyboard()
+        val token = mApplication.token
+        SendRequest.completeUserInfo(mContext!!, token, mBirthday!!, mNickName, "${mSex}", mAvatar, object : OkCallback<String>
         (OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 LogUtil.d(TAG + ": " + response)
-                if (!TextUtils.isEmpty(response)) {
+                val resultBean = mGson!!.fromJson(response, JSonResultBean::class.java)
+                if (resultBean.isSuccess) {
                     setResult(Activity.RESULT_OK)
                     finish()
                 } else {
-
+                    ToastUtil.show(resultBean.message)
                 }
             }
 

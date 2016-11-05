@@ -36,31 +36,26 @@ import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.AndroidPermissonRequest
 import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
-import com.ybg.yxym.yueshow.view.AdvanceViewPager
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-    private val showApplication = ShowApplication.instance!!
 
-    private var m_ivTabMenu0: ImageView? = null
-    private var m_tvTabMenu0: TextView? = null
-    private var m_ivTabMenu1: ImageView? = null
-    private var m_tvTabMenu1: TextView? = null
-    private var mViewPager: AdvanceViewPager? = null
+    private val showApplication = ShowApplication.instance!!
 
     private var mCurrentTab = 0
     private val mTabViews = ArrayList<View>()
     private val mTabTexts = ArrayList<View>()
-    private var mAdapter: ViewPagerAdapter? = null
+    private lateinit var mAdapter: ViewPagerAdapter
     private val mList = ArrayList<Fragment>()
 
     //左侧菜单
-    private var headView: View? = null
-    private var userImage: ImageView? = null
-    private var userName: TextView? = null
-    private var userLevel: TextView? = null
-    private var navHeader: LinearLayout? = null
+    private lateinit var headView: View
+    private lateinit var userImage: ImageView
+    private lateinit var userName: TextView
+    private lateinit var userLevel: TextView
+    private lateinit var navHeader: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,23 +133,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun setUpView() {
         //左侧菜单
         headView = nav_view.getHeaderView(0)
-        userImage = headView!!.findViewById(R.id.userImage) as ImageView
-        userName = headView!!.findViewById(R.id.userName) as TextView
-        userLevel = headView!!.findViewById(R.id.userLevel) as TextView
-        navHeader = headView!!.findViewById(R.id.navHeader) as LinearLayout
+        userImage = headView.findViewById(R.id.userImage) as ImageView
+        userName = headView.findViewById(R.id.userName) as TextView
+        userLevel = headView.findViewById(R.id.userLevel) as TextView
+        navHeader = headView.findViewById(R.id.navHeader) as LinearLayout
 
-        m_ivTabMenu0 = findViewById(R.id.iv_tab_menu_0) as ImageView
-        m_tvTabMenu0 = findViewById(R.id.tv_tab_menu_0) as TextView
-        m_ivTabMenu1 = findViewById(R.id.iv_tab_menu_1) as ImageView
-        m_tvTabMenu1 = findViewById(R.id.tv_tab_menu_1) as TextView
-        mViewPager = findViewById(R.id.vp_main_content) as AdvanceViewPager
-
-        mTabViews.add(m_ivTabMenu0!!)
-        mTabViews.add(m_ivTabMenu1!!)
-        mTabTexts.add(m_tvTabMenu0!!)
-        mTabTexts.add(m_tvTabMenu1!!)
-        m_ivTabMenu0!!.isSelected = true
-        m_tvTabMenu0!!.isSelected = true
+        mTabViews.add(iv_tab_menu_0!!)
+        mTabViews.add(iv_tab_menu_1!!)
+        mTabTexts.add(tv_tab_menu_0!!)
+        mTabTexts.add(tv_tab_menu_1!!)
+        iv_tab_menu_0!!.isSelected = true
+        tv_tab_menu_0!!.isSelected = true
         /** 6.0 动态申请权限 外部存储和相机 */
         AndroidPermissonRequest.verifyStoragePermissions(this@MainActivity)
     }
@@ -164,14 +153,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mAdapter = ViewPagerAdapter(supportFragmentManager)
         mList.add(HallFragment.newInstance())
         mList.add(ChartsFragment.newInstance())
-        mAdapter!!.setDataList(mList)
-        mViewPager!!.adapter = mAdapter
-        mViewPager!!.addOnPageChangeListener(mPageChangeListener)
+        mAdapter.setDataList(mList)
+        vp_main_content!!.adapter = mAdapter
+        vp_main_content!!.addOnPageChangeListener(mPageChangeListener)
 
         if (showApplication.hasLogin()) {
             loadUserInfo()
         }
-        headView!!.setOnClickListener {
+        headView.setOnClickListener {
             //首先关闭左侧菜单
             val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
             drawer.closeDrawer(GravityCompat.START)
@@ -201,8 +190,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun onClick(view: View) {
         when (view.id) {
-            R.id.rl_tab_menu_0 -> mViewPager!!.currentItem = 0
-            R.id.rl_tab_menu_1 -> mViewPager!!.currentItem = 1
+            R.id.rl_tab_menu_0 -> vp_main_content!!.currentItem = 0
+            R.id.rl_tab_menu_1 -> vp_main_content!!.currentItem = 1
             R.id.rl_tab_publish -> EntryActivity.start(this@MainActivity)
         }
     }
@@ -228,16 +217,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (TextUtils.isEmpty(userBase.avatar)) {
             //utils.loadBitmap(userImage, R.mipmap.ic_default_girl);
         } else {
-            utils.loadBitmap(userImage!!, userBase.avatar)
+            utils.loadBitmap(userImage, userBase.avatar)
         }
         if (TextUtils.isEmpty(userBase.avatarBG)) {
             //navHeader.setBackgroundResource(R.drawable.side_nav_bar);
         } else {
             val bitmap = utils.loadBitmap(userBase.avatarBG)
-            navHeader!!.background = BitmapDrawable(resources, bitmap)
+            navHeader.background = BitmapDrawable(resources, bitmap)
         }
-        userName!!.text = userBase.nickName
-        userLevel!!.text = userBase.ymMemo
+        userName.text = userBase.nickName
+        userLevel.text = userBase.ymMemo
     }
 
     fun loadUserInfo() {
@@ -267,16 +256,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         private val TAG = "MainActivity:"
 
         var instance: MainActivity? = null
-            get() {
-                if (instance == null) {
-                    synchronized(MainActivity::class.java) {
-                        if (instance == null) {
-                            instance = MainActivity()
-                        }
-                    }
-                }
-                return instance!!
-            }
 
         fun start(context: Context) {
             val starter = Intent(context, MainActivity::class.java)

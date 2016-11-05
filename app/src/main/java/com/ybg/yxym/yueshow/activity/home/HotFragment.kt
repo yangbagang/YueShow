@@ -25,8 +25,8 @@ import java.util.ArrayList
 
 class HotFragment : BaseFragment() {
 
-    private var mListView: ListView? = null
-    private var mRefreshLayout: BGARefreshLayout? = null
+    private lateinit var mListView: ListView
+    private lateinit var mRefreshLayout: BGARefreshLayout
     /**
      * 一次加载数据的条数
      */
@@ -38,7 +38,7 @@ class HotFragment : BaseFragment() {
     private val TYPE_REFRESH = 0//下拉刷新
     private val TYPE_LOADMORE = 1//上拉加载
 
-    private var mAdapter: HotShowAdapter? = null
+    private lateinit var mAdapter: HotShowAdapter
     private var hotEntityList: MutableList<YueShow> = ArrayList()
 
     override fun setContentViewId(): Int {
@@ -49,16 +49,16 @@ class HotFragment : BaseFragment() {
         mListView = mRootView!!.findViewById(R.id.rv_list_view) as ListView
         mRefreshLayout = mRootView!!.findViewById(R.id.rl_fresh_layout) as BGARefreshLayout
 
-        mRefreshLayout!!.setRefreshViewHolder(BGANormalRefreshViewHolder(mContext!!, true))
-        mRefreshLayout!!.setDelegate(mDelegate)
-        mRefreshLayout!!.beginRefreshing()
+        mRefreshLayout.setRefreshViewHolder(BGANormalRefreshViewHolder(mContext!!, true))
+        mRefreshLayout.setDelegate(mDelegate)
+        mRefreshLayout.beginRefreshing()
     }
 
     override fun init() {
         mAdapter = HotShowAdapter(mContext!!)
-        mAdapter!!.setDataList(hotEntityList)
-        mListView!!.adapter = mAdapter
-        mListView!!.onItemClickListener = onItemClickListener
+        mAdapter.setDataList(hotEntityList)
+        mListView.adapter = mAdapter
+        mListView.onItemClickListener = onItemClickListener
     }
 
     /**
@@ -94,21 +94,17 @@ class HotFragment : BaseFragment() {
 
             when (msg.what) {
                 0 -> {
-                    if (mRefreshLayout != null) {
-                        mRefreshLayout!!.endRefreshing()
-                    }
+                    mRefreshLayout.endRefreshing()
                     hotEntityList.clear()
                     hotEntityList.addAll(list)
                 }
                 1 -> {
-                    if (mRefreshLayout != null) {
-                        mRefreshLayout!!.endLoadingMore()
-                    }
+                    mRefreshLayout.endLoadingMore()
                     hotEntityList.addAll(list)
                 }
             }
-            mAdapter!!.setDataList(hotEntityList)
-            mAdapter!!.notifyDataSetChanged()
+            mAdapter.setDataList(hotEntityList)
+            mAdapter.notifyDataSetChanged()
         }
     }
 
@@ -160,9 +156,7 @@ class HotFragment : BaseFragment() {
             }
 
             override fun onFailure(e: Throwable) {
-                if (mRefreshLayout != null) {
-                    mRefreshLayout!!.endRefreshing()
-                }
+                mRefreshLayout.endRefreshing()
             }
         })
     }

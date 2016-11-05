@@ -17,8 +17,12 @@ object HttpUrl {
     private val USER_REGISTER = "/userBase/register"
     //用户登录
     private val USER_LOGIN = "/userBase/login"
-    //Refresh Token
+    //用户基本信息
     private val GET_USER_BASE = "/userBase/getUserBase"
+    //用户个性化信息
+    private val GET_USER_INFO = "/userInfo/getUserInfo"
+    //用户个性化信息
+    private val COMPLETE_USER_INFO = "/userBase/completeData"
     /*直播列表*/
     private val LIVE_LIST = "/live/v1/live/list"
     /*create live*/
@@ -74,6 +78,12 @@ object HttpUrl {
 
     val userBaseUrl: String
         get() = ROOT_URL + GET_USER_BASE
+
+    val userInfoUrl: String
+        get() = ROOT_URL + GET_USER_INFO
+
+    val userCompleteUrl: String
+        get() = ROOT_URL + GET_USER_INFO
 
     val liveListUrl: String
         get() = ROOT_URL + LIVE_LIST

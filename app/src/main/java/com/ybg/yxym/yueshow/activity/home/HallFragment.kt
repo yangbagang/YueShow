@@ -20,8 +20,8 @@ import java.util.ArrayList
  */
 class HallFragment : BaseFragment() {
 
-    private var slidingTabs: TabLayout? = null
-    private var vpMainContent: ViewPager? = null
+    private lateinit var slidingTabs: TabLayout
+    private lateinit var vpMainContent: ViewPager
 
     private val mFragment = ArrayList<Fragment>()
     private var adapter: ContentViewPagerAdapter? = null
@@ -40,12 +40,12 @@ class HallFragment : BaseFragment() {
         mFragment.add(FriendShowFragment.instance!!)
         mFragment.add(FreshFragment.instance!!)
         adapter = ContentViewPagerAdapter(childFragmentManager)
-        vpMainContent!!.adapter = adapter
+        vpMainContent.adapter = adapter
 
-        slidingTabs!!.addTab(slidingTabs!!.newTab().setText("最热"))
-        slidingTabs!!.addTab(slidingTabs!!.newTab().setText("友秀圈"))
-        slidingTabs!!.addTab(slidingTabs!!.newTab().setText("最鲜"))
-        slidingTabs!!.setupWithViewPager(vpMainContent)
+        slidingTabs.addTab(slidingTabs.newTab().setText("最热"))
+        slidingTabs.addTab(slidingTabs.newTab().setText("友秀圈"))
+        slidingTabs.addTab(slidingTabs.newTab().setText("最鲜"))
+        slidingTabs.setupWithViewPager(vpMainContent)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -96,8 +96,30 @@ object SendRequest {
      * @param token
      */
     fun getUserBase(tag: Context, token: String, callback: OkCallback<*>) {
-        mParams!!.put("token", token)
-        OkHttpProxy.postJson(HttpUrl.userBaseUrl, tag, appendParams(), callback)
+        val params = mapOf<String, String>("token" to token)
+        OkHttpProxy.post(HttpUrl.userBaseUrl, tag, params, callback)
+    }
+
+    /**
+     * 1.6 获取用户个性化信息
+     *
+     * @param token
+     */
+    fun getUserInfo(tag: Context, token: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token)
+        OkHttpProxy.post(HttpUrl.userInfoUrl, tag, params, callback)
+    }
+
+    /**
+     * 1.7 补充用户个性化信息
+     *
+     * @param token
+     */
+    fun completeUserInfo(tag: Context, token: String, birthday: String, nickName: String,
+                         sex: String, avatar: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "birthday" to birthday,
+                "nickName" to nickName, "sex" to sex, "avatar" to  avatar)
+        OkHttpProxy.post(HttpUrl.userInfoUrl, tag, params, callback)
     }
 
     /**
