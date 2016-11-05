@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_photo_list"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_120"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/rl_process_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_380"
+        android:layout_alignParentBottom="true">
+
+        <RadioGroup
+            android:id="@+id/rg_process_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px_98"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_process_filter"
+                style="@style/text_16pt_aab1b8"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_process_bg"
+                android:button="@null"
+                android:checked="true"
+                android:drawableTop="@drawable/selector_photo_filter"
+                android:gravity="center"
+                android:padding="@dimen/px_10"
+                android:text="@string/photos_process_filter" />
+
+            <RadioButton
+                android:id="@+id/rb_process_stickers"
+                style="@style/text_16pt_aab1b8"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_process_bg"
+                android:button="@null"
+                android:drawableTop="@drawable/selector_photo_stickers"
+                android:gravity="center"
+                android:padding="@dimen/px_10"
+                android:text="@string/photos_process_stickers" />
+
+            <RadioButton
+                android:id="@+id/rb_process_text"
+                style="@style/text_16pt_aab1b8"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_process_bg"
+                android:button="@null"
+                android:drawableTop="@drawable/selector_photo_text"
+                android:gravity="center"
+                android:padding="@dimen/px_10"
+                android:text="@string/photo_process_text" />
+
+            <RadioButton
+                android:id="@+id/rb_process_music"
+                style="@style/text_16pt_aab1b8"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_process_bg"
+                android:button="@null"
+                android:drawableTop="@drawable/selector_photo_music"
+                android:gravity="center"
+                android:padding="@dimen/px_10"
+                android:text="@string/photo_process_music" />
+        </RadioGroup>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_process_tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/rg_process_layout" />
+    </RelativeLayout>
+
+    <com.ybg.yxym.yueshow.gpuimage.GPUImageView
+        android:id="@+id/iv_photo_process"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/rl_process_layout"
+        android:layout_below="@id/rv_photo_list" />
+
+</RelativeLayout>

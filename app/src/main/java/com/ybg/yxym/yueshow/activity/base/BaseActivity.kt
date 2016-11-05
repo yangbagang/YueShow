@@ -123,7 +123,7 @@ abstract class BaseActivity : AppCompatActivity() {
         false
     }
 
-    protected fun onHandler(msg: Message) {//处理handler发送的消息,具体操作在子类中实现
+    protected open fun onHandler(msg: Message) {//处理handler发送的消息,具体操作在子类中实现
 
     }
 

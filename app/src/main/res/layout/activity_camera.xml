@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+    <!--自定义拍照相机-->
+    <SurfaceView
+        android:id="@+id/sv_take_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:onClick="onClick"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_camera_top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_88"
+        android:background="@color/color_de4942">
+
+        <ImageView
+            android:id="@+id/iv_camera_close"
+            android:layout_width="@dimen/px_56"
+            android:layout_height="@dimen/px_44"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/px_30"
+            android:src="@mipmap/ic_camera_close"
+            android:onClick="onClick"/>
+
+        <ImageView
+            android:id="@+id/iv_switch_camera"
+            android:layout_width="@dimen/px_56"
+            android:layout_height="@dimen/px_44"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/px_30"
+            android:src="@mipmap/ic_camera_change"
+            android:onClick="onClick"/>
+
+        <ImageView
+            android:id="@+id/iv_camera_flash"
+            android:layout_width="@dimen/px_56"
+            android:layout_height="@dimen/px_44"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/px_60"
+            android:layout_toLeftOf="@+id/iv_switch_camera"
+            android:src="@mipmap/ic_camera_flash"
+            android:onClick="onClick"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_take_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/iv_take_photo"
+            android:layout_width="@dimen/px_172"
+            android:layout_height="@dimen/px_172"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:background="@drawable/shape_take_photo"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_entry_photograph_logo"
+            android:onClick="onClick"/>
+
+    </RelativeLayout>
+
+
+    <com.ymyx.yxyuemei.widget.CameraGrid
+        android:id="@+id/cg_camera_grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/rl_take_parent"
+        android:layout_below="@id/rl_camera_top"/>
+
+    <View
+        android:id="@+id/view_focus_index"
+        android:layout_width="@dimen/px_80"
+        android:layout_height="@dimen/px_80"
+        android:background="@drawable/shape_camera_focus"
+        android:visibility="invisible"/>
+
+
+</RelativeLayout>
