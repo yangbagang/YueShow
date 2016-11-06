@@ -1,23 +1,18 @@
 package com.ybg.yxym.yueshow.http
 
 import android.content.Context
+import android.util.Pair
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.ybg.yxym.yb.utils.LogUtil
 import com.ybg.yxym.yueshow.http.builder.GetRequestBuilder
 import com.ybg.yxym.yueshow.http.callback.OkCallback
+import com.ybg.yxym.yueshow.http.listener.UploadListener
+import java.io.File
 
 import java.util.IdentityHashMap
 
-/**
- * @author Jax
- * *
- * @version V1.0.0
- * *
- * @Created on 2016/1/20 15:06.
- * * 后期json内容在封装下
- */
 object SendRequest {
     /**
      * 默认配置了 api_key 这个参数("api_key", "B8EA0154BFE72EFD720A")在post方法中
@@ -118,36 +113,36 @@ object SendRequest {
     fun completeUserInfo(tag: Context, token: String, birthday: String, nickName: String,
                          sex: String, avatar: String, callback: OkCallback<*>) {
         val params = mapOf<String, String>("token" to token, "birthday" to birthday,
-                "nickName" to nickName, "sex" to sex, "avatar" to  avatar)
-        OkHttpProxy.post(HttpUrl.userInfoUrl, tag, params, callback)
+                "nickName" to nickName, "sex" to sex, "avatar" to avatar)
+        OkHttpProxy.post(HttpUrl.userCompleteUrl, tag, params, callback)
     }
 
     /**
-     * 2.1 Live  List
-     * path: /live/v1/live/list
-     * method: GET
-     * params:
-
-     * @param username username string required
-     * *
-     * @param token    token string required
-     * *
-     * @param type     token_type int required
-     * *
-     * @param start    start int start from 0
-     * *
-     * @param count    count int default is 10
-     * *
-     * @param order    order int hot/latest etc
+     * 1.8 第三方用户登录，目前仅支持QQ，微信，新浪
+     *
+     * @param openid 手机号
+     * @param platform 密码
+     * @param nickName
+     * @param userImage
+     * @param sex
      */
-    fun getLiveList(tag: Context, username: String, token: String, type: Int, start: Int, count: Int, order: Int, callback: OkCallback<*>) {
-        mParams!!.put("username", username)
-        mParams!!.put("token", token)
-        mParams!!.put("token_type", type)
-        mParams!!.put("start", start)
-        mParams!!.put("count", count)
-        mParams!!.put("order", order)
-        OkHttpProxy.get(HttpUrl.liveListUrl, tag, params, callback)
+    fun umLogin(tag: Context, openid: String, platform: String, nickName: String, userImage: String,
+                sex: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("openid" to openid, "platform" to platform, "nickName" to nickName,
+                "userImage" to userImage, "sex" to sex)
+        OkHttpProxy.post(HttpUrl.umLoginUrl, tag, params, callback)
+    }
+
+    /**
+     * 2.1 获取美秀列表
+     *
+     * @param pageNum  第几页
+     * @param pageSize  每页显示多少条
+     * @param type  1最新 2最热
+     */
+    fun getLiveList(tag: Context, pageNum: Int, pageSize: Int, type: Int, callback: OkCallback<*>) {
+        val params = mapOf<String, Int>("pageNum" to pageNum, "pageSize" to pageSize, "type" to type)
+        OkHttpProxy.post(HttpUrl.liveListUrl, tag, params, callback)
     }
 
     /**
@@ -279,24 +274,17 @@ object SendRequest {
     }
 
     /**
-     * 2.7 get category list
-     * path: /live/v1/category/list
-     * method: GET
-     * params: None
+     * 2.7 获得板块列表
      */
     fun getCategoryList(tag: Context, callback: OkCallback<*>) {
         OkHttpProxy.get(HttpUrl.categoryListUrl, tag, params, callback)
     }
 
     /**
-     * 2.8 Create Topic
-     * path: /live/v1/topic/create
-     * method: POST
-     * params: None
+     * 2.8 获得话题列表
      */
-
-    fun createTopic(tag: Context, callback: OkCallback<*>) {
-        OkHttpProxy.postJson(HttpUrl.createTopicUrl, tag, appendParams(), callback)
+    fun getTopicList(tag: Context, callback: OkCallback<*>) {
+        OkHttpProxy.postJson(HttpUrl.topicListUrl, tag, appendParams(), callback)
     }
 
     /**
@@ -600,4 +588,17 @@ object SendRequest {
 
     }
 
+    /**
+     * 上传文件
+     */
+    fun uploadFile(tag: Context, folder: String, file: File, uploadListener: UploadListener) {
+        try {
+            val uploadBuilder = OkHttpProxy.upload().url(HttpUrl.FILE_SERVER_UPLOAD).tag(tag)
+            uploadBuilder.addParams("folder", folder)
+                    .file(Pair("Filedata", file))
+                    .start(uploadListener)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 }

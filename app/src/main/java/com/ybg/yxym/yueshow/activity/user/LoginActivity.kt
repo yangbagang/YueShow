@@ -123,6 +123,57 @@ class LoginActivity : BaseActivity() {
         override fun onComplete(share_media: SHARE_MEDIA, i: Int, map: Map<String, String>) {
             LogUtil.d(TAG + ": Authorize succeed")
             LogUtil.d(TAG + " " + mGson?.toJson(map))
+            var openid = ""
+            var nickName = ""
+            var sex = ""
+            var profile_image_url = ""
+            var platform = ""
+
+            when (share_media) {
+                SHARE_MEDIA.QQ -> {
+                    openid = map["openid"]!!
+                    nickName = map["screenname"]!!
+                    profile_image_url = map["profile_image_url"]!!
+                    sex = map["gender"]!!
+                    platform = "QQ"
+                }
+                SHARE_MEDIA.WEIXIN -> {
+                    openid = map["openid"]!!
+                    nickName = map["screenname"]!!
+                    profile_image_url = map["profile_image_url"]!!
+                    sex = map["gender"]!!
+                    platform = "WX"
+                }
+                SHARE_MEDIA.SINA -> {
+                    openid = map["id"]!!
+                    nickName = map["screen_name"]!!
+                    profile_image_url = map["profile_image_url"]!!
+                    sex = map["gender"]!!
+                    platform = "SINA"
+                }
+            }
+            SendRequest.umLogin(mContext!!, openid, platform, nickName, profile_image_url, sex, object : OkCallback<String>
+            (OkStringParser()) {
+                override fun onSuccess(code: Int, response: String) {
+                    val resultBean = mGson!!.fromJson(response, JSonResultBean::class.java)
+                    if (resultBean.isSuccess) {
+                        //登录成功
+                        mApplication.token = resultBean.data
+                        MainActivity.instance?.loadUserInfo()
+
+                        finish()
+                    } else {
+                        //登录失败
+                        LogUtil.d("登录失败：" + resultBean.message)
+                        ToastUtil.show(resultBean.message)
+                    }
+                }
+
+                override fun onFailure(e: Throwable) {
+                    LogUtil.d("登陆失败：" + e.message)
+                    ToastUtil.show("登陆失败，请稍候再试。")
+                }
+            })
         }
 
         override fun onError(share_media: SHARE_MEDIA, i: Int, throwable: Throwable) {

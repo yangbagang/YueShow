@@ -45,4 +45,8 @@
     <!-- 视频聊天中小窗口移动时的阈值 -->
     <dimen name="video_smallview_move_thresholdX">30dp</dimen>
     <dimen name="video_smallview_move_thresholdY">40dp</dimen>
+
+    <!-- process button -->
+    <dimen name="corner_radius">2dp</dimen>
+    <dimen name="layer_padding">3dp</dimen>
 </resources>

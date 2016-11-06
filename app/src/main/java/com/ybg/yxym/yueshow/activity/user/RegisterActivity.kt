@@ -136,6 +136,7 @@ class RegisterActivity : BaseActivity() {
                 if (resultBean.isSuccess) {
                     mApplication.token = resultBean.data
                     MainActivity.instance?.loadUserInfo()
+                    CompleteDataActivity.start(mContext!!)
                     finish()
                 } else {
                     LogUtil.d("注册失败：" + resultBean.message)

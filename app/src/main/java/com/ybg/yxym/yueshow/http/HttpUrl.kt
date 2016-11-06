@@ -8,6 +8,9 @@ object HttpUrl {
 
     //测试服务器地址
     val API_HOST_DEBUG = "http://192.168.12.101:8080/ma"
+    val FILE_SERVER_UPLOAD = "http://183.57.41.230/FileServer/upload"
+    val FILE_SERVER_PREVIEW = "http://183.57.41.230/FileServer/preview"
+
     val ROOT_URL = API_HOST_DEBUG
     //获取验证码
     private val GET_CAPTCHA = "/system/getCaptcha"
@@ -23,6 +26,8 @@ object HttpUrl {
     private val GET_USER_INFO = "/userInfo/getUserInfo"
     //用户个性化信息
     private val COMPLETE_USER_INFO = "/userBase/completeData"
+    //第三方用户登录
+    private val UM_USER_LOGIN = "/userBase/umLogin"
     /*直播列表*/
     private val LIVE_LIST = "/live/v1/live/list"
     /*create live*/
@@ -36,9 +41,9 @@ object HttpUrl {
     /*forward live*/
     private val FORWARD_LIVE = "/live/v1/live/Forward"
     /*Category list*/
-    private val CATEGORY_LIST = "/live/v1/category/list"
+    private val CATEGORY_LIST = "/ruiBar/list"
     /*Create Topic*/
-    private val CREATE_TOPIC = "/live/v1/topic/create"
+    private val TOPIC_LIST = "/ruiEvent/list"
 
 
     /**用户搜索列表 */
@@ -63,7 +68,7 @@ object HttpUrl {
 
     private val USER_COMMENT_LIST = "/live/v1/live/comments"
 
-
+    //用户模块
     val userLoginUrl: String
         get() = ROOT_URL + USER_LOGIN
 
@@ -83,7 +88,10 @@ object HttpUrl {
         get() = ROOT_URL + GET_USER_INFO
 
     val userCompleteUrl: String
-        get() = ROOT_URL + GET_USER_INFO
+        get() = ROOT_URL + COMPLETE_USER_INFO
+
+    val umLoginUrl: String
+        get() = ROOT_URL + UM_USER_LOGIN
 
     val liveListUrl: String
         get() = ROOT_URL + LIVE_LIST
@@ -151,8 +159,8 @@ object HttpUrl {
     val createLiveUrl: String
         get() = ROOT_URL + CREATE_LIVE
 
-    val createTopicUrl: String
-        get() = ROOT_URL + CREATE_TOPIC
+    val topicListUrl: String
+        get() = ROOT_URL + TOPIC_LIST
 
     val categoryListUrl: String
         get() = ROOT_URL + CATEGORY_LIST

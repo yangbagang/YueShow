@@ -10,8 +10,10 @@ import com.ybg.yxym.yb.utils.LogUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.constant.IntentExtra
+import com.ybg.yxym.yueshow.http.Model.Progress
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
+import com.ybg.yxym.yueshow.http.listener.UploadListener
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
 import com.ybg.yxym.yueshow.utils.OnoptionsUtils
@@ -20,6 +22,10 @@ import com.ybg.yxym.yueshow.view.gallery.MultiImageSelectorActivity
 import com.ybg.yxym.yueshow.view.pickerview.OptionsPopupWindow
 import com.ybg.yxym.yueshow.view.pickerview.TimePopupWindow
 import kotlinx.android.synthetic.main.activity_complete_data.*
+import okhttp3.Call
+import okhttp3.Response
+import java.io.File
+import java.io.IOException
 import java.util.*
 
 /**
@@ -35,6 +41,8 @@ class CompleteDataActivity : BaseActivity() {
     private var mBirthday: String? = null//生日
     private val mIsLunar = false
     private val mAddress: String? = null//地址
+
+    private var path: String? = null//头像图片文件
 
     override fun setContentViewId(): Int {
         return R.layout.activity_complete_data
@@ -80,7 +88,7 @@ class CompleteDataActivity : BaseActivity() {
                     ToastUtil.show("请选择性别!")
                     return
                 }
-                completeUserInfo()
+                saveUserInfo()
             }
         }
     }
@@ -89,8 +97,16 @@ class CompleteDataActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == IntentExtra.RequestCode.REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK) {
             if (data == null) return
-            val path = data.getStringExtra(MultiImageSelectorActivity.EXTRA_RESULT)
-            ImageLoaderUtils.instance.loadFileBitmap(iv_user_avatar!!, path)
+            path = data.getStringExtra(MultiImageSelectorActivity.EXTRA_RESULT)
+            ImageLoaderUtils.instance.loadFileBitmap(iv_user_avatar!!, path!!)
+        }
+    }
+
+    private fun saveUserInfo() {
+        if (path != null) {
+            uploadAvatar()
+        } else {
+            completeUserInfo()
         }
     }
 
@@ -116,12 +132,35 @@ class CompleteDataActivity : BaseActivity() {
         })
     }
 
+    private fun uploadAvatar() {
+        //上传头像
+        SendRequest.uploadFile(mContext!!, "avatar", File(path), object: UploadListener(){
+            override fun onResponse(call: Call?, response: Response?) {
+
+            }
+
+            override fun onFailure(call: Call?, e: IOException?) {
+
+            }
+
+            override fun onSuccess(response: Response) {
+
+            }
+
+            override fun onFailure(e: Exception) {
+
+            }
+
+            override fun onUIProgress(progress: Progress) {
+
+            }
+        })
+    }
+
     companion object {
 
-        fun start(context: Activity, mobile: String, password: String) {
+        fun start(context: Activity) {
             val starter = Intent(context, CompleteDataActivity::class.java)
-            starter.putExtra(IntentExtra.EXTRA_MOBILE, mobile)
-            starter.putExtra(IntentExtra.EXTRA_PASSWORD, password)
             context.startActivityForResult(starter, IntentExtra.RequestCode.REQUEST_CODE_REGISTER)
         }
     }
