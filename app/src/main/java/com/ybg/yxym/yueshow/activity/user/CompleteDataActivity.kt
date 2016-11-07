@@ -34,13 +34,9 @@ import java.util.*
 class CompleteDataActivity : BaseActivity() {
 
     private var mNickName: String = ""//昵称
-    private val mAvatar: String = ""//头像
-    private val mMotto: String = ""//签名
+    private var mAvatar: String = ""//头像
     private var mSex = -1//性别
-    private val mType = 0//登录类型(0 默认 1 微信 2 qq 3 微博)
     private var mBirthday: String? = null//生日
-    private val mIsLunar = false
-    private val mAddress: String? = null//地址
 
     private var path: String? = null//头像图片文件
 
@@ -112,13 +108,16 @@ class CompleteDataActivity : BaseActivity() {
 
     private fun completeUserInfo() {
         hideKeyboard()
+        btn_complete_register.isEnabled = false
         val token = mApplication.token
         SendRequest.completeUserInfo(mContext!!, token, mBirthday!!, mNickName, "${mSex}", mAvatar, object : OkCallback<String>
         (OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 LogUtil.d(TAG + ": " + response)
+                btn_complete_register.isEnabled = true
                 val resultBean = mGson!!.fromJson(response, JSonResultBean::class.java)
                 if (resultBean.isSuccess) {
+                    btn_complete_register.progress = btn_complete_register.maxProgress
                     setResult(Activity.RESULT_OK)
                     finish()
                 } else {
@@ -127,6 +126,7 @@ class CompleteDataActivity : BaseActivity() {
             }
 
             override fun onFailure(e: Throwable) {
+                btn_complete_register.isEnabled = true
                 LogUtil.e(TAG + ": " + e.message)
             }
         })
@@ -134,25 +134,30 @@ class CompleteDataActivity : BaseActivity() {
 
     private fun uploadAvatar() {
         //上传头像
+        btn_complete_register.isEnabled = false
+        btn_complete_register.loadingText = "准备上传头像..."
         SendRequest.uploadFile(mContext!!, "avatar", File(path), object: UploadListener(){
             override fun onResponse(call: Call?, response: Response?) {
-
+                btn_complete_register.isEnabled = true
             }
 
             override fun onFailure(call: Call?, e: IOException?) {
-
+                btn_complete_register.isEnabled = true
             }
 
             override fun onSuccess(response: Response) {
-
+                btn_complete_register.loadingText = "头像上传成功，正在保存数据"
+                mAvatar = response.toString()
+                completeUserInfo()
             }
 
             override fun onFailure(e: Exception) {
-
+                btn_complete_register.isEnabled = true
             }
 
             override fun onUIProgress(progress: Progress) {
-
+                val progressInt: Int = (progress.currentBytes * 100 / progress.totalBytes).toInt()
+                btn_complete_register.loadingText = "正在上传头像${progressInt}%"
             }
         })
     }

@@ -111,9 +111,8 @@ class RegisterActivity : BaseActivity() {
                 val result = mGson!!.fromJson(response, JSonResultBean::class.java)
                 if (result != null) {
                     if (result.isSuccess) {
-                        //CompleteDataActivity.start(mContext!!, mMobile!!, mPassword!!)
+                        //验证码通过，开始实际注册。
                         userRegister()
-                        //finish()
                     } else {
                         ToastUtil.show(result.message)
                     }

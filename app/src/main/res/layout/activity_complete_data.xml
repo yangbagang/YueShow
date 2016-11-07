@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -82,13 +83,15 @@
             android:drawablePadding="@dimen/px_20"
             android:text="@string/gender_choose_tips"/>
 
-        <Button
+        <com.ybg.yxym.yueshow.view.processButton.impl.GenerateProcessButton
             android:id="@+id/btn_complete_register"
             style="@style/btn_24pt_7dcf2c_white"
             android:layout_width="match_parent"
             android:layout_height="@dimen/px_88"
             android:layout_marginTop="@dimen/px_50"
             android:onClick="onClick"
-            android:text="@string/complete_register"/>
+            android:text="@string/complete_register"
+            app:pb_textComplete="完成"
+            app:pb_textProgress="正在保存数据..."/>
     </LinearLayout>
 </RelativeLayout>
