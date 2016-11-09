@@ -71,7 +71,7 @@ class RegisterActivity : BaseActivity() {
                 }
                 checkCaptcha()
             }
-        }// CompleteDataActivity.start(mContext, mMobile, mPassword);
+        }
     }
 
     private var mTimer: CountDownTimer? = object : CountDownTimer((2 * 60 * 1000).toLong(), 1000) {
@@ -134,6 +134,7 @@ class RegisterActivity : BaseActivity() {
                 val resultBean = mGson!!.fromJson(response, JSonResultBean::class.java)
                 if (resultBean.isSuccess) {
                     mApplication.token = resultBean.data
+                    println("token=${mApplication.token}")
                     MainActivity.instance?.loadUserInfo()
                     CompleteDataActivity.start(mContext!!)
                     finish()

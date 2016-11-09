@@ -73,7 +73,7 @@ class CompleteDataActivity : BaseActivity() {
             R.id.btn_complete_register -> {
                 mNickName = getTextViewString(et_user_nickName)
                 if (TextUtils.isEmpty(mNickName)) {
-                    ToastUtil.show("请输入用户名!")
+                    ToastUtil.show("请输入昵称!")
                     return
                 }
                 if (TextUtils.isEmpty(mBirthday)) {
@@ -98,12 +98,10 @@ class CompleteDataActivity : BaseActivity() {
         }
     }
 
-    private fun saveUserInfo() {
-        if (path != null) {
-            uploadAvatar()
-        } else {
-            completeUserInfo()
-        }
+    private fun saveUserInfo() = if (path != null && path != "") {
+        uploadAvatar()
+    } else {
+        completeUserInfo()
     }
 
     private fun completeUserInfo() {
@@ -148,6 +146,7 @@ class CompleteDataActivity : BaseActivity() {
             override fun onSuccess(response: Response) {
                 btn_complete_register.loadingText = "头像上传成功，正在保存数据"
                 mAvatar = response.toString()
+                path = ""
                 completeUserInfo()
             }
 

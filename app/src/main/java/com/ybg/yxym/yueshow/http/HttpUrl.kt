@@ -7,7 +7,7 @@ object HttpUrl {
     private val debug = true
 
     //测试服务器地址
-    val API_HOST_DEBUG = "http://192.168.12.101:8080/ma"
+    val API_HOST_DEBUG = "http://192.168.12.102:8080/ma"
     val FILE_SERVER_UPLOAD = "http://183.57.41.230/FileServer/upload"
     val FILE_SERVER_PREVIEW = "http://183.57.41.230/FileServer/preview"
 

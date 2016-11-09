@@ -83,9 +83,9 @@ class HotFragment : BaseFragment() {
             super.handleMessage(msg)
 
             val gson = Gson()
-            val jSonResultBean = gson.fromJson(msg.obj.toString(), JSonResultBean::class.java)
+            val jSonResultBean = JSonResultBean.fromJSON(msg.obj.toString())
             var list: List<YueShow> = ArrayList()
-            if (jSonResultBean.isSuccess) {
+            if (jSonResultBean != null && jSonResultBean.isSuccess) {
                 list = gson.fromJson<List<YueShow>>(jSonResultBean.data, object : TypeToken<List<YueShow>>() {
 
                 }.type)

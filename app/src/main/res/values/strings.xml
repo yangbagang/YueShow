@@ -14,7 +14,7 @@
     <string name="tab_friend">朋友</string>
 
     <!--登陆页面-->
-    <string name="login_account">手机号/悦美号</string>
+    <string name="login_account">手机号</string>
     <string name="login">登陆</string>
     <string name="forget_password">忘记密码</string>
     <string name="register_now">立即注册</string>
@@ -28,7 +28,7 @@
     <string name="input_captcha_error">请输入正确的验证码</string>
     <string name="get_captcha_later">%dS重新获取</string>
     <string name="get_captcha_again">重新获取</string>
-    <string name="user_name">用户名</string>
+    <string name="user_name">昵称</string>
     <string name="choose_birthday">请选择生日</string>
     <string name="choose_gender">请选择性别</string>
     <string name="complete_register">完成注册</string>

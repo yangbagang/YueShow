@@ -20,8 +20,8 @@ object OnoptionsUtils {
     fun showGardenSelect(context: Context, view: View, listener: OptionsPopupWindow.OnOptionsSelectListener) {
         val picker = OptionsPopupWindow(context)
         val list = ArrayList<String>()
-        list.add("男")
         list.add("女")
+        list.add("男")
         picker.setPicker(list)
         picker.setOnoptionsSelectListener(listener)
         picker.showAtLocation(view, Gravity.BOTTOM, 0, 0)

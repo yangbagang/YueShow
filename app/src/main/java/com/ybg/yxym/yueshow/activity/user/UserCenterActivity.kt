@@ -3,6 +3,8 @@ package com.ybg.yxym.yueshow.activity.user
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AbsListView
 import android.widget.ArrayAdapter
@@ -13,9 +15,11 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 
 import com.ybg.yxym.yueshow.R
+import com.ybg.yxym.yueshow.activity.MainActivity
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.CircleImageView
+import kotlinx.android.synthetic.main.activity_user_center_listview.*
 
 import java.util.ArrayList
 
@@ -24,8 +28,6 @@ import java.util.ArrayList
  */
 class UserCenterActivity : BaseActivity(), View.OnClickListener {
 
-    private var lvUser: ListView? = null
-    private var llFloating: LinearLayout? = null
     private var vDynamic_float: View? = null
     private var tvDynamic_float: TextView? = null
     private var tvDynamicNum_float: TextView? = null
@@ -36,8 +38,6 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
     private var tvAchievement_float: TextView? = null
     private var tvAchievementNum_float: TextView? = null
 
-    private var iv_back: ImageView? = null
-    private var iv_more: ImageView? = null//返回 一键分享
     private var rl_user_wall: RelativeLayout? = null//照片背景
     private var iv_user_logo: CircleImageView? = null//用户头像
     private var iv_level: ImageView? = null//用户等级图片
@@ -45,8 +45,6 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
     private var tv_level: TextView? = null
     private var tv_level_name: TextView? = null
     private var tv_sign_name: TextView? = null// 昵称 用户等级 用户等级名称 用户的个性签名
-    private var iv_go_user_info: ImageView? = null
-    private var iv_setting: ImageView? = null//跳转到用户资料 //跳转到设置页面
     private var tv_meilizhi: TextView? = null
     private var tv_care: TextView? = null
     private var tv_fans: TextView? = null//美力值 关注 粉丝
@@ -69,8 +67,6 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun setUpView() {
-        lvUser = findViewById(R.id.lv_user) as ListView
-        llFloating = findViewById(R.id.ll_floating) as LinearLayout
         vDynamic_float = findViewById(R.id.v_dynamic)
         tvDynamic_float = findViewById(R.id.tv_dynamic) as TextView
         tvDynamicNum_float = findViewById(R.id.tv_dynamic_num) as TextView
@@ -85,12 +81,12 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val headerView = inflater.inflate(R.layout.item_user_list_head, null)
         val floatView = inflater.inflate(R.layout.item_list_user_floating_bar, null)
-        lvUser!!.addHeaderView(headerView)
-        lvUser!!.addHeaderView(floatView)
+        lv_user!!.addHeaderView(headerView)
+        lv_user!!.addHeaderView(floatView)
         initHeadFloatView(floatView)
         initHeadview(headerView)
-        lvUser!!.setHeaderDividersEnabled(false)
-        lvUser!!.setOnScrollListener(scrollListener)
+        lv_user!!.setHeaderDividersEnabled(false)
+        lv_user!!.setOnScrollListener(scrollListener)
         list1.add("你好")
         list1.add("同学")
         list1.add("你好")
@@ -110,19 +106,17 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
         list1.add("同学")
         list1.add("你好")
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list1)
-        lvUser!!.adapter = adapter!!
+        lv_user!!.adapter = adapter!!
     }
 
     override fun init() {
-
+        setCustomTitle("用户中心")
     }
 
     /**
      * @param headview 初始化headerview
      */
     private fun initHeadview(headview: View) {
-        iv_back = headview.findViewById(R.id.iv_back) as ImageView
-        iv_more = headview.findViewById(R.id.iv_more) as ImageView
         rl_user_wall = headview.findViewById(R.id.rl_user_wall) as RelativeLayout
         iv_user_logo = headview.findViewById(R.id.iv_user_logo) as CircleImageView
         tv_nickname = headview.findViewById(R.id.tv_nickname) as TextView
@@ -130,8 +124,6 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
         tv_level = headview.findViewById(R.id.tv_level) as TextView
         tv_level_name = headview.findViewById(R.id.tv_level_name) as TextView
         tv_sign_name = headview.findViewById(R.id.tv_sign_name) as TextView
-        iv_go_user_info = headview.findViewById(R.id.iv_go_user_info) as ImageView
-        iv_setting = headview.findViewById(R.id.iv_setting) as ImageView
         tv_meilizhi = headview.findViewById(R.id.tv_meilizhi) as TextView
         tv_care = headview.findViewById(R.id.tv_care) as TextView
         tv_fans = headview.findViewById(R.id.tv_fans) as TextView
@@ -140,14 +132,35 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
         iv_miai_3 = headview.findViewById(R.id.iv_aimi_third) as CircleImageView
         tv_go_aimi = headview.findViewById(R.id.tv_go_aimi) as TextView
         rl_user_level = headview.findViewById(R.id.rl_user_level) as RelativeLayout
-        iv_back!!.setOnClickListener(this)
-        iv_more!!.setOnClickListener(this)
-        iv_go_user_info!!.setOnClickListener(this)
-        iv_setting!!.setOnClickListener(this)
         tv_go_aimi!!.setOnClickListener(this)
         rl_user_level!!.setOnClickListener(this)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.user_center, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+
+        if (id == R.id.action_settings) {
+            //跳转到设置页面
+            UserSettingActivity.start(mContext!!)
+            return true
+        } else if (id == R.id.action_exit) {
+            mApplication.token = ""
+            MainActivity.instance?.removeUserInfo()
+            finish()
+            return true
+        } else if (id == R.id.action_me) {
+            //跳转到用户资料
+            MyInformationActivity.start(mContext!!)
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
 
     private var vDynamic: View? = null
     private var vJoinGame: View? = null
@@ -197,11 +210,7 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
                 setResSelector(2)
                 ToastUtil.show("成就")
             }
-            R.id.iv_back -> finish()
-            R.id.iv_more -> ToastUtil.show("一键分享")
             R.id.rl_user_level -> LevelActivity.start(mContext!!)
-            R.id.iv_go_user_info -> MyInformationActivity.start(mContext!!)
-            R.id.iv_setting -> UserSettingActivity.start(mContext!!)
             R.id.tv_go_aimi -> MiAiActivity.start(mContext!!)
         }
     }
@@ -215,9 +224,9 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
 
         override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
             if (firstVisibleItem >= 1) {
-                llFloating!!.visibility = View.VISIBLE
+                ll_floating!!.visibility = View.VISIBLE
             } else {
-                llFloating!!.visibility = View.GONE
+                ll_floating!!.visibility = View.GONE
             }
         }
     }

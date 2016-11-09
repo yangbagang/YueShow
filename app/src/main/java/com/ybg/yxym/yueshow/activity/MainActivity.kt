@@ -36,6 +36,7 @@ import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.AndroidPermissonRequest
 import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
+import com.ybg.yxym.yueshow.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
@@ -84,26 +85,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -229,19 +210,32 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         userLevel.text = userBase.ymMemo
     }
 
+    fun removeUserInfo() {
+        val utils = ImageLoaderUtils.instance
+        utils.loadBitmap(userImage, R.mipmap.ic_default_girl);
+
+        userName.text = "游客"
+        userLevel.text = "悦美御秀"
+    }
+
     fun loadUserInfo() {
         val token = showApplication.token
         SendRequest.getUserBase(this@MainActivity, token, object : OkCallback<String>(OkStringParser()) {
 
             override fun onSuccess(code: Int, response: String) {
                 val mGson = GsonBuilder().serializeNulls().create()
-                val resultBean = mGson.fromJson(response, JSonResultBean::class.java)
-                if (resultBean.isSuccess) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
                     //成功
-                    val userBase = mGson.fromJson(resultBean.data, UserBase::class.java)
+                    val userBase = mGson.fromJson(jsonBean.data, UserBase::class.java)
                     setUserInfo(userBase)
                 } else {
-
+                    if (showApplication.checkNeedLogin(jsonBean?.message ?: "")) {
+                        showApplication.token = ""
+                        LoginActivity.start(this@MainActivity)
+                    } else {
+                        ToastUtil.show(jsonBean?.message ?: "")
+                    }
                 }
             }
 

@@ -142,30 +142,30 @@ class MyInformationActivity : BaseActivity() {
      * get USER Data
      */
     private fun getUserData() {
-        val preferences = getSharedPreferences(AppConstants.SHARE_PREFERENCE_USER, Context.MODE_PRIVATE)
-        strlist!!.add(preferences.getString(AppConstants.USER_ID, ""))
-        strlist!!.add(preferences.getString(AppConstants.USER_NICKNAME, ""))
-        strlist!!.add(preferences.getString(AppConstants.USER_BIRTHDAY, ""))
-        val sex: String
-        if ("1" == preferences.getString(AppConstants.USER_SEX, ""))
-            sex = "男"
-        else
-            sex = "女"
-        strlist!!.add(sex)
-        strlist!!.add("Android工程师")
-        strlist!!.add(preferences.getString(AppConstants.USER_HEIGHT, "")!! + "cm")
-        strlist!!.add(preferences.getString(AppConstants.USER_WEIGHT, "" + "kg"))
-        strlist!!.add("C90-70-80")
-        strlist!!.add(preferences.getString(AppConstants.USER_ADDRESS, ""))
-        strlist!!.add(preferences.getString(AppConstants.USER_MOTTO, ""))
+//        val preferences = getSharedPreferences(AppConstants.SHARE_PREFERENCE_USER, Context.MODE_PRIVATE)
+//        strlist!!.add(preferences.getString(AppConstants.USER_ID, ""))
+//        strlist!!.add(preferences.getString(AppConstants.USER_NICKNAME, ""))
+//        strlist!!.add(preferences.getString(AppConstants.USER_BIRTHDAY, ""))
+//        val sex: String
+//        if ("1" == preferences.getString(AppConstants.USER_SEX, ""))
+//            sex = "男"
+//        else
+//            sex = "女"
+//        strlist!!.add(sex)
+//        strlist!!.add("Android工程师")
+//        strlist!!.add(preferences.getString(AppConstants.USER_HEIGHT, "")!! + "cm")
+//        strlist!!.add(preferences.getString(AppConstants.USER_WEIGHT, "" + "kg"))
+//        strlist!!.add("C90-70-80")
+//        strlist!!.add(preferences.getString(AppConstants.USER_ADDRESS, ""))
+//        strlist!!.add(preferences.getString(AppConstants.USER_MOTTO, ""))
     }
 
     fun onClick(view: View) {
-        when (view.id) {
-            R.id.iv_back -> finish()
-        }//            case R.id.tv_dress_up:
-        //                DressUpActivity.start(mContext);
-        //                break;
+//        when (view.id) {
+//            R.id.iv_back -> finish()
+//        }//            case R.id.tv_dress_up:
+//        //                DressUpActivity.start(mContext);
+//        //                break;
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
