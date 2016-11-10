@@ -1,5 +1,6 @@
 package com.ybg.yxym.yueshow.activity.user
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.View
@@ -7,10 +8,12 @@ import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.activity.live.StartLiveActivity
 import com.ybg.yxym.yueshow.activity.photo.CameraActivity
+import com.ybg.yxym.yueshow.constant.IntentExtra
 import com.ybg.yxym.yueshow.utils.AndroidPermissonRequest
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.gallery.MultiImageSelectorActivity
 import kotlinx.android.synthetic.main.activity_entry.*
+import java.util.*
 
 /**
  * 类描述：拍摄入口
@@ -23,6 +26,7 @@ class EntryActivity : BaseActivity() {
 
     override fun setUpView() {
         AndroidPermissonRequest.verifyCameraPermissions(mContext!!)
+        setCustomTitle("选择类型")
     }
 
     override fun init() {
@@ -34,6 +38,17 @@ class EntryActivity : BaseActivity() {
         iv_close.setOnClickListener(onClickListener)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == IntentExtra.RequestCode.REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK) {
+            if (data == null) return
+            val list = data.getStringArrayListExtra(MultiImageSelectorActivity
+                    .EXTRA_RESULT)
+            for (path in list) {
+                println("path=${path}")
+            }
+        }
+    }
 
     /**
      * 点击事件
@@ -42,7 +57,7 @@ class EntryActivity : BaseActivity() {
         when (v.id) {
             R.id.rl_entry_updata_photo//上传图片
             -> {
-                ToastUtil.show("上传图片!")
+                //选择己有的图片上传
                 MultiImageSelectorActivity.start(mContext!!, true, 9, MultiImageSelectorActivity
                         .MODE_MULTI)
             }

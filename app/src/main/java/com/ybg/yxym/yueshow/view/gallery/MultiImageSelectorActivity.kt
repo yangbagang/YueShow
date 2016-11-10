@@ -39,7 +39,8 @@ class MultiImageSelectorActivity : FragmentActivity(), MultiImageSelectorFragmen
         bundle.putBoolean(MultiImageSelectorFragment.EXTRA_SHOW_CAMERA, isShow)
         bundle.putStringArrayList(MultiImageSelectorFragment.EXTRA_DEFAULT_SELECTED_LIST, resultList)
 
-        supportFragmentManager.beginTransaction().add(R.id.image_grid, Fragment.instantiate(this, MultiImageSelectorFragment::class.java.name, bundle)).commit()
+        supportFragmentManager.beginTransaction().add(R.id.image_grid, Fragment.instantiate(this,
+                MultiImageSelectorFragment::class.java.name, bundle)).commit()
 
         // 返回按钮
         findViewById(R.id.btn_back).setOnClickListener {

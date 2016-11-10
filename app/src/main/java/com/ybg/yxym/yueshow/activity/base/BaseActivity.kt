@@ -21,9 +21,17 @@ import android.widget.TextView
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.ybg.yxym.yb.bean.JSonResultBean
+import com.ybg.yxym.yb.bean.UserBase
+import com.ybg.yxym.yb.bean.UserInfo
+import com.ybg.yxym.yueshow.activity.MainActivity
+import com.ybg.yxym.yueshow.activity.user.LoginActivity
 import com.ybg.yxym.yueshow.app.ShowApplication
 import com.ybg.yxym.yueshow.constant.MessageEvent
 import com.ybg.yxym.yueshow.http.OkHttpProxy
+import com.ybg.yxym.yueshow.http.SendRequest
+import com.ybg.yxym.yueshow.http.callback.OkCallback
+import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.ToastUtil
 
 import org.greenrobot.eventbus.EventBus
@@ -162,4 +170,59 @@ abstract class BaseActivity : AppCompatActivity() {
 
     }
 
+    protected fun checkUserValid(msg: String) {
+        if (mApplication.checkNeedLogin(msg)) {
+            mApplication.token = ""
+            MainActivity.instance?.removeUserInfo()
+            LoginActivity.start(mContext!!)
+        } else {
+            ToastUtil.show(msg)
+        }
+    }
+
+    protected fun loadUserBase(call: (UserBase) -> Unit) {
+        SendRequest.getUserBase(mContext!!, mApplication.token, object : OkCallback<String>
+        (OkStringParser()) {
+            override fun onSuccess(code: Int, response: String) {
+                val mGson = GsonBuilder().serializeNulls().create()
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    //成功
+                    val userBase = mGson.fromJson(jsonBean.data, UserBase::class.java)
+                    call(userBase)
+                } else {
+                    jsonBean?.let {
+                        checkUserValid(jsonBean.message)
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                ToastUtil.show("获取用户信息失败。")
+            }
+        })
+    }
+
+    protected fun loadUserInfo(call: (UserInfo) -> Unit) {
+        SendRequest.getUserInfo(mContext!!, mApplication.token, object : OkCallback<String>
+        (OkStringParser()) {
+            override fun onSuccess(code: Int, response: String) {
+                val mGson = GsonBuilder().serializeNulls().create()
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    //成功
+                    val userInfo = mGson.fromJson(jsonBean.data, UserInfo::class.java)
+                    call(userInfo)
+                } else {
+                    jsonBean?.let {
+                        checkUserValid(jsonBean.message)
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                ToastUtil.show("获取用户信息失败。")
+            }
+        })
+    }
 }

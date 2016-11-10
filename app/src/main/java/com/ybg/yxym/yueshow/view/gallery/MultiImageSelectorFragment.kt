@@ -22,13 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.widget.AbsListView
-import android.widget.AdapterView
-import android.widget.Button
-import android.widget.GridView
-import android.widget.TextView
-import android.widget.Toast
-
+import android.widget.*
 import com.ybg.yxym.yb.utils.LogUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.picasso.Picasso
@@ -38,12 +32,10 @@ import com.ybg.yxym.yueshow.view.gallery.bean.Folder
 import com.ybg.yxym.yueshow.view.gallery.bean.Image
 import com.ybg.yxym.yueshow.view.gallery.utils.FileUtils
 import com.ybg.yxym.yueshow.view.gallery.utils.TimeUtils
-
 import java.io.File
-import java.util.ArrayList
+import java.util.*
 
 class MultiImageSelectorFragment : Fragment() {
-
 
     // 结果数据
     private var resultList: ArrayList<String>? = ArrayList()
@@ -77,6 +69,81 @@ class MultiImageSelectorFragment : Fragment() {
     private var mGridHeight: Int = 0
 
     private var mTmpFile: File? = null
+
+    private val mLoaderCallback = object : LoaderManager.LoaderCallbacks<Cursor> {
+
+        private val IMAGE_PROJECTION = arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images
+                .Media.DISPLAY_NAME, MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.Media._ID)
+
+        override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor>? {
+            if (id == LOADER_ALL) {
+                val cursorLoader = CursorLoader(activity,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
+                        null, null, IMAGE_PROJECTION[2] + " DESC")
+                return cursorLoader
+            } else if (id == LOADER_CATEGORY) {
+                val cursorLoader = CursorLoader(activity,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
+                        IMAGE_PROJECTION[0] + " like '%" + args?.getString("path") + "%'", null,
+                        IMAGE_PROJECTION[2] + " DESC")
+                return cursorLoader
+            }
+
+            return null
+        }
+
+        override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
+            if (data != null) {
+                val images = ArrayList<Image>()
+                val count = data.count
+                if (count > 0) {
+                    data.moveToFirst()
+                    do {
+                        val path = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]))
+                        val name = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]))
+                        val dateTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[2]))
+                        val image = Image(path, name, dateTime)
+                        images.add(image)
+                        if (!hasFolderGened) {
+                            // 获取文件夹名称
+                            val imageFile = File(path)
+                            val folderFile = imageFile.parentFile
+                            val folder = Folder()
+                            folder.name = folderFile.name
+                            folder.path = folderFile.absolutePath
+                            folder.cover = image
+                            if (!mResultFolder.contains(folder)) {
+                                val imageList = ArrayList<Image>()
+                                imageList.add(image)
+                                folder.images = imageList
+                                mResultFolder.add(folder)
+                            } else {
+                                // 更新
+                                val f = mResultFolder[mResultFolder.indexOf(folder)]
+                                f.images!!.add(image)
+                            }
+                        }
+
+                    } while (data.moveToNext())
+
+                    mImageAdapter!!.setData(images)
+
+                    // 设定默认选择
+                    if (resultList != null && resultList!!.size > 0) {
+                        mImageAdapter!!.setDefaultSelected(resultList!!)
+                    }
+
+                    mFolderAdapter!!.setData(mResultFolder)
+                    hasFolderGened = true
+
+                }
+            }
+        }
+
+        override fun onLoaderReset(loader: Loader<Cursor>) {
+
+        }
+    }
 
     override fun onAttach(activity: Activity?) {
         super.onAttach(activity)
@@ -152,7 +219,8 @@ class MultiImageSelectorFragment : Fragment() {
             override fun onScrollStateChanged(absListView: AbsListView, state: Int) {
 
                 val picasso = Picasso.with(activity)
-                if (state == AbsListView.OnScrollListener.SCROLL_STATE_IDLE || state == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                if (state == AbsListView.OnScrollListener.SCROLL_STATE_IDLE || state ==
+                        AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     picasso.resumeTag(activity)
                 } else {
                     picasso.pauseTag(activity)
@@ -392,79 +460,6 @@ class MultiImageSelectorFragment : Fragment() {
                     mCallback!!.onSingleImageSelected(image.path)
                 }
             }
-        }
-    }
-
-    private val mLoaderCallback = object : LoaderManager.LoaderCallbacks<Cursor> {
-
-        private val IMAGE_PROJECTION = arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.Media._ID)
-
-        override fun onCreateLoader(id: Int, args: Bundle): Loader<Cursor>? {
-            if (id == LOADER_ALL) {
-                val cursorLoader = CursorLoader(activity,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
-                        null, null, IMAGE_PROJECTION[2] + " DESC")
-                return cursorLoader
-            } else if (id == LOADER_CATEGORY) {
-                val cursorLoader = CursorLoader(activity,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
-                        IMAGE_PROJECTION[0] + " like '%" + args.getString("path") + "%'", null, IMAGE_PROJECTION[2] + " DESC")
-                return cursorLoader
-            }
-
-            return null
-        }
-
-        override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
-            if (data != null) {
-                val images = ArrayList<Image>()
-                val count = data.count
-                if (count > 0) {
-                    data.moveToFirst()
-                    do {
-                        val path = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]))
-                        val name = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]))
-                        val dateTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[2]))
-                        val image = Image(path, name, dateTime)
-                        images.add(image)
-                        if (!hasFolderGened) {
-                            // 获取文件夹名称
-                            val imageFile = File(path)
-                            val folderFile = imageFile.parentFile
-                            val folder = Folder()
-                            folder.name = folderFile.name
-                            folder.path = folderFile.absolutePath
-                            folder.cover = image
-                            if (!mResultFolder.contains(folder)) {
-                                val imageList = ArrayList<Image>()
-                                imageList.add(image)
-                                folder.images = imageList
-                                mResultFolder.add(folder)
-                            } else {
-                                // 更新
-                                val f = mResultFolder[mResultFolder.indexOf(folder)]
-                                f.images!!.add(image)
-                            }
-                        }
-
-                    } while (data.moveToNext())
-
-                    mImageAdapter!!.setData(images)
-
-                    // 设定默认选择
-                    if (resultList != null && resultList!!.size > 0) {
-                        mImageAdapter!!.setDefaultSelected(resultList!!)
-                    }
-
-                    mFolderAdapter!!.setData(mResultFolder)
-                    hasFolderGened = true
-
-                }
-            }
-        }
-
-        override fun onLoaderReset(loader: Loader<Cursor>) {
-
         }
     }
 

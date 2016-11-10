@@ -3,37 +3,27 @@ package com.ybg.yxym.yueshow.activity.user
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ListView
-
 import com.ybg.yxym.yb.utils.DateUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.adapter.InterestGridViewAdapter
 import com.ybg.yxym.yueshow.adapter.MyInfoAdapter
-import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.utils.OnoptionsUtils
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.CustomerGridView
 import com.ybg.yxym.yueshow.view.pickerview.OptionsPopupWindow
 import com.ybg.yxym.yueshow.view.pickerview.TimePopupWindow
-
+import kotlinx.android.synthetic.main.activity_my_information.*
 import java.io.Serializable
-import java.util.ArrayList
-import java.util.Date
+import java.util.*
 
 /**
  * 类描述：个人资料
  */
 class MyInformationActivity : BaseActivity() {
-
-    private var lvInfo: ListView? = null
-    private var llAll: LinearLayout? = null
 
     private val REQUEST_BIAOQIAN = 0
     private val REQUEST_NICKNAME = 1
@@ -41,32 +31,29 @@ class MyInformationActivity : BaseActivity() {
     private val REQUEST_SIGN_NAME = 3
     private val REQUEST_PLACES = 4
 
-    private var strlist: MutableList<String>? = null
-    private var adapter: MyInfoAdapter? = null
+    private lateinit var strlist: MutableList<String>
+    private lateinit var adapter: MyInfoAdapter
     private var setPhoto: ImageView? = null
     private var gridViewAdapter: InterestGridViewAdapter? = null
     private var gridView: CustomerGridView? = null
-    private var intlist: MutableList<String>? = null
+    private lateinit var intlist: MutableList<String>
 
     override fun setContentViewId(): Int {
         return R.layout.activity_my_information
     }
 
     override fun setUpView() {
-        lvInfo = findViewById(R.id.lv_info) as ListView
-        llAll = findViewById(R.id.ll_all) as LinearLayout
-
         mContext = this@MyInformationActivity
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val footView = inflater.inflate(R.layout.item_my_info_foot, null)
         val headerView = inflater.inflate(R.layout.item_my_info_head, null)
-        lvInfo!!.addFooterView(footView)
-        lvInfo!!.addHeaderView(headerView)
+        lv_info.addFooterView(footView)
+        lv_info.addHeaderView(headerView)
         setPhoto = headerView.findViewById(R.id.iv_set_photo) as ImageView
         setPhoto!!.setOnClickListener { ToastUtil.show("设置头像") }
         gridView = footView.findViewById(R.id.gridview) as CustomerGridView
         gridView!!.setOnItemClickListener { parent, view, position, id ->
-            if (position == intlist!!.size) {
+            if (position == intlist.size) {
                 val starter = Intent(mContext, MyInterestActivity::class.java)
                 starter.putExtra("mBiaoqian", intlist as Serializable?)
                 startActivityForResult(starter, REQUEST_BIAOQIAN)
@@ -78,15 +65,16 @@ class MyInformationActivity : BaseActivity() {
     override fun init() {
         strlist = ArrayList<String>()
         adapter = MyInfoAdapter(mContext!!)
+        initUserData()
         getUserData()
-        adapter!!.setData(strlist!!)
-        lvInfo!!.adapter = adapter
+        adapter.setData(strlist)
+        lv_info!!.adapter = adapter
         gridViewAdapter = InterestGridViewAdapter(mContext!!)
         intlist = ArrayList<String>()
-        gridViewAdapter!!.setData(intlist!!)
+        gridViewAdapter!!.setData(intlist)
         gridView!!.adapter = gridViewAdapter
 
-        lvInfo!!.setOnItemClickListener { parent, view, position, id ->
+        lv_info!!.setOnItemClickListener { parent, view, position, id ->
             if (position == 2) {
                 val up_msg = Intent(mContext, UpdataUserMsgActivity::class.java)
                 up_msg.putExtra("type", "昵称")
@@ -100,35 +88,35 @@ class MyInformationActivity : BaseActivity() {
                 up_msg.putExtra("type", "个性签名")
                 startActivityForResult(up_msg, REQUEST_SIGN_NAME)
             } else if (position == 3) {
-                OnoptionsUtils.showDateSelect(mContext!!, llAll!!, object : TimePopupWindow.OnTimeSelectListener {
+                OnoptionsUtils.showDateSelect(mContext!!, ll_all!!, object : TimePopupWindow.OnTimeSelectListener {
                     override fun onTimeSelect(date: Date) {
-                        strlist!![2] = DateUtil.format(date)
-                        adapter!!.setData(strlist!!)
-                        adapter!!.notifyDataSetChanged()
+                        strlist[2] = DateUtil.format(date)
+                        adapter.setData(strlist)
+                        adapter.notifyDataSetChanged()
                     }
                 })
             } else if (position == 6) {
-                OnoptionsUtils.showheight(mContext!!, llAll!!, object : OptionsPopupWindow.OnOptionsSelectListener {
+                OnoptionsUtils.showheight(mContext!!, ll_all!!, object : OptionsPopupWindow.OnOptionsSelectListener {
                     override fun onOptionsSelect(options1: Int, option2: Int, options3: Int, options4: Int) {
-                        strlist!![5] = "${options1}cm"
-                        adapter!!.setData(strlist!!)
-                        adapter!!.notifyDataSetChanged()
+                        strlist[5] = "${options1}cm"
+                        adapter.setData(strlist)
+                        adapter.notifyDataSetChanged()
                     }
                 })
             } else if (position == 7) {
-                OnoptionsUtils.showWeight(mContext!!, llAll!!, object : OptionsPopupWindow.OnOptionsSelectListener {
+                OnoptionsUtils.showWeight(mContext!!, ll_all!!, object : OptionsPopupWindow.OnOptionsSelectListener {
                     override fun onOptionsSelect(options1: Int, option2: Int, options3: Int, options4: Int) {
-                        strlist!![6] = "${options1}kg"
-                        adapter!!.setData(strlist!!)
-                        adapter!!.notifyDataSetChanged()
+                        strlist[6] = "${options1}kg"
+                        adapter.setData(strlist)
+                        adapter.notifyDataSetChanged()
                     }
                 })
             } else if (position == 8) {
-                OnoptionsUtils.showShencai(mContext!!, llAll!!, object : OptionsPopupWindow.OnOptionsSelectListener {
+                OnoptionsUtils.showShencai(mContext!!, ll_all!!, object : OptionsPopupWindow.OnOptionsSelectListener {
                     override fun onOptionsSelect(options1: Int, option2: Int, options3: Int, options4: Int) {
-                        strlist!![7] = transforCup(options1) + "" + option2 + "-" + options3 + "-" + options4
-                        adapter!!.setData(strlist!!)
-                        adapter!!.notifyDataSetChanged()
+                        strlist[7] = transforCup(options1) + "" + option2 + "-" + options3 + "-" + options4
+                        adapter.setData(strlist)
+                        adapter.notifyDataSetChanged()
                     }
                 })
             } else if (position == 9) {
@@ -138,26 +126,34 @@ class MyInformationActivity : BaseActivity() {
         }
     }
 
+    private fun initUserData() {
+        strlist.add("")//"悦美号", , , , , , , , ,
+        strlist.add("")//"昵称:"
+        strlist.add("")//"生日:"
+        strlist.add("")//"性别:"
+        strlist.add("")//"职业:"
+        strlist.add("cm")//"身高:"
+        strlist.add("kg")//"体重:"
+        strlist.add("C90-70-80")//"身材:"
+        strlist.add("")//"地区:"
+        strlist.add("")//"个性签名:"
+    }
+
     /**
      * get USER Data
      */
     private fun getUserData() {
-//        val preferences = getSharedPreferences(AppConstants.SHARE_PREFERENCE_USER, Context.MODE_PRIVATE)
-//        strlist!!.add(preferences.getString(AppConstants.USER_ID, ""))
-//        strlist!!.add(preferences.getString(AppConstants.USER_NICKNAME, ""))
-//        strlist!!.add(preferences.getString(AppConstants.USER_BIRTHDAY, ""))
-//        val sex: String
-//        if ("1" == preferences.getString(AppConstants.USER_SEX, ""))
-//            sex = "男"
-//        else
-//            sex = "女"
-//        strlist!!.add(sex)
-//        strlist!!.add("Android工程师")
-//        strlist!!.add(preferences.getString(AppConstants.USER_HEIGHT, "")!! + "cm")
-//        strlist!!.add(preferences.getString(AppConstants.USER_WEIGHT, "" + "kg"))
-//        strlist!!.add("C90-70-80")
-//        strlist!!.add(preferences.getString(AppConstants.USER_ADDRESS, ""))
-//        strlist!!.add(preferences.getString(AppConstants.USER_MOTTO, ""))
+        //获取服务器数据
+        loadUserBase { userBase ->
+            strlist[0] = "${userBase.ymCode}"
+            strlist[1] = userBase.nickName
+            strlist[9] = userBase.ymMemo
+            adapter.notifyDataSetChanged()
+        }
+        loadUserInfo { userInfo ->
+            strlist[2] = userInfo.birthday
+            adapter.notifyDataSetChanged()
+        }
     }
 
     fun onClick(view: View) {
@@ -172,26 +168,26 @@ class MyInformationActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_BIAOQIAN) {
-            intlist!!.clear()
+            intlist.clear()
             intlist = data.getSerializableExtra("mBiaoqian") as MutableList<String>
-            gridViewAdapter!!.setData(intlist!!)
+            gridViewAdapter!!.setData(intlist)
             gridViewAdapter!!.notifyDataSetChanged()
         } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_NICKNAME) {
-            strlist!![1] = data.getStringExtra("nickname")
-            adapter!!.setData(strlist!!)
-            adapter!!.notifyDataSetChanged()
+            strlist[1] = data.getStringExtra("nickname")
+            adapter.setData(strlist)
+            adapter.notifyDataSetChanged()
         } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_PROFESSION) {
-            strlist!![4] = data.getStringExtra("profession")
-            adapter!!.setData(strlist!!)
-            adapter!!.notifyDataSetChanged()
+            strlist[4] = data.getStringExtra("profession")
+            adapter.setData(strlist)
+            adapter.notifyDataSetChanged()
         } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_SIGN_NAME) {
-            strlist!![9] = data.getStringExtra("signname")
-            adapter!!.setData(strlist!!)
-            adapter!!.notifyDataSetChanged()
+            strlist[9] = data.getStringExtra("signname")
+            adapter.setData(strlist)
+            adapter.notifyDataSetChanged()
         } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_PLACES) {
-            strlist!![8] = data.getStringExtra("place")
-            adapter!!.setData(strlist!!)
-            adapter!!.notifyDataSetChanged()
+            strlist[8] = data.getStringExtra("place")
+            adapter.setData(strlist)
+            adapter.notifyDataSetChanged()
         }
     }
 

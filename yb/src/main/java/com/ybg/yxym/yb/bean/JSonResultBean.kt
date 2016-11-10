@@ -1,5 +1,6 @@
 package com.ybg.yxym.yb.bean
 
+import org.json.JSONObject
 import java.io.Serializable
 
 /**
@@ -28,5 +29,20 @@ class JSonResultBean : Serializable {
     companion object {
 
         private val serialVersionUID = -788465282702822219L
+
+        fun fromJSON(jsonStr: String): JSonResultBean? {
+            try {
+                val json = JSONObject(jsonStr)
+                val jsonBean = JSonResultBean()
+                jsonBean.isSuccess = json.getBoolean("isSuccess")
+                jsonBean.message = json.getString("message")
+                jsonBean.errorCode = json.getString("errorCode")
+                jsonBean.data = json.getString("data")
+                return jsonBean
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return null
+            }
+        }
     }
 }
