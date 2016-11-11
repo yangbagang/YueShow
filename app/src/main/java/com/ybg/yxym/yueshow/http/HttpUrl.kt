@@ -8,10 +8,11 @@ object HttpUrl {
 
     //测试服务器地址
     val API_HOST_DEBUG = "http://192.168.12.102:8080/ma"
+    val API_HOST_PRODUCT = "https://139.224.186.241:8443//ma"
     val FILE_SERVER_UPLOAD = "http://183.57.41.230/FileServer/upload"
     val FILE_SERVER_PREVIEW = "http://183.57.41.230/FileServer/preview"
 
-    val ROOT_URL = API_HOST_DEBUG
+    val ROOT_URL = if (debug) API_HOST_DEBUG else API_HOST_PRODUCT
     //获取验证码
     private val GET_CAPTCHA = "/system/getCaptcha"
     //验证验证码
