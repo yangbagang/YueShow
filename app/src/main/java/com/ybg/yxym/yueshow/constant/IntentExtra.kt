@@ -16,5 +16,6 @@ class IntentExtra {
         val EXTRA_PASSWORD = "extra_password"
         val EXTRA_MOBILE = "extra_mobile"
         val EXTRA_PHOTO_RESULT = "extra_photo_result"
+        val PICTURE_LIST = "picture_list"
     }
 }

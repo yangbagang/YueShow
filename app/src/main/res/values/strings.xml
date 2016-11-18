@@ -4,6 +4,8 @@
     <string name="navigation_drawer_open">打开侧滑菜单</string>
     <string name="navigation_drawer_close">关闭侧滑菜单</string>
     <string name="action_settings">设置</string>
+    <string name="action_next">下一步</string>
+    <string name="action_finish">完成</string>
 
     <string name="pull_refresh_text">下拉刷新</string>
     <string name="release_refresh_text">释放更新</string>
@@ -93,6 +95,7 @@
     <string name="photos_process_stickers">贴纸</string>
     <string name="photos_process_filter">滤镜</string>
     <string name="edit">编辑</string>
+    <string name="post">发布</string>
     <!--好友通讯录搜索-->
     <string name="no_results">没有搜索到匹配的内容</string>
 </resources>

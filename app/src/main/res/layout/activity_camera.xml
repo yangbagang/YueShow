@@ -68,7 +68,7 @@
     </RelativeLayout>
 
 
-    <com.ymyx.yxyuemei.widget.CameraGrid
+    <com.ybg.yxym.yueshow.view.CameraGrid
         android:id="@+id/cg_camera_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

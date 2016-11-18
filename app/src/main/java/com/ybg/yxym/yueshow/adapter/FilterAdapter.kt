@@ -34,5 +34,6 @@ class FilterAdapter : RecyclerBaseAdapter<FilterEffect> {
             m_ivGPUImageView!!.filter = filter
 
         }
+        viewHolder.setIsRecyclable(false)
     }
 }

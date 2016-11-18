@@ -67,32 +67,58 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!--公共-->
+        <!--选择图片界面，由于发布或者选择头像等-->
         <activity android:name=".view.gallery.MultiImageSelectorActivity"
                   android:screenOrientation="portrait" />
-        <!--User-->
+        <!--拍照，新建悦秀过程之一。-->
+        <activity android:name=".activity.photo.CameraActivity"
+                  android:screenOrientation="portrait" />
+        <!--图片处理、加工，新建悦秀过程之一。-->
+        <activity android:name=".activity.photo.PhotoProcessActivity"
+                  android:screenOrientation="portrait" />
+
+        <!--完善用户资料，注册过程之一。-->
         <activity android:name=".activity.user.CompleteDataActivity"
                   android:screenOrientation="portrait" />
+        <!--用户界面装饰，用户中心分支之一。-->
         <activity android:name=".activity.user.DressUpActivity"
                   android:screenOrientation="portrait" />
+        <!--用户等级，用户资料之一。-->
         <activity android:name=".activity.user.LevelActivity" android:screenOrientation="portrait" />
+        <!--用户登录主界面。-->
         <activity android:name=".activity.user.LoginActivity" android:screenOrientation="portrait" />
+        <!--显示用户密爱，用户资料之一。-->
         <activity android:name=".activity.user.MiAiActivity" android:screenOrientation="portrait" />
+        <!--用户资料主界面。-->
         <activity android:name=".activity.user.MyInformationActivity"
                   android:screenOrientation="portrait" />
+        <!--兴趣爱好，用户资料之一。-->
         <activity android:name=".activity.user.MyInterestActivity"
                   android:screenOrientation="portrait" />
+        <!--用户注册主界面，注册过程之一。-->
         <activity android:name=".activity.user.RegisterActivity"
                   android:screenOrientation="portrait" />
+        <!--用户资料，设置过程之一。-->
         <activity android:name=".activity.user.SelectPlaceActivity"
                   android:screenOrientation="portrait" />
+        <!--用户资料，设置过程之一。-->
         <activity android:name=".activity.user.UpdataUserMsgActivity"
                   android:screenOrientation="portrait" />
+        <!--用户中心。-->
         <activity android:name=".activity.user.UserCenterActivity"
                   android:screenOrientation="portrait" />
+        <!--设置界面。-->
         <activity android:name=".activity.user.UserSettingActivity"
                   android:screenOrientation="portrait" />
+        <!--开始悦秀第一步。-->
         <activity android:name=".activity.user.EntryActivity" android:screenOrientation="portrait" />
+        <!--开始悦秀第三步。-->
+        <activity android:name=".activity.show.PhotoPostActivity"
+                  android:screenOrientation="portrait" />
+        <activity android:name=".activity.show.VideoPostActivity"
+                  android:screenOrientation="portrait" />
+        <activity android:name=".activity.show.LivingPostActivity"
+                  android:screenOrientation="portrait" />
     </application>
 
 </manifest>

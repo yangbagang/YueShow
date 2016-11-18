@@ -8,6 +8,7 @@ import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.activity.live.StartLiveActivity
 import com.ybg.yxym.yueshow.activity.photo.CameraActivity
+import com.ybg.yxym.yueshow.activity.photo.PhotoProcessActivity
 import com.ybg.yxym.yueshow.constant.IntentExtra
 import com.ybg.yxym.yueshow.utils.AndroidPermissonRequest
 import com.ybg.yxym.yueshow.utils.ToastUtil
@@ -44,9 +45,12 @@ class EntryActivity : BaseActivity() {
             if (data == null) return
             val list = data.getStringArrayListExtra(MultiImageSelectorActivity
                     .EXTRA_RESULT)
-            for (path in list) {
-                println("path=${path}")
+            if (list.isEmpty()) {
+                ToastUtil.show("你最少需要选择一张图片")
+                return
             }
+            PhotoProcessActivity.start(mContext!!, list)
+            finish()
         }
     }
 
@@ -65,8 +69,8 @@ class EntryActivity : BaseActivity() {
             -> ToastUtil.show("上传视频!")
             R.id.rl_entry_photograph//拍照
             -> {
-                ToastUtil.show("拍照!")
                 CameraActivity.start(mContext!!)
+                finish()
             }
             R.id.rl_entry_video_live//直播
             -> {

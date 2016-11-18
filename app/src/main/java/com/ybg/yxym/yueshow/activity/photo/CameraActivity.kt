@@ -4,12 +4,7 @@ import android.annotation.TargetApi
 import android.content.ComponentCallbacks2
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.BitmapRegionDecoder
-import android.graphics.ImageFormat
-import android.graphics.Matrix
-import android.graphics.Rect
+import android.graphics.*
 import android.hardware.Camera
 import android.os.AsyncTask
 import android.os.Build
@@ -19,30 +14,22 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
-import android.view.SurfaceView
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.ScaleAnimation
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import com.ybg.yxym.yb.utils.LogUtil
-
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.constant.MessageHandler
 import com.ybg.yxym.yueshow.utils.*
 import com.ybg.yxym.yueshow.utils.camera.CameraHelper
-import com.ybg.yxym.yueshow.view.CameraGrid
 import kotlinx.android.synthetic.main.activity_camera.*
-
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.lang.reflect.Method
-import java.util.ArrayList
-import java.util.Collections
-import java.util.Comparator
+import java.util.*
 
 /**
  * 相机页面自定义拍照
@@ -524,7 +511,8 @@ class CameraActivity : BaseActivity() {
 
 
         // 移除不符合条件的分辨率
-        val screenAspectRatio = ScreenUtils.getScreenWidth(mContext!!) as Double / ScreenUtils.getScreenHeight(mContext!!) as Double
+        val screenAspectRatio = ScreenUtils.getScreenWidth(mContext!!).toDouble() / ScreenUtils
+                .getScreenHeight(mContext!!).toDouble()
         val it = supportedPreviewResolutions.iterator()
         while (it.hasNext()) {
             val supportedPreviewResolution = it.next()
@@ -597,7 +585,8 @@ class CameraActivity : BaseActivity() {
         })
 
         // 移除不符合条件的分辨率
-        val screenAspectRatio = ScreenUtils.getScreenWidth(mContext!!) as Double / ScreenUtils.getScreenHeight(mContext!!) as Double
+        val screenAspectRatio = ScreenUtils.getScreenWidth(mContext!!).toDouble() / ScreenUtils
+                .getScreenHeight(mContext!!).toDouble()
         val it = sortedSupportedPicResolutions.iterator()
         while (it.hasNext()) {
             val supportedPreviewResolution = it.next()
