@@ -84,11 +84,12 @@
             android:layout_above="@id/rg_process_layout" />
     </RelativeLayout>
 
-    <com.ybg.yxym.yueshow.gpuimage.GPUImageView
-        android:id="@+id/iv_photo_process"
+    <LinearLayout
+        android:id="@+id/ll_photo_process"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@id/rl_process_layout"
-        android:layout_below="@id/rv_photo_list" />
+        android:layout_below="@id/rv_photo_list"
+        android:orientation="vertical"/>
 
 </RelativeLayout>

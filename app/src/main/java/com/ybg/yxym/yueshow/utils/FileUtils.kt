@@ -1,31 +1,20 @@
 package com.ybg.yxym.yueshow.utils
 
 import android.text.TextUtils
-
 import com.ybg.yxym.yb.utils.LogUtil
 import com.ybg.yxym.yueshow.constant.AppConstants
-
-import java.io.Closeable
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
-import java.io.RandomAccessFile
+import java.io.*
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.HashMap
-import java.util.Properties
+import java.util.*
 
 object FileUtils {
-    
+
     private val TAG = "FileUtils"
     val FILE_EXTENSION_SEPARATOR = "."
     val KB = 1024.0
     val MB = KB * KB
     val GB = KB * KB * KB
-    
+
     /**
      * 创建文件夹
      */
@@ -478,6 +467,14 @@ object FileUtils {
 
         }
 
+    }
+
+    fun getFileName(filePath: String): String {
+        if (TextUtils.isEmpty(filePath)) {
+            return filePath
+        }
+        val index = filePath.lastIndexOf(File.separator)
+        return if (index == -1) filePath else filePath.substring(index)
     }
 
 }

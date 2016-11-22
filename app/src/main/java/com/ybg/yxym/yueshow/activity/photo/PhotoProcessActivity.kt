@@ -12,15 +12,22 @@ import android.view.View
 import android.widget.RadioGroup
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
+import com.ybg.yxym.yb.utils.AppUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
+import com.ybg.yxym.yueshow.activity.show.PhotoPostActivity
 import com.ybg.yxym.yueshow.adapter.FilterAdapter
 import com.ybg.yxym.yueshow.adapter.RecyclerBaseAdapter
 import com.ybg.yxym.yueshow.adapter.SelectedImageAdapter
+import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.constant.IntentExtra
+import com.ybg.yxym.yueshow.gpuimage.GPUImageView
 import com.ybg.yxym.yueshow.gpuimage.util.GPUImageFilterTools
+import com.ybg.yxym.yueshow.utils.BitmapUtils
+import com.ybg.yxym.yueshow.utils.FileUtils
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_photo_process.*
+import java.io.File
 import java.util.*
 
 /**
@@ -30,10 +37,11 @@ class PhotoProcessActivity : BaseActivity() {
 
     private var mSmallPreviewImage: Bitmap? = null
     private var mCurrentImage: Bitmap? = null
-    private var mPath: String? = null
     private var mFilterAdapter: FilterAdapter? = null//滤镜部分
     private var mFilterList: MutableList<FilterEffect>? = null
     private var mPics: MutableList<String> = ArrayList<String>()
+    private var mGPUImageViews: MutableList<GPUImageView> = ArrayList<GPUImageView>()
+    private var mIndex = 0
 
     //选择多图片
     private lateinit var mImageAdapter: SelectedImageAdapter
@@ -50,16 +58,17 @@ class PhotoProcessActivity : BaseActivity() {
         initSelectedImageBar()
 
         if (intent != null) {
-            //拍照入口
-            mPath = String.format("file://%s", intent.getStringExtra(IntentExtra.EXTRA_PHOTO_RESULT))
-            //文件选择入口
             val pics = intent.getStringArrayListExtra(IntentExtra.PICTURE_LIST)
             if (pics.isNotEmpty()) {
                 mPics.clear()
                 for (pic in pics) {
-                    mPics.add(String.format("file://%s", pic))
+                    if (pic.startsWith("file://", true)) {
+                        mPics.add(pic)
+                    } else {
+                        mPics.add(String.format("file://%s", pic))
+                    }
+                    mGPUImageViews.add(GPUImageView(mContext))
                 }
-                mPath = mPics.first()
                 rv_photo_list.visibility = View.VISIBLE
                 mImageAdapter.notifyDataSetChanged()
             }
@@ -82,8 +91,8 @@ class PhotoProcessActivity : BaseActivity() {
         val id = item.itemId
 
         if (id == R.id.action_next) {
-            //下一步
-            ToastUtil.show("下一步。。。")
+            //保存修改，准备进行下一步。。。
+            SaveImageFile().execute()
             return true
         }
 
@@ -91,11 +100,13 @@ class PhotoProcessActivity : BaseActivity() {
     }
 
     private fun setCurrentImage() {
-        ImageLoader.getInstance().loadImage(mPath, object : SimpleImageLoadingListener() {
+        ImageLoader.getInstance().loadImage(mPics[mIndex], object : SimpleImageLoadingListener() {
             override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
                 super.onLoadingComplete(imageUri, view, loadedImage)
                 mCurrentImage = loadedImage
-                iv_photo_process.setImage(mCurrentImage)
+                ll_photo_process.removeAllViews()
+                mGPUImageViews[mIndex].setImage(mCurrentImage)
+                ll_photo_process.addView(mGPUImageViews[mIndex])
                 asyncLoadSmallImage().execute()
             }
         })
@@ -112,6 +123,40 @@ class PhotoProcessActivity : BaseActivity() {
             mSmallPreviewImage = bitmap
             initFilterToolBar()
         }
+    }
+
+    private inner class SaveImageFile : AsyncTask<Unit, Unit, Unit>() {
+
+        private val progress = AppUtil.getProgressDialog(mContext!!, "正在保存...")
+        private var savedFiles: ArrayList<String> = ArrayList<String>()
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+            progress.show()
+        }
+
+        override fun onPostExecute(result: Unit?) {
+            super.onPostExecute(result)
+            progress.dismiss()
+            val list: ArrayList<String> = savedFiles
+            PhotoPostActivity.start(mContext!!, list)
+        }
+
+        override fun doInBackground(vararg p0: Unit?) {
+            for ((index, gpuImageView) in mGPUImageViews.withIndex()) {
+                if (gpuImageView.filter != null) {
+                    val file = AppConstants.IMAGE_SAVE_PATH + "/" + System.currentTimeMillis() +
+                            "/" + FileUtils.getFileName(mPics[index])
+                    savedFiles.add("file://" + file)
+                    val saveFile = File(file)
+                    val bitmap = gpuImageView.capture()
+                    BitmapUtils.saveBitmap(bitmap, saveFile)
+                } else {
+                    savedFiles.add(mPics[index])
+                }
+            }
+        }
+
     }
 
     //底部RadioGroup切换监听
@@ -145,7 +190,7 @@ class PhotoProcessActivity : BaseActivity() {
         mImageAdapter.setDataList(mPics)
         mImageAdapter.setOnItemClickListener(object : RecyclerBaseAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                mPath = mPics[position]
+                mIndex = position
                 setCurrentImage()
             }
         })
@@ -160,7 +205,7 @@ class PhotoProcessActivity : BaseActivity() {
         mFilterAdapter!!.setOnItemClickListener(object : RecyclerBaseAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 val filter = GPUImageFilterTools.createFilterForType(mContext, mFilterList!![position].type)
-                iv_photo_process.filter = filter
+                mGPUImageViews[mIndex].filter = filter
             }
         })
         rv_process_tools.adapter = mFilterAdapter
@@ -168,13 +213,6 @@ class PhotoProcessActivity : BaseActivity() {
     }
 
     companion object {
-
-        fun start(context: Context, result: String) {
-            val starter = Intent(context, PhotoProcessActivity::class.java)
-            starter.putExtra(IntentExtra.EXTRA_PHOTO_RESULT, result)
-            context.startActivity(starter)
-        }
-
         fun start(context: Context, pics: ArrayList<String>) {
             val starter = Intent(context, PhotoProcessActivity::class.java)
             starter.putStringArrayListExtra(IntentExtra.PICTURE_LIST, pics)

@@ -319,8 +319,9 @@ class CameraActivity : BaseActivity() {
 
             if (!TextUtils.isEmpty(result)) {
                 dismissProgressDialog()
+                val list = arrayListOf(result)
                 //这边处理接下来的事件
-                PhotoProcessActivity.start(mContext!!, result)
+                PhotoProcessActivity.start(mContext!!, list)
                 finish()
                 LogUtil.d(TAG + result)
             } else {

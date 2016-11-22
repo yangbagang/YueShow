@@ -1,11 +1,11 @@
 package com.ybg.yxym.yueshow.activity.show
 
+import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.ybg.yxym.yueshow.R
-import com.ybg.yxym.yueshow.adapter.RecyclerBaseAdapter
 import com.ybg.yxym.yueshow.adapter.SelectedImageAdapter
 import com.ybg.yxym.yueshow.constant.IntentExtra
 import com.ybg.yxym.yueshow.utils.ToastUtil
@@ -32,13 +32,6 @@ class PhotoPostActivity : PostShowActivity() {
         initSelectedImageBar()
 
         if (intent != null) {
-            //拍照入口
-            val mPath = String.format("file://%s", intent.getStringExtra(IntentExtra
-                    .EXTRA_PHOTO_RESULT))
-            if (mPath != "") {
-                mPics.add(mPath)
-            }
-            //文件选择入口
             val pics = intent.getStringArrayListExtra(IntentExtra.PICTURE_LIST)
             if (pics.isNotEmpty()) {
                 mPics.clear()
@@ -73,13 +66,17 @@ class PhotoPostActivity : PostShowActivity() {
 
         mImageAdapter = SelectedImageAdapter(mContext!!)
         mImageAdapter.setDataList(mPics)
-//        mImageAdapter.setOnItemClickListener(object : RecyclerBaseAdapter.OnItemClickListener {
-//            override fun onItemClick(position: Int) {
-//                mPath = mPics[position]
-//                setCurrentImage()
-//            }
-//        })
 
         rv_photo_list.adapter = mImageAdapter
     }
+
+    companion object {
+
+        fun start(context: Context, pics: ArrayList<String>) {
+            val starter = Intent(context, PostShowActivity::class.java)
+            starter.putStringArrayListExtra(IntentExtra.PICTURE_LIST, pics)
+            context.startActivity(starter)
+        }
+    }
+
 }

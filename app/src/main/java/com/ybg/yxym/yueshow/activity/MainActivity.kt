@@ -172,7 +172,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (view.id) {
             R.id.rl_tab_menu_0 -> vp_main_content!!.currentItem = 0
             R.id.rl_tab_menu_1 -> vp_main_content!!.currentItem = 1
-            R.id.rl_tab_publish -> EntryActivity.start(this@MainActivity)
+            R.id.rl_tab_publish -> {
+                if (showApplication.hasLogin()) {
+                    EntryActivity.start(this@MainActivity)
+                } else {
+                    ToastUtil.show("你还没有登录，请登录后再尝试。")
+                }
+            }
         }
     }
 

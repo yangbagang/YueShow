@@ -36,7 +36,6 @@ class EntryActivity : BaseActivity() {
         rl_entry_photograph.setOnClickListener(onClickListener)
         rl_entry_video_live.setOnClickListener(onClickListener)
         rl_entry_video_play.setOnClickListener(onClickListener)
-        iv_close.setOnClickListener(onClickListener)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -58,27 +57,30 @@ class EntryActivity : BaseActivity() {
      * 点击事件
      */
     private var onClickListener: View.OnClickListener = View.OnClickListener { v ->
-        when (v.id) {
-            R.id.rl_entry_updata_photo//上传图片
-            -> {
-                //选择己有的图片上传
-                MultiImageSelectorActivity.start(mContext!!, true, 9, MultiImageSelectorActivity
-                        .MODE_MULTI)
+        if (!mApplication.hasLogin()) {
+            ToastUtil.show("你还没有登录，请先登录。")
+        } else {
+            when (v.id) {
+                R.id.rl_entry_updata_photo//上传图片
+                -> {
+                    //选择己有的图片上传
+                    MultiImageSelectorActivity.start(mContext!!, true, 9, MultiImageSelectorActivity
+                            .MODE_MULTI)
+                }
+                R.id.rl_entry_updata_video//上传视频
+                -> ToastUtil.show("上传视频!")
+                R.id.rl_entry_photograph//拍照
+                -> {
+                    CameraActivity.start(mContext!!)
+                    finish()
+                }
+                R.id.rl_entry_video_live//直播
+                -> {
+                    StartLiveActivity.start(mContext!!)
+                }
+                R.id.rl_entry_video_play//视频
+                -> showVideoRecord()
             }
-            R.id.rl_entry_updata_video//上传视频
-            -> ToastUtil.show("上传视频!")
-            R.id.rl_entry_photograph//拍照
-            -> {
-                CameraActivity.start(mContext!!)
-                finish()
-            }
-            R.id.rl_entry_video_live//直播
-            -> {
-                StartLiveActivity.start(mContext!!)
-            }
-            R.id.rl_entry_video_play//视频
-            -> showVideoRecord()
-            R.id.iv_close -> finish()
         }//CameraActivity.start(mContext);
         //                    SharedPreferences pref = getSharedPreferences("user", Context.MODE_PRIVATE);
         //                    String user_id = pref.getString("user_id", "");

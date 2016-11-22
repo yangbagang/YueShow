@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
@@ -9,23 +10,30 @@
         android:layout_height="@dimen/px_60"
         android:layout_marginTop="@dimen/px_16"
         android:layout_marginBottom="@dimen/px_16">
-        <Button
-            android:id="@+id/btn_topic_add"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="#话题"/>
-        <Button
-            android:id="@+id/btn_topic_notice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="填写话题，获更多关注哦！"/>
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btn_topic_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="#话题"/>
+            <TextView
+                android:id="@+id/btn_topic_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="填写话题，获更多关注哦！"/>
+        </LinearLayout>
+
     </HorizontalScrollView>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:hint="添加描述"/>
+        android:inputType="textMultiLine"
+        android:hint="添加描述"
+        android:gravity="start"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -65,7 +73,8 @@
     
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px_80">
+        android:layout_height="@dimen/px_80"
+        android:gravity="center_vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -87,15 +96,14 @@
             android:src="@mipmap/umeng_socialize_sina_off"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_show_post"
+    <com.ybg.yxym.yueshow.view.processButton.impl.GenerateProcessButton
+        android:id="@+id/btn_complete_register"
+        style="@style/btn_24pt_7dcf2c_white"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px_80"
-        android:background="@android:color/holo_orange_dark">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="发布"
-            android:textColor="@color/white"/>
-    </LinearLayout>
+        android:layout_height="@dimen/px_88"
+        android:layout_marginTop="@dimen/px_16"
+        android:onClick="onClick"
+        android:text="发布"
+        app:pb_textComplete="完成"
+        app:pb_textProgress="正在上传数据..."/>
 </LinearLayout>
