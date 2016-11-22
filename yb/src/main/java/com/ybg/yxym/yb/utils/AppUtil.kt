@@ -22,7 +22,7 @@ import com.ybg.yxym.yb.R
 /**
  * Created by yangbagang on 16/8/9.
  */
-class AppUtil private constructor() {
+object AppUtil {
 
     private val preference = AppPreferences.instance
 
@@ -104,16 +104,4 @@ class AppUtil private constructor() {
         return dialog
     }
 
-    companion object {
-
-        private var app: AppUtil? = null
-
-        val instance: AppUtil
-            get() {
-                if (app == null) {
-                    app = AppUtil()
-                }
-                return app!!
-            }
-    }
 }
