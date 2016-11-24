@@ -7,7 +7,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_photo_list"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px_120"
+        android:layout_height="@dimen/px_200"
         android:visibility="gone" />
 
     <RelativeLayout

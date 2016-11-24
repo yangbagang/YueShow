@@ -9,8 +9,8 @@ object HttpUrl {
     //测试服务器地址
     val API_HOST_DEBUG = "http://192.168.12.99:8080/ma"
     val API_HOST_PRODUCT = "https://139.224.186.241:8443/ma"
-    val FILE_SERVER_UPLOAD = "http://120.76.74.2/file/upload"
-    val FILE_SERVER_PREVIEW = "http://120.76.74.2/file/preview"
+    val FILE_SERVER_UPLOAD = "http://120.76.74.2/file/file/upload"
+    val FILE_SERVER_PREVIEW = "http://120.76.74.2/file/file/preview"
 
     val ROOT_URL = if (debug) API_HOST_DEBUG else API_HOST_PRODUCT
     //获取验证码
@@ -29,10 +29,12 @@ object HttpUrl {
     private val COMPLETE_USER_INFO = "/userBase/completeData"
     //第三方用户登录
     private val UM_USER_LOGIN = "/userBase/umLogin"
-    /*直播列表*/
-    private val LIVE_LIST = "/live/v1/live/list"
-    /*create live*/
-    private val CREATE_LIVE = "/live/v1/live/create"
+    /*美秀列表*/
+    private val LIVE_LIST = "/ruiShow/list"
+    /*新建美秀*/
+    private val CREATE_LIVE = "/ruiShow/create"
+    private val APPEND_FILES = "/showFile/addFiles"
+    private val APPEND_EVENTS = "/ruiEvent/appendEvent"
     /*switch live*/
     private val SWITCH_LIVE = "/live/v1/live/switch"
     /*comment live*/
@@ -159,6 +161,12 @@ object HttpUrl {
 
     val createLiveUrl: String
         get() = ROOT_URL + CREATE_LIVE
+
+    val appendFileUrl: String
+        get() = ROOT_URL + APPEND_FILES
+
+    val appendEventUrl: String
+        get() = ROOT_URL + APPEND_EVENTS
 
     val topicListUrl: String
         get() = ROOT_URL + TOPIC_LIST

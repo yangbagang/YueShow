@@ -140,34 +140,35 @@ object SendRequest {
      * @param pageSize  每页显示多少条
      * @param type  1最新 2最热
      */
-    fun getLiveList(tag: Context, pageNum: Int, pageSize: Int, type: Int, callback: OkCallback<*>) {
+    fun getShowList(tag: Context, pageNum: Int, pageSize: Int, type: Int, callback: OkCallback<*>) {
         val params = mapOf<String, Int>("pageNum" to pageNum, "pageSize" to pageSize, "type" to type)
         OkHttpProxy.post(HttpUrl.liveListUrl, tag, params, callback)
     }
 
     /**
-     * 2.2 live Create
-     * path: /live/v1/live/create
-     * method: POST
-     * params:
-
-     * @param username      username string required
-     * *
-     * @param token         token string required
-     * *
-     * @param type          token_type int required
-     * *
-     * @param relatedTopics related_topics [int]   如果找不到对应的topic，则需要先创建
-     * *
-     * @param category      category int required  表示选择的板块（0：逗萌乐悠悠 1：温湿暖潮潮 2：人生要BIBI 3：有颜有气质 4：唱演兼懂言 5：会秀更会美）
+     * 2.2 新建美秀
+     *
+     * @param token
+     * @param barId
+     * @param thumbnail
+     * @param title
      */
-    fun createLive(tag: Context, username: String, token: String, type: Int, relatedTopics: Int, category: Int, callback: OkCallback<*>) {
-        mParams!!.put("username", username)
-        mParams!!.put("token", token)
-        mParams!!.put("token_type", type)
-        mParams!!.put("related_topics ", relatedTopics)
-        mParams!!.put("category ", category)
-        OkHttpProxy.postJson(HttpUrl.createLiveUrl, tag, appendParams(), callback)
+    fun createShow(tag: Context, token: String, barId: String, thumbnail: String,
+                   title: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "barId" to barId, "thumbnail" to thumbnail,
+                "title" to title)
+        OkHttpProxy.post(HttpUrl.createLiveUrl, tag, params, callback)
+    }
+
+    fun addFiles(tag: Context, showId: String, files: String, type: String, callback:
+    OkCallback<*>) {
+        val params = mapOf<String, String>("showId" to showId, "fileIds" to files, "type" to type)
+        OkHttpProxy.post(HttpUrl.appendFileUrl, tag, params, callback)
+    }
+
+    fun addEvents(tag: Context, showId: String, events: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("showId" to showId, "eventIds" to events)
+        OkHttpProxy.post(HttpUrl.appendEventUrl, tag, params, callback)
     }
 
     /**

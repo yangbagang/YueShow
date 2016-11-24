@@ -448,9 +448,7 @@ class BGARefreshLayout @JvmOverloads constructor(context: Context, attrs: Attrib
             return true
         }
 
-        return mStickyNavLayout?.let { ScrollingUtil.isStickyNavLayoutToTop(it) }!!
-
-        return false
+        return mStickyNavLayout?.let { ScrollingUtil.isStickyNavLayoutToTop(it) } == true
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {

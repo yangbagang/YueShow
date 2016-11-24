@@ -7,9 +7,7 @@
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px_60"
-        android:layout_marginTop="@dimen/px_16"
-        android:layout_marginBottom="@dimen/px_16">
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -28,20 +26,24 @@
     </HorizontalScrollView>
 
     <EditText
+        android:id="@+id/et_show_title"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:inputType="textMultiLine"
+        android:minLines="3"
         android:hint="添加描述"
         android:gravity="start"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px_60">
+        android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/iv_emotion_entry"
             android:layout_width="@dimen/px_60"
-            android:layout_height="@dimen/px_60"
+            android:layout_height="wrap_content"
             android:scaleType="fitXY"
             android:src="@mipmap/ic_qq"/>
         <EditText
@@ -97,7 +99,7 @@
     </LinearLayout>
 
     <com.ybg.yxym.yueshow.view.processButton.impl.GenerateProcessButton
-        android:id="@+id/btn_complete_register"
+        android:id="@+id/btn_post_show"
         style="@style/btn_24pt_7dcf2c_white"
         android:layout_width="match_parent"
         android:layout_height="@dimen/px_88"

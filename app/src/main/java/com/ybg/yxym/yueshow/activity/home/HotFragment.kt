@@ -1,12 +1,9 @@
 package com.ybg.yxym.yueshow.activity.home
 
-import android.content.Context
 import android.os.Handler
 import android.os.Message
-import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
-
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.ybg.yxym.yb.bean.JSonResultBean
@@ -20,20 +17,16 @@ import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.bgarefresh.BGANormalRefreshViewHolder
 import com.ybg.yxym.yueshow.view.bgarefresh.BGARefreshLayout
-
-import java.util.ArrayList
+import java.util.*
 
 class HotFragment : BaseFragment() {
 
     private lateinit var mListView: ListView
     private lateinit var mRefreshLayout: BGARefreshLayout
-    /**
-     * 一次加载数据的条数
-     */
-    private var DATA_START = 0
-    private var DATA_NUM = 0
-    private val DATA_SIZE = 5//每次拉取5条
-    private val DATA_TYPE = 0//拉去全部
+
+    private var hasMore = true
+    private val pageSize = 5//每页取5条
+    private var pageNum = 1//页码
 
     private val TYPE_REFRESH = 0//下拉刷新
     private val TYPE_LOADMORE = 1//上拉加载
@@ -65,13 +58,14 @@ class HotFragment : BaseFragment() {
      * ListView ITEM 点击事件
      */
     private val onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-        if (hotEntityList[position].type == 2 || hotEntityList[position].type == 3) {
-            //TODO
-            //HomeShowItemDetailActivity.start(mContext,hotEntityList.get(position).getLive(),
-            //        hotEntityList.get(position).getUser());
-        } else {
-            ToastUtil.show("直播已经结束")
-        }
+//        if (hotEntityList[position].type == 2 || hotEntityList[position].type == 3) {
+//            //TODO
+//            //HomeShowItemDetailActivity.start(mContext,hotEntityList.get(position).getLive(),
+//            //        hotEntityList.get(position).getUser());
+//        } else {
+//            ToastUtil.show("直播已经结束")
+//        }
+        ToastUtil.show("查看详情")
     }
 
 
@@ -90,7 +84,8 @@ class HotFragment : BaseFragment() {
 
                 }.type)
             }
-            DATA_NUM = list.size
+
+            hasMore = list.size < pageSize
 
             when (msg.what) {
                 0 -> {
@@ -114,14 +109,14 @@ class HotFragment : BaseFragment() {
      */
     private val mDelegate = object : BGARefreshLayout.BGARefreshLayoutDelegate {
         override fun onBGARefreshLayoutBeginRefreshing(refreshLayout: BGARefreshLayout) {
-            DATA_START = 0
-            getHotInfolist(mContext!!, DATA_TYPE, DATA_START, DATA_SIZE)
+            pageNum = 1
+            getHotInfolist()
         }
 
         override fun onBGARefreshLayoutBeginLoadingMore(refreshLayout: BGARefreshLayout): Boolean {
-            DATA_START += DATA_SIZE
-            if (DATA_START < DATA_NUM / DATA_SIZE * DATA_SIZE + DATA_SIZE) {
-                getHotInfolist(mContext!!, DATA_TYPE, DATA_START, DATA_SIZE)
+            if (hasMore) {
+                pageNum = pageNum + 1
+                getHotInfolist()
             } else {
                 ToastUtil.show("没有更多数据!")
                 return false//不显示更多加载
@@ -139,10 +134,11 @@ class HotFragment : BaseFragment() {
      * *
      * @param count
      */
-    private fun getHotInfolist(context: Context, type: Int, start: Int, count: Int) {
-        SendRequest.getHomeHot(context, type, start, count, object : OkCallback<String>(OkStringParser()) {
+    private fun getHotInfolist() {
+        SendRequest.getShowList(mContext!!, pageNum, pageSize, 2, object : OkCallback<String>
+        (OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
-                if (DATA_START == 0) {
+                if (pageNum == 1) {
                     val message = mHandler.obtainMessage()
                     message.what = TYPE_REFRESH
                     message.obj = response

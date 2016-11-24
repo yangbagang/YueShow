@@ -138,8 +138,11 @@ class PhotoProcessActivity : BaseActivity() {
         override fun onPostExecute(result: Unit?) {
             super.onPostExecute(result)
             progress.dismiss()
+            //启动发布界面
             val list: ArrayList<String> = savedFiles
             PhotoPostActivity.start(mContext!!, list)
+            //关闭本窗口
+            finish()
         }
 
         override fun doInBackground(vararg p0: Unit?) {
@@ -147,7 +150,7 @@ class PhotoProcessActivity : BaseActivity() {
                 if (gpuImageView.filter != null) {
                     val file = AppConstants.IMAGE_SAVE_PATH + "/" + System.currentTimeMillis() +
                             "/" + FileUtils.getFileName(mPics[index])
-                    savedFiles.add("file://" + file)
+                    savedFiles.add(file)
                     val saveFile = File(file)
                     val bitmap = gpuImageView.capture()
                     BitmapUtils.saveBitmap(bitmap, saveFile)

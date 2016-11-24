@@ -3,13 +3,28 @@ package com.ybg.yxym.yueshow.activity.show
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import com.ybg.yxym.yb.bean.JSonResultBean
+import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.adapter.SelectedImageAdapter
 import com.ybg.yxym.yueshow.constant.IntentExtra
+import com.ybg.yxym.yueshow.http.Model.Progress
+import com.ybg.yxym.yueshow.http.SendRequest
+import com.ybg.yxym.yueshow.http.callback.OkCallback
+import com.ybg.yxym.yueshow.http.listener.UploadListener
+import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_photo_post.*
+import kotlinx.android.synthetic.main.activity_show_post.*
+import okhttp3.Call
+import okhttp3.Response
+import org.json.JSONObject
+import java.io.File
+import java.io.IOException
 import java.util.*
 
 /**
@@ -19,6 +34,8 @@ class PhotoPostActivity : PostShowActivity() {
 
     private lateinit var mImageAdapter: SelectedImageAdapter
     private var mPics: MutableList<String> = ArrayList<String>()
+    private var mIndex = 0
+    private var mFiles: MutableList<String> = ArrayList<String>()
 
     override fun setContentViewId(): Int {
         return R.layout.activity_photo_post
@@ -35,7 +52,13 @@ class PhotoPostActivity : PostShowActivity() {
             val pics = intent.getStringArrayListExtra(IntentExtra.PICTURE_LIST)
             if (pics.isNotEmpty()) {
                 mPics.clear()
-                mPics.addAll(pics)
+                for (pic in pics) {
+                    if (pic.startsWith("file:")) {
+                        mPics.add(pic)
+                    } else {
+                        mPics.add(String.format("file://%s", pic))
+                    }
+                }
                 mImageAdapter.notifyDataSetChanged()
             }
         }
@@ -52,8 +75,7 @@ class PhotoPostActivity : PostShowActivity() {
         val id = item.itemId
 
         if (id == R.id.action_finish) {
-            //下一步
-            ToastUtil.show("完成。。。")
+            postShow()
             return true
         }
 
@@ -70,10 +92,108 @@ class PhotoPostActivity : PostShowActivity() {
         rv_photo_list.adapter = mImageAdapter
     }
 
+    override fun postShow() {
+        //开始上传图片，图片上传完成后再建美秀。
+        uploadPics()
+    }
+
+    private fun uploadPics() {
+        val file = mPics[mIndex].substring(7)
+        SendRequest.uploadFile(mContext!!, "show", File(file), object : UploadListener(){
+            override fun onFailure(call: Call?, e: IOException?) {
+                e?.let { onFailure(e) }
+            }
+
+            override fun onResponse(call: Call?, response: Response?) {
+                response?.let { onSuccess(response) }
+            }
+
+            override fun onSuccess(response: Response) {
+                val json = JSONObject(response.body().string())
+                val fileId = json.getString("fid")
+                println("fileId=" + fileId)
+                mFiles.add(fileId)
+                mIndex++
+                if (mIndex == mPics.size) {
+                    createShow()
+                } else {
+                    uploadPics()
+                }
+            }
+
+            override fun onFailure(e: Exception) {
+                e.printStackTrace()
+                workInLoopThread {
+                    ToastUtil.show("上传图片失败")
+                }
+            }
+
+            override fun onUIProgress(progress: Progress) {
+                runOnUiThread {
+                    val progressInt: Int = (progress.currentBytes * 100 / progress.totalBytes).toInt()
+                    btn_post_show.text = "上传第${mIndex + 1}张(${progressInt}%)"
+                }
+            }
+        })
+    }
+
+    private fun createShow() {
+        val barId = "1"
+        val thumbnail = mFiles.first()
+        SendRequest.createShow(mContext!!, mApplication.token, barId, thumbnail, title, object :
+                OkCallback<String>(OkStringParser()) {
+
+            override fun onSuccess(code: Int, response: String) {
+                val resultBean = JSonResultBean.fromJSON(response)
+                if (resultBean != null && resultBean.isSuccess) {
+                    //创建完成，开始添加附件
+                    val show = mGson?.fromJson(resultBean.data, YueShow::class.java)
+                    appendPics(show)
+                } else {
+                    resultBean?.let {
+                        checkUserValid(resultBean.message)
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                ToastUtil.show("建立美秀失败。")
+            }
+
+        })
+    }
+
+    private fun appendPics(show: YueShow?) {
+        val files = mFiles.toTypedArray().joinToString(",")
+        show?.let {
+            SendRequest.addFiles(mContext!!, show.id.toString(), files, "1", object :
+                    OkCallback<String>(OkStringParser()) {
+
+                override fun onSuccess(code: Int, response: String) {
+                    val resultBean = JSonResultBean.fromJSON(response)
+                    if (resultBean != null && resultBean.isSuccess) {
+                        //创建完成
+                        ToastUtil.show("创建完成。")
+                        finish()
+                    } else {
+                        resultBean?.let {
+                            checkUserValid(resultBean.message)
+                        }
+                    }
+                }
+
+                override fun onFailure(e: Throwable) {
+                    ToastUtil.show("保存文件失败。")
+                }
+
+            })
+        }
+    }
+
     companion object {
 
         fun start(context: Context, pics: ArrayList<String>) {
-            val starter = Intent(context, PostShowActivity::class.java)
+            val starter = Intent(context, PhotoPostActivity::class.java)
             starter.putStringArrayListExtra(IntentExtra.PICTURE_LIST, pics)
             context.startActivity(starter)
         }

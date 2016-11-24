@@ -1,121 +1,78 @@
 package com.ybg.yxym.yueshow.activity.home
 
-import android.app.Activity
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Message
-import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
-
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.YueShow
-import com.ybg.yxym.yb.utils.LogUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseFragment
 import com.ybg.yxym.yueshow.adapter.FreshShowAdapter
-import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.bgarefresh.BGANormalRefreshViewHolder
 import com.ybg.yxym.yueshow.view.bgarefresh.BGARefreshLayout
-
-import java.util.ArrayList
+import java.util.*
 
 class FreshFragment : BaseFragment() {
 
-    private var mListView: ListView? = null
-    private var mRefreshLayout: BGARefreshLayout? = null
+    private lateinit var mListView: ListView
+    private lateinit var mRefreshLayout: BGARefreshLayout
 
-    /**
-     * userid
-     */
-    private var user_id: String? = null
-    /**
-     * 从第0条数据开始
-     */
-    private var DATA_START = 0
-    /**
-     * 总的据的条数
-     */
-    private var DATA_NUM = 0
-    /**
-     * 每次数据的条数
-     */
-    private val DATA_SIZE = 5
-    /**
-     * 返回数据的类型 1直播，2是图片，3是视频，0全部
-     */
-    private val DATA_TYPE = 0
+    private var hasMore = true
+    private val pageSize = 5//每页取5条
+    private var pageNum = 1//页码
+
     private val TYPE_REFRESH = 0//下拉刷新
     private val TYPE_LOADMORE = 1//上拉加载
 
-    private var mAdapter: FreshShowAdapter? = null
+    private lateinit var mAdapter: FreshShowAdapter
     private var hotEntityList: MutableList<YueShow> = ArrayList()
 
     override fun setContentViewId(): Int {
-        LogUtil.d("Hot----" + "加载布局-------最鲜")
         return R.layout.fragment_hall_show_fresh
     }
 
     override fun setUpView() {
-        mContext = activity
-        getSharePref()
-
         mListView = mRootView!!.findViewById(R.id.rv_list_view) as ListView
         mRefreshLayout = mRootView!!.findViewById(R.id.rl_fresh_layout) as BGARefreshLayout
+
+        mRefreshLayout.setRefreshViewHolder(BGANormalRefreshViewHolder(mContext!!, true))
+        mRefreshLayout.setDelegate(mDelegate)
+        mRefreshLayout.beginRefreshing()
     }
 
     override fun init() {
         mAdapter = FreshShowAdapter(mContext!!)
-        mAdapter!!.setDataList(hotEntityList)
-        mListView!!.adapter = mAdapter
-
-        mRefreshLayout!!.setRefreshViewHolder(BGANormalRefreshViewHolder(mContext!!, true))
-        mRefreshLayout!!.setDelegate(mDelegate)
-        mRefreshLayout!!.beginRefreshing()
-        mListView!!.onItemClickListener = onItemClickListener
+        mAdapter.setDataList(hotEntityList)
+        mListView.adapter = mAdapter
+        mListView.onItemClickListener = onItemClickListener
     }
 
     /**
      * ListView ITEM 点击事件
      */
     private val onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-        if (hotEntityList[position].type == 2 || hotEntityList[position].type == 3) {
-            //TODO
-            //HomeShowItemDetailActivity.start(mContext, hotEntityList.get(position).getLive()
-            //        , hotEntityList.get(position).getUser());
-        } else {
-            ToastUtil.show("直播已经结束")
-        }
+//        if (hotEntityList[position].type == 2 || hotEntityList[position].type == 3) {
+//            //TODO
+//            //HomeShowItemDetailActivity.start(mContext, hotEntityList.get(position).getLive()
+//            //        , hotEntityList.get(position).getUser());
+//        } else {
+//            ToastUtil.show("直播已经结束")
+//        }
+        ToastUtil.show("查看详情")
     }
 
-
-    private fun getSharePref() {
-        val preferences = mContext!!.getSharedPreferences(AppConstants.SHARE_PREFERENCE_USER, Context.MODE_PRIVATE)
-        user_id = preferences.getString(AppConstants.USER_ID, "")
-    }
-
-    /**
-     * @param context
-     * *
-     * @param userid
-     * *
-     * @param type
-     * *
-     * @param start
-     * *
-     * @param count
-     */
-    private fun getHomeNewInfo(context: Context, userid: String, type: Int, start: Int, count: Int) {
-        SendRequest.getHomeNew(context, userid, type, start, count, object : OkCallback<String>(OkStringParser()) {
+    private fun getHomeNewInfo() {
+        SendRequest.getShowList(mContext!!, pageNum, pageSize, 1, object : OkCallback<String>
+        (OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
-                if (DATA_START == 0) {
+                if (pageNum == 1) {
                     val message = mHandler.obtainMessage()
                     message.what = TYPE_REFRESH
                     message.obj = response
@@ -129,9 +86,7 @@ class FreshFragment : BaseFragment() {
             }
 
             override fun onFailure(e: Throwable) {
-                if (mRefreshLayout != null) {
-                    mRefreshLayout!!.endRefreshing()
-                }
+                mRefreshLayout.endRefreshing()
             }
         })
     }
@@ -152,25 +107,22 @@ class FreshFragment : BaseFragment() {
 
                 }.type)
             }
-            DATA_NUM = list.size
+
+            hasMore = list.size < pageSize
 
             when (msg.what) {
                 0 -> {
-                    if (mRefreshLayout != null) {
-                        mRefreshLayout!!.endRefreshing()
-                    }
+                    mRefreshLayout.endRefreshing()
                     hotEntityList.clear()
                     hotEntityList.addAll(list)
                 }
                 1 -> {
-                    if (mRefreshLayout != null) {
-                        mRefreshLayout!!.endLoadingMore()
-                    }
+                    mRefreshLayout.endLoadingMore()
                     hotEntityList.addAll(list)
                 }
             }
-            mAdapter!!.setDataList(hotEntityList)
-            mAdapter!!.notifyDataSetChanged()
+            mAdapter.setDataList(hotEntityList)
+            mAdapter.notifyDataSetChanged()
         }
     }
 
@@ -179,14 +131,14 @@ class FreshFragment : BaseFragment() {
      */
     private val mDelegate = object : BGARefreshLayout.BGARefreshLayoutDelegate {
         override fun onBGARefreshLayoutBeginRefreshing(refreshLayout: BGARefreshLayout) {
-            DATA_START = 0
-            getHomeNewInfo(mContext!!, user_id!!, DATA_TYPE, DATA_START, DATA_SIZE)
+            pageNum = 1
+            getHomeNewInfo()
         }
 
         override fun onBGARefreshLayoutBeginLoadingMore(refreshLayout: BGARefreshLayout): Boolean {
-            DATA_START += DATA_SIZE
-            if (DATA_START < DATA_NUM / DATA_SIZE * DATA_SIZE + DATA_SIZE) {
-                getHomeNewInfo(mContext!!, user_id!!, DATA_TYPE, DATA_START, DATA_SIZE)
+            if (hasMore) {
+                pageNum = pageNum + 1
+                getHomeNewInfo()
             } else {
                 ToastUtil.show("没有更多数据!")
                 return false

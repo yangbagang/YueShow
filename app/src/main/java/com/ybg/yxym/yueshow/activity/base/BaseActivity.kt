@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.support.annotation.IdRes
 import android.support.annotation.LayoutRes
@@ -224,5 +225,13 @@ abstract class BaseActivity : AppCompatActivity() {
                 ToastUtil.show("获取用户信息失败。")
             }
         })
+    }
+
+    protected fun workInLoopThread(work: () -> Unit) {
+        Thread {
+            Looper.prepare()
+            kotlin.run(work)
+            Looper.loop()
+        }.start()
     }
 }

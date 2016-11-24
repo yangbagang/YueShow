@@ -21,6 +21,7 @@ import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yb.utils.DateUtil
 import com.ybg.yxym.yb.utils.LogUtil
 import com.ybg.yxym.yueshow.R
+import com.ybg.yxym.yueshow.app.ShowApplication
 import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
@@ -41,7 +42,6 @@ class HotShowAdapter(protected var mContext: Activity) : BaseAdapter() {
     private var token: String? = null//令牌
 
     init {
-        getSharePref()
         val wm = mContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         this.width = wm.defaultDisplay.width
     }
@@ -54,7 +54,7 @@ class HotShowAdapter(protected var mContext: Activity) : BaseAdapter() {
     }
 
     override fun getCount(): Int {
-        return if (mList != null && mList!!.size > 0) mList!!.size else 0
+        return if (mList != null && mList!!.isNotEmpty()) mList!!.size else 0
     }
 
     override fun getItemId(position: Int): Long {
@@ -65,8 +65,8 @@ class HotShowAdapter(protected var mContext: Activity) : BaseAdapter() {
         return mList!![position]
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var convertView = convertView
+    override fun getView(position: Int, view: View?, parent: ViewGroup): View {
+        var convertView = view
         var viewHolder: ViewHolder? = null
         var careOnClickListener: BtnCareOnClickListener? = null
         var commentOnClickListener: BtnCommentOnClickListener? = null
@@ -126,7 +126,7 @@ class HotShowAdapter(protected var mContext: Activity) : BaseAdapter() {
             /**冠军 */
             viewHolder.iv_video_cover!!.layoutParams = relativeLayoutParms
             viewHolder.iv_video_cover!!.setImageResource(R.mipmap.ic_default_cover)
-            if (mList!![position].thumbnail != null) {
+            if (mList!![position].thumbnail != "") {
                 if (!TextUtils.isEmpty(mList!![position].thumbnail)) {
                     /**设置 tag 防止图片错位 */
                     viewHolder.iv_video_cover!!.tag = mList!![position].thumbnail
@@ -144,7 +144,7 @@ class HotShowAdapter(protected var mContext: Activity) : BaseAdapter() {
             /**冠军 */
             viewHolder.ll_photo_live_flag!!.setBackgroundResource(R.drawable.shape_gray_bg)
             viewHolder.iv_photo_live_flag!!.setImageResource(R.mipmap.ic_entry_photo_logo)
-            if (mList!![position].thumbnail != null) {
+            if (mList!![position].thumbnail != "") {
                 val imgNum = mList!![position].fileNum
                 viewHolder.rl_live!!.visibility = View.GONE
                 viewHolder.rl_video!!.visibility = View.GONE
@@ -236,7 +236,7 @@ class HotShowAdapter(protected var mContext: Activity) : BaseAdapter() {
             viewHolder.iv_live_cover!!.layoutParams = relativeLayoutParms
             //设置默认图片
             viewHolder.iv_live_cover!!.setImageResource(R.mipmap.ic_default_cover)
-            if (mList!![position].thumbnail != null) {
+            if (mList!![position].thumbnail != "") {
                 if (!TextUtils.isEmpty(mList!![position].thumbnail)) {
                     /**设置 tag 防止图片错位 */
                     val img_url_live = mList!![position].thumbnail
@@ -249,20 +249,21 @@ class HotShowAdapter(protected var mContext: Activity) : BaseAdapter() {
         }
         /**用户信息 */
         viewHolder.iv_user_photo!!.setOnClickListener(photoOnClickListener)
-        if (TextUtils.isEmpty(mList!![position].user!!.nickName)) {
-            viewHolder.tv_username!!.text = "" + mList!![position].user!!.ymCode
+        if (TextUtils.isEmpty(mList!![position].user?.nickName)) {
+            viewHolder.tv_username!!.text = "" + mList!![position].user?.ymCode
         } else {
-            viewHolder.tv_username!!.text = mList!![position].user!!.nickName
+            viewHolder.tv_username!!.text = mList!![position].user?.nickName
         }
-        if (TextUtils.isEmpty(mList!![position].user!!.avatar)) {
+        if (TextUtils.isEmpty(mList!![position].user?.avatar)) {
             Picasso.with(mContext).load(AppConstants.APP_DEFAULT_USER_PHOTO).resize(100, 100).centerCrop().into(viewHolder.iv_user_photo)
         } else {
-            Picasso.with(mContext).load(mList!![position].user!!.avatar).resize(100, 100).centerCrop().into(viewHolder.iv_user_photo)
+            Picasso.with(mContext).load(mList!![position].user?.avatar).resize(100, 100)
+                    .centerCrop().into(viewHolder.iv_user_photo)
         }
 
         viewHolder.btn_care!!.setOnClickListener(careOnClickListener)
 
-        if (mList!![position].user!!.flag == 1) {
+        if (mList!![position].user?.flag == 1) {
             viewHolder.btn_care!!.setBackgroundResource(R.drawable.shape_bg_green_edge)
             val img_focus = mContext.resources.getDrawable(R.mipmap.ic_has_focus)
             // 调用setCompoundDrawables时，必须调用Drawable.setBounds()方法,否则图片不显示
@@ -292,9 +293,9 @@ class HotShowAdapter(protected var mContext: Activity) : BaseAdapter() {
         viewHolder.iv_comment!!.setOnClickListener(commentOnClickListener)
         viewHolder.iv_parise!!.setOnClickListener(pariseOnClickListener)
         viewHolder.iv_transmit!!.setOnClickListener(transOnClickListener)
-        viewHolder.tv_comment!!.setText(mList!![position].pingNum)
-        viewHolder.tv_parise!!.setText(mList!![position].zanNum)
-        viewHolder.tv_transmit!!.setText(mList!![position].shareNum)
+        viewHolder.tv_comment!!.setText("" + mList!![position].pingNum)
+        viewHolder.tv_parise!!.setText("" + mList!![position].zanNum)
+        viewHolder.tv_transmit!!.setText("" + mList!![position].shareNum)
         return convertView
     }
 
@@ -353,7 +354,7 @@ class HotShowAdapter(protected var mContext: Activity) : BaseAdapter() {
     private inner class BtnPariseOnClickListener(internal var mPosition: Int) : View.OnClickListener {
 
         override fun onClick(v: View) {
-            if (TextUtils.isEmpty(user_id)) {
+            if (ShowApplication.instance?.hasLogin() == true) {
                 ToastUtil.show("请登录后再点赞")
             } else {
                 SendRequest.like(mContext, user_id!!, token!!, mList!![mPosition].id, "1", object : OkCallback<String>(OkStringParser()) {
@@ -435,11 +436,5 @@ class HotShowAdapter(protected var mContext: Activity) : BaseAdapter() {
             params.height = width
             return params
         }
-
-    private fun getSharePref() {
-        val preferences = mContext.getSharedPreferences(AppConstants.SHARE_PREFERENCE_USER, Context.MODE_PRIVATE)
-        user_id = preferences.getString(AppConstants.USER_ID, "")
-        token = preferences.getString(AppConstants.USER_REFRESH_TOKEN, "")
-    }
 
 }

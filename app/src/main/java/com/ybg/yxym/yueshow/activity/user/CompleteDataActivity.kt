@@ -136,27 +136,33 @@ class CompleteDataActivity : BaseActivity() {
         btn_complete_register.loadingText = "准备上传头像..."
         SendRequest.uploadFile(mContext!!, "avatar", File(path), object: UploadListener(){
             override fun onResponse(call: Call?, response: Response?) {
-                btn_complete_register.isEnabled = true
+                response?.let { onSuccess(response) }
             }
 
             override fun onFailure(call: Call?, e: IOException?) {
-                btn_complete_register.isEnabled = true
+                e?.let { onFailure(it) }
             }
 
             override fun onSuccess(response: Response) {
-                btn_complete_register.loadingText = "头像上传成功，正在保存数据"
+                workInLoopThread {
+                    btn_complete_register.loadingText = "头像上传成功，正在保存数据"
+                }
                 mAvatar = response.toString()
                 path = ""
                 completeUserInfo()
             }
 
             override fun onFailure(e: Exception) {
-                btn_complete_register.isEnabled = true
+                workInLoopThread {
+                    btn_complete_register.isEnabled = true
+                }
             }
 
             override fun onUIProgress(progress: Progress) {
-                val progressInt: Int = (progress.currentBytes * 100 / progress.totalBytes).toInt()
-                btn_complete_register.loadingText = "正在上传头像${progressInt}%"
+                workInLoopThread {
+                    val progressInt: Int = (progress.currentBytes * 100 / progress.totalBytes).toInt()
+                    btn_complete_register.loadingText = "正在上传头像${progressInt}%"
+                }
             }
         })
     }

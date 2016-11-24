@@ -176,7 +176,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (showApplication.hasLogin()) {
                     EntryActivity.start(this@MainActivity)
                 } else {
-                    ToastUtil.show("你还没有登录，请登录后再尝试。")
+                    ToastUtil.show("你还没有登录，请先登录。")
                 }
             }
         }
