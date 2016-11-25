@@ -15,7 +15,7 @@ class YueShow : Serializable {
     var pingNum: Int = 0//评论次数
     var zanNum: Int = 0//赞次数
     var shareNum: Int = 0//分享次数
-    var type: Int = 2//1直播，2是图片，3是视频
+    var type: Int = 1//1图片2视频3直播
     var fileNum: Int = 1//附带文件数量
     var user: UserBase? = null
 
