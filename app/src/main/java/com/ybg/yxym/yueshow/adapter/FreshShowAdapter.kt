@@ -76,7 +76,7 @@ class FreshShowAdapter(protected var mContext: Activity) : BaseAdapter() {
             viewHolder.rl_live = convertView.findViewById(R.id.rl_live) as RelativeLayout
             viewHolder.iv_live_cover = convertView.findViewById(R.id.iv_live_cover) as ImageView
             viewHolder.iv_live_play = convertView.findViewById(R.id.iv_video_play) as ImageView
-            viewHolder.ll_picture = convertView.findViewById(R.id.ll_picture) as LinearLayout
+            //viewHolder.ll_picture = convertView.findViewById(R.id.ll_picture) as LinearLayout
             viewHolder.tv_photo_live_flag = convertView.findViewById(R.id.tv_photo_live_flag) as TextView
             viewHolder.iv_photo_live_flag = convertView.findViewById(R.id.iv_photo_live_flag) as ImageView
             viewHolder.ll_photo_live_flag = convertView.findViewById(R.id.ll_photo_live_flag) as LinearLayout

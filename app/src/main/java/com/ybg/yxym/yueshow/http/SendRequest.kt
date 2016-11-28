@@ -146,6 +146,14 @@ object SendRequest {
     }
 
     /**
+     * 获取发布者信息
+     */
+    fun getAuthorInfo(tag: Context, showId: Long, token: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("showId" to "$showId", "token" to token)
+        OkHttpProxy.post(HttpUrl.authorInfoUrl, tag, params, callback)
+    }
+
+    /**
      * 2.2 新建美秀
      *
      * @param token

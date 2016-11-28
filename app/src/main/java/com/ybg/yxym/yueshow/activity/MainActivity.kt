@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
@@ -25,9 +26,7 @@ import com.ybg.yxym.yb.utils.LogUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.home.ChartsFragment
 import com.ybg.yxym.yueshow.activity.home.HallFragment
-import com.ybg.yxym.yueshow.activity.user.EntryActivity
-import com.ybg.yxym.yueshow.activity.user.LoginActivity
-import com.ybg.yxym.yueshow.activity.user.UserCenterActivity
+import com.ybg.yxym.yueshow.activity.user.*
 import com.ybg.yxym.yueshow.adapter.ViewPagerAdapter
 import com.ybg.yxym.yueshow.app.ShowApplication
 import com.ybg.yxym.yueshow.http.SendRequest
@@ -77,6 +76,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         init()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+
+        if (id == R.id.action_msg) {
+            //跳转到消息页面
+            //UserSettingActivity.start(mContext!!)
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onBackPressed() {
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -91,19 +107,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         val id = item.itemId
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
+//        if (id == R.id.nav_camera) {
+//            // Handle the camera action
+//        } else if (id == R.id.nav_gallery) {
+//
+//        } else if (id == R.id.nav_slideshow) {
+//
+//        } else if (id == R.id.nav_manage) {
+//
+//        } else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
+//
+//        }
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)

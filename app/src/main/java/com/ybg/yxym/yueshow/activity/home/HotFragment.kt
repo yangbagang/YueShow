@@ -10,6 +10,7 @@ import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseFragment
+import com.ybg.yxym.yueshow.adapter.HomeShowAdapter
 import com.ybg.yxym.yueshow.adapter.HotShowAdapter
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
@@ -31,7 +32,7 @@ class HotFragment : BaseFragment() {
     private val TYPE_REFRESH = 0//下拉刷新
     private val TYPE_LOADMORE = 1//上拉加载
 
-    private lateinit var mAdapter: HotShowAdapter
+    private lateinit var mAdapter: HomeShowAdapter
     private var hotEntityList: MutableList<YueShow> = ArrayList()
 
     override fun setContentViewId(): Int {
@@ -48,7 +49,7 @@ class HotFragment : BaseFragment() {
     }
 
     override fun init() {
-        mAdapter = HotShowAdapter(mContext!!)
+        mAdapter = HomeShowAdapter(mContext!!)
         mAdapter.setDataList(hotEntityList)
         mListView.adapter = mAdapter
         mListView.onItemClickListener = onItemClickListener

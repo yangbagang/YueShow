@@ -23,28 +23,4 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main"/>
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="66dp"
-        android:layout_marginRight="@dimen/fab_margin">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_home_chat_normal"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="12dp"
-            android:layout_marginBottom="12dp"
-            android:elevation="7dp"
-            android:text="0"
-            android:textColor="#ffffff"/>
-    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

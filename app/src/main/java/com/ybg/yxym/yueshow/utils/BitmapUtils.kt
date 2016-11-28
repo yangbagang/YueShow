@@ -40,7 +40,7 @@ object BitmapUtils {
         }
         try {
             baos = ByteArrayOutputStream()
-            mBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+            mBitmap.compress(Bitmap.CompressFormat.PNG, 80, baos)
             val bitmapData = baos.toByteArray()
             fos = FileOutputStream(file)
             fos.write(bitmapData)

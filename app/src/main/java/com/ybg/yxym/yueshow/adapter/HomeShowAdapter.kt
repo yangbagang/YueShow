@@ -8,12 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
+import com.google.gson.GsonBuilder
 import com.volokh.danylo.video_player_manager.ui.VideoPlayerView
+import com.ybg.yxym.yb.bean.JSonResultBean
+import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yb.utils.DateUtil
 import com.ybg.yxym.yb.utils.LogUtil
 import com.ybg.yxym.yueshow.R
+import com.ybg.yxym.yueshow.app.ShowApplication
 import com.ybg.yxym.yueshow.constant.AppConstants
+import com.ybg.yxym.yueshow.http.HttpUrl
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
@@ -79,22 +84,67 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         } else if (mList!![position].type == 1) {
             initPicView(viewHolder, position)
         }
-        /**用户信息 */
+        //填充用户信息
         viewHolder.iv_user_photo!!.setOnClickListener(photoOnClickListener)
-        if (TextUtils.isEmpty(mList!![position].user?.nickName)) {
-            viewHolder.tv_username!!.text = "" + mList!![position].user?.ymCode
-        } else {
-            viewHolder.tv_username!!.text = mList!![position].user?.nickName
-        }
-        if (TextUtils.isEmpty(mList!![position].user?.avatar)) {
-            Picasso.with(mContext).load(AppConstants.APP_DEFAULT_USER_PHOTO).resize(100, 100).centerCrop().into(viewHolder.iv_user_photo)
-        } else {
-            Picasso.with(mContext).load(mList!![position].user?.avatar).resize(100, 100).centerCrop().into(viewHolder.iv_user_photo)
-        }
-
         viewHolder.btn_care!!.setOnClickListener(careOnClickListener)
+        getAuthorInfo(mList!![position].id!!, viewHolder)
+        //填充美秀信息
+        if (!TextUtils.isEmpty(mList!![position].createTime)) {
+            viewHolder.tv_time!!.text = DateUtil.getTimeInterval(mList!![position].createTime!!)
+        }
+        /**用户发布内容 */
+        val str = mList!![position].title
+        viewHolder.tv_content!!.text = str
+        /**用户操作 */
+        viewHolder.iv_comment!!.setOnClickListener(commentOnClickListener)
+        viewHolder.iv_parise!!.setOnClickListener(pariseOnClickListener)
+        viewHolder.iv_transmit!!.setOnClickListener(transOnClickListener)
+        viewHolder.tv_comment!!.setText("" + mList!![position].pingNum)
+        viewHolder.tv_parise!!.setText("" + mList!![position].zanNum)
+        viewHolder.tv_transmit!!.setText("" + mList!![position].shareNum)
+        return convertView!!
+    }
 
-        if (mList!![position].user?.flag == 1) {
+    private fun getAuthorInfo(showId: Long, viewHolder: ViewHolder) {
+        SendRequest.getAuthorInfo(mContext, showId, ShowApplication.instance!!.token, object :
+                OkCallback<String> (OkStringParser()) {
+            override fun onSuccess(code: Int, response: String) {
+                val mGson = GsonBuilder().serializeNulls().create()
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    //成功
+                    val userBase = mGson.fromJson(jsonBean.data, UserBase::class.java)
+                    loadInfo(viewHolder, userBase)
+                } else {
+                    jsonBean?.let {
+                        ToastUtil.show(jsonBean.message)
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                ToastUtil.show("获取用户信息失败。")
+            }
+        })
+    }
+
+    private fun loadInfo(viewHolder: ViewHolder, userBase: UserBase) {
+        /**用户信息 */
+        viewHolder.tv_meilizhi!!.text = String.format("美力值 + %d", userBase.ml)
+        if (TextUtils.isEmpty(userBase.nickName)) {
+            viewHolder.tv_username!!.text = userBase.ymCode
+        } else {
+            viewHolder.tv_username!!.text = userBase.nickName
+        }
+        if (TextUtils.isEmpty(userBase.avatar)) {
+            Picasso.with(mContext).load(AppConstants.APP_DEFAULT_USER_PHOTO).resize(100, 100).centerCrop()
+                    .into(viewHolder.iv_user_photo)
+        } else {
+            Picasso.with(mContext).load(HttpUrl.getImageUrl(userBase.avatar)).resize(100, 100).centerCrop()
+                    .into(viewHolder.iv_user_photo)
+        }
+
+        if (userBase.flag == 1) {
             viewHolder.btn_care!!.setBackgroundResource(R.drawable.shape_bg_green_edge)
             val img_focus = mContext.resources.getDrawable(R.mipmap.ic_has_focus)
             // 调用setCompoundDrawables时，必须调用Drawable.setBounds()方法,否则图片不显示
@@ -114,20 +164,6 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
             viewHolder.btn_care!!.isEnabled = true
             /**已经关注之后不能点击 */
         }
-        if (!TextUtils.isEmpty(mList!![position].createTime)) {
-            viewHolder.tv_time!!.text = DateUtil.getTimeInterval(mList!![position].createTime!!)
-        }
-        /**用户发布内容 */
-        val str = mList!![position].title
-        viewHolder.tv_content!!.text = str
-        /**用户操作 */
-        viewHolder.iv_comment!!.setOnClickListener(commentOnClickListener)
-        viewHolder.iv_parise!!.setOnClickListener(pariseOnClickListener)
-        viewHolder.iv_transmit!!.setOnClickListener(transOnClickListener)
-        viewHolder.tv_comment!!.setText("" + mList!![position].pingNum)
-        viewHolder.tv_parise!!.setText("" + mList!![position].zanNum)
-        viewHolder.tv_transmit!!.setText("" + mList!![position].shareNum)
-        return convertView!!
     }
 
     private fun initViewHolder(viewHolder: ViewHolder, convertView: View) {
@@ -179,10 +215,11 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         viewHolder.iv_live_cover!!.setImageResource(R.mipmap.ic_default_cover)
         if (mList!![position].thumbnail != "") {
             /**设置 tag 防止图片错位 */
-            val img_url_live = mList!![position].thumbnail
+            val img_url_live = HttpUrl.getImageUrl(mList!![position].thumbnail)
             viewHolder.iv_live_cover!!.tag = img_url_live
             if (viewHolder.iv_live_cover!!.tag != null && viewHolder.iv_live_cover!!.tag == img_url_live) {
-                Picasso.with(mContext).load(img_url_live).resize(600, 600).centerCrop().into(viewHolder.iv_live_cover)
+                Picasso.with(mContext).load(img_url_live).resize(width, (width*0.75).toInt()).centerCrop()
+                        .into(viewHolder.iv_live_cover)
             }
         }
     }
@@ -203,9 +240,12 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
             viewHolder.iv_picture!!.visibility = View.VISIBLE
             viewHolder.tv_photo_live_flag!!.text = "$imgNum"
             /**设置 tag 防止图片错位 */
-            val img_url_0 = mList!![position].thumbnail
+            val img_url_0 = HttpUrl.getImageUrl(mList!![position].thumbnail)
+            viewHolder.iv_picture!!.tag = img_url_0
             if (viewHolder.iv_picture!!.tag != null && viewHolder.iv_picture!!.tag == img_url_0) {
-                Picasso.with(mContext).load(img_url_0).resize(600, 600).centerCrop().into(viewHolder.iv_picture!!)
+                Picasso.with(mContext).load(img_url_0).resize(width, (width*0.75).toInt()).centerCrop()
+                        .into(viewHolder.iv_picture!!)
+
             }
         }
     }
@@ -221,9 +261,11 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         viewHolder.iv_video_cover!!.setImageResource(R.mipmap.ic_default_cover)
         if (mList!![position].thumbnail != "") {
             /**设置 tag 防止图片错位 */
-            viewHolder.iv_video_cover!!.tag = mList!![position].thumbnail
-            if (viewHolder.iv_video_cover!!.tag != null && viewHolder.iv_video_cover!!.tag == mList!![position].thumbnail) {
-                Picasso.with(mContext).load(mList!![position].thumbnail).resize(800, 800).centerCrop().into(viewHolder.iv_video_cover)
+            val img_url_0 = HttpUrl.getImageUrl(mList!![position].thumbnail)
+            viewHolder.iv_video_cover!!.tag = img_url_0
+            if (viewHolder.iv_video_cover!!.tag != null && viewHolder.iv_video_cover!!.tag == img_url_0) {
+                Picasso.with(mContext).load(img_url_0).resize(width, (width*0.75).toInt()).centerCrop()
+                        .into(viewHolder.iv_video_cover)
             }
         }
     }
@@ -323,17 +365,12 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
 
     /**
      * @param topMargin    顶部距离
-     * *
      * @param bottomMargin 底部距离
-     * *
      * @param leftMargin   左边距离
-     * *
      * @param rightMargin  右边距离
-     * *
      * @param multiple     倍数
-     * *
      * @param divide       除数
-     * *
+     *
      * @return
      */
     private fun getLinearLayoutParms(topMargin: Int, bottomMargin: Int, leftMargin: Int, rightMargin: Int,

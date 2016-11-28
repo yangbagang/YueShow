@@ -197,13 +197,13 @@ class MyInformationActivity : BaseActivity() {
      * @return
      */
     private fun transforCup(i: Int): String {
-        var i = i
-        if (i < 0) {
-            i = 0
+        var index = i
+        if (index < 0) {
+            index = 0
         } else if (i > 7) {
-            i = 7
+            index = 7
         }
-        return OnoptionsUtils.cups[i]
+        return OnoptionsUtils.cups[index]
     }
 
     companion object {

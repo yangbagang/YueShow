@@ -7,6 +7,7 @@ import android.view.View
 import com.umeng.socialize.UMAuthListener
 import com.umeng.socialize.UMShareAPI
 import com.umeng.socialize.bean.SHARE_MEDIA
+import com.umeng.socialize.bean.SHARE_MEDIA.*
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.utils.LogUtil
 import com.ybg.yxym.yueshow.R
@@ -47,19 +48,19 @@ class LoginActivity : BaseActivity() {
             R.id.iv_login_qq//QQ登陆
             -> {
                 LogUtil.d(TAG + ": QQ登录")
-                mPlatform = SHARE_MEDIA.QQ
+                mPlatform = QQ
                 mShareAPI!!.doOauthVerify(mContext, mPlatform, mAuthListener)
             }
             R.id.iv_login_wechat//微信登录
             -> {
                 LogUtil.d(TAG + ": 微信登录")
-                mPlatform = SHARE_MEDIA.WEIXIN
+                mPlatform = WEIXIN
                 mShareAPI!!.doOauthVerify(mContext, mPlatform, mAuthListener)
             }
             R.id.iv_login_sina//微博登录
             -> {
                 LogUtil.d(TAG + ": 微博登录")
-                mPlatform = SHARE_MEDIA.SINA
+                mPlatform = SINA
                 mShareAPI!!.doOauthVerify(mContext, mPlatform, mAuthListener)
             }
             R.id.btn_login//手机号or悦美号登录
@@ -130,26 +131,28 @@ class LoginActivity : BaseActivity() {
             var platform = ""
 
             when (share_media) {
-                SHARE_MEDIA.QQ -> {
+                QQ -> {
                     openid = map["openid"]!!
                     nickName = map["screenname"]!!
                     profile_image_url = map["profile_image_url"]!!
                     sex = map["gender"]!!
                     platform = "QQ"
                 }
-                SHARE_MEDIA.WEIXIN -> {
+                WEIXIN -> {
                     openid = map["openid"]!!
                     nickName = map["screenname"]!!
                     profile_image_url = map["profile_image_url"]!!
                     sex = map["gender"]!!
                     platform = "WX"
                 }
-                SHARE_MEDIA.SINA -> {
+                SINA -> {
                     openid = map["id"]!!
                     nickName = map["screen_name"]!!
                     profile_image_url = map["profile_image_url"]!!
                     sex = map["gender"]!!
                     platform = "SINA"
+                }
+                else -> {
                 }
             }
             SendRequest.umLogin(mContext!!, openid, platform, nickName, profile_image_url, sex, object : OkCallback<String>

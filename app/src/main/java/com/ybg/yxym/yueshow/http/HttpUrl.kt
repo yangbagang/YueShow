@@ -31,6 +31,7 @@ object HttpUrl {
     private val UM_USER_LOGIN = "/userBase/umLogin"
     /*美秀列表*/
     private val LIVE_LIST = "/ruiShow/list"
+    private val AUTHOR_INFO = "/userBase/getAuthorInfoByShowId"
     /*新建美秀*/
     private val CREATE_LIVE = "/ruiShow/create"
     private val APPEND_FILES = "/showFile/addFiles"
@@ -98,6 +99,9 @@ object HttpUrl {
 
     val liveListUrl: String
         get() = ROOT_URL + LIVE_LIST
+
+    val authorInfoUrl: String
+        get() = ROOT_URL + AUTHOR_INFO
 
 
     /**
@@ -185,4 +189,11 @@ object HttpUrl {
 
     val switchLiveUrl: String
         get() = ROOT_URL + SWITCH_LIVE
+
+    fun getImageUrl(fid: String): String {
+        if (fid.startsWith("http:", true) || fid.startsWith("https:", true)) {
+            return fid
+        }
+        return FILE_SERVER_PREVIEW + "/" + fid
+    }
 }
