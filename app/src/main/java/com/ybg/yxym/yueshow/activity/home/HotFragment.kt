@@ -11,7 +11,6 @@ import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseFragment
 import com.ybg.yxym.yueshow.adapter.HomeShowAdapter
-import com.ybg.yxym.yueshow.adapter.HotShowAdapter
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
@@ -111,13 +110,13 @@ class HotFragment : BaseFragment() {
     private val mDelegate = object : BGARefreshLayout.BGARefreshLayoutDelegate {
         override fun onBGARefreshLayoutBeginRefreshing(refreshLayout: BGARefreshLayout) {
             pageNum = 1
-            getHotInfolist()
+            getHotInfoList()
         }
 
         override fun onBGARefreshLayoutBeginLoadingMore(refreshLayout: BGARefreshLayout): Boolean {
             if (hasMore) {
-                pageNum = pageNum + 1
-                getHotInfolist()
+                pageNum += 1
+                getHotInfoList()
             } else {
                 ToastUtil.show("没有更多数据!")
                 return false//不显示更多加载
@@ -135,7 +134,7 @@ class HotFragment : BaseFragment() {
      * *
      * @param count
      */
-    private fun getHotInfolist() {
+    private fun getHotInfoList() {
         SendRequest.getShowList(mContext!!, pageNum, pageSize, 2, object : OkCallback<String>
         (OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {

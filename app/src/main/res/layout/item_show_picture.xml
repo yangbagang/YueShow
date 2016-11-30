@@ -100,12 +100,4 @@
             android:textColor="@color/white"/>
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/iv_champion_flag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/px_20"
-        android:src="@mipmap/ic_entry"/>
-
 </RelativeLayout>

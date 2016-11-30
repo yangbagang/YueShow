@@ -179,7 +179,6 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         viewHolder.tv_photo_live_flag = convertView.findViewById(R.id.tv_photo_live_flag) as TextView
         viewHolder.iv_photo_live_flag = convertView.findViewById(R.id.iv_photo_live_flag) as ImageView
         viewHolder.ll_photo_live_flag = convertView.findViewById(R.id.ll_photo_live_flag) as LinearLayout
-        viewHolder.iv_champion_flag = convertView.findViewById(R.id.iv_champion_flag) as ImageView
         //用户信息
         viewHolder.iv_user_photo = convertView.findViewById(R.id.iv_user_logo) as CircleImageView
         viewHolder.tv_username = convertView.findViewById(R.id.tv_user_name) as TextView
@@ -205,7 +204,6 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         viewHolder.rl_video!!.visibility = View.GONE
         viewHolder.iv_picture!!.visibility = View.GONE
         viewHolder.ll_photo_live_flag!!.visibility = View.VISIBLE
-        viewHolder.iv_champion_flag!!.visibility = View.GONE
         /**冠军 */
         viewHolder.ll_photo_live_flag!!.setBackgroundResource(R.drawable.shape_red_bg)
         viewHolder.iv_photo_live_flag!!.setImageResource(R.mipmap.ic_entry_live_logo)
@@ -229,7 +227,6 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         viewHolder.rl_video!!.visibility = View.GONE
         viewHolder.iv_picture!!.visibility = View.VISIBLE
         viewHolder.ll_photo_live_flag!!.visibility = View.VISIBLE
-        viewHolder.iv_champion_flag!!.visibility = View.VISIBLE
         /**冠军 */
         viewHolder.ll_photo_live_flag!!.setBackgroundResource(R.drawable.shape_gray_bg)
         viewHolder.iv_photo_live_flag!!.setImageResource(R.mipmap.ic_entry_photo_logo)
@@ -255,7 +252,6 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         viewHolder.rl_video!!.visibility = View.VISIBLE
         viewHolder.iv_picture!!.visibility = View.GONE
         viewHolder.ll_photo_live_flag!!.visibility = View.GONE
-        viewHolder.iv_champion_flag!!.visibility = View.VISIBLE
         /**冠军 */
         viewHolder.iv_video_cover!!.layoutParams = relativeLayoutParms
         viewHolder.iv_video_cover!!.setImageResource(R.mipmap.ic_default_cover)
@@ -285,7 +281,6 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         internal var tv_photo_live_flag: TextView? = null//图片或者直播标志
         internal var iv_photo_live_flag: ImageView? = null//图片或者直播标志
         internal var ll_photo_live_flag: LinearLayout? = null//图片或者直播标志
-        internal var iv_champion_flag: ImageView? = null//冠军标志
         internal var iv_user_photo: CircleImageView? = null//用户头像
         internal var tv_username: TextView? = null//用户昵称
         internal var iv_level_img: ImageView? = null//用户等级图片

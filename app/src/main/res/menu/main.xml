@@ -2,9 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_msg"
+        android:id="@+id/action_search"
         android:orderInCategory="100"
+        android:icon="@mipmap/ic_home_search_normal"
+        android:title="搜索"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_msg"
+        android:orderInCategory="200"
         android:icon="@mipmap/ic_home_chat_normal"
-        android:title="1"
+        android:title="消息"
         app:showAsAction="ifRoom"/>
 </menu>

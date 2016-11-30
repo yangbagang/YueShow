@@ -10,7 +10,6 @@ import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseFragment
-import com.ybg.yxym.yueshow.adapter.FreshShowAdapter
 import com.ybg.yxym.yueshow.adapter.HomeShowAdapter
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
@@ -138,7 +137,7 @@ class FreshFragment : BaseFragment() {
 
         override fun onBGARefreshLayoutBeginLoadingMore(refreshLayout: BGARefreshLayout): Boolean {
             if (hasMore) {
-                pageNum = pageNum + 1
+                pageNum += 1
                 getHomeNewInfo()
             } else {
                 ToastUtil.show("没有更多数据!")
