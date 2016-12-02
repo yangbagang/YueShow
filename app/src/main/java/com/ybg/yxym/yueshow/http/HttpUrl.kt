@@ -72,6 +72,14 @@ object HttpUrl {
 
     private val USER_COMMENT_LIST = "/live/v1/live/comments"
 
+    //悦美榜
+    val ruiMeiBang: String
+        get() = ROOT_URL + "/meiLiHistory/meiliList"
+    val renQiBang: String
+        get() = ROOT_URL + "/meiLiHistory/renqiList"
+    val huoLiBang: String
+        get() = ROOT_URL + "/meiLiHistory/huoliList"
+
     //用户模块
     val userLoginUrl: String
         get() = ROOT_URL + USER_LOGIN

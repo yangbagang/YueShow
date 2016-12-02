@@ -362,71 +362,6 @@ object SendRequest {
     }
 
     /**
-     * 首页最鲜
-     * @param tag
-     * *
-     * @param userid
-     * *
-     * @param posttype
-     * *
-     * @param start
-     * *
-     * @param count
-     * *
-     * @param callback
-     */
-    fun getHomeNew(tag: Context, userid: String, posttype: Int, start: Int, count: Int, callback: OkCallback<*>) {
-        val url = HttpUrl.homeNew +
-                "?userid=" + userid +
-                "&start=" + start +
-                "&count=" + count +
-                "&posttype=" + posttype +
-                "&api_key=" + API_KEY
-        LogUtil.d(url)
-        try {
-            val builder = OkHttpProxy.get().url(url).tag(tag)
-            builder.enqueue(callback)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
-
-    /**
-     * 首页友秀圈
-     * @param tag
-     * *
-     * @param userid
-     * *
-     * @param posttype
-     * *
-     * @param start
-     * *
-     * @param count
-     * *
-     * @param callback
-     */
-    fun getHomeFriend(tag: Context, userid: String, token: String, friendtype: Int, posttype: Int, start: Int, count: Int, callback: OkCallback<*>) {
-        val url = HttpUrl.homeFriend +
-                "?userid=" + userid +
-                "&token=" + token +
-                "&friendtype=" + friendtype +
-                "&start=" + start +
-                "&count=" + count +
-                "&posttype=" + posttype +
-                "&api_key=" + API_KEY
-        LogUtil.d(url)
-        try {
-            val builder = OkHttpProxy.get().url(url).tag(tag)
-            builder.enqueue(callback)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
-
-
-    /**
      * 获取好友列表
      * @param tag
      * *
@@ -609,5 +544,26 @@ object SendRequest {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    fun getRuiMeiBang(tag: Context, beginTime: String, endTime: String, pageNum: Int, pageSize: Int,
+                      callback: OkCallback<*>) {
+        val params = mapOf<String, String>("beginTime" to beginTime, "endTime" to endTime,
+                "pageNum" to "$pageNum", "pageSize" to "$pageSize")
+        OkHttpProxy.post(HttpUrl.ruiMeiBang, tag, params, callback)
+    }
+
+    fun getRenQiBang(tag: Context, beginTime: String, endTime: String, pageNum: Int, pageSize: Int,
+                      callback: OkCallback<*>) {
+        val params = mapOf<String, String>("beginTime" to beginTime, "endTime" to endTime,
+                "pageNum" to "$pageNum", "pageSize" to "$pageSize")
+        OkHttpProxy.post(HttpUrl.renQiBang, tag, params, callback)
+    }
+
+    fun getHuoLiBang(tag: Context, beginTime: String, endTime: String, pageNum: Int, pageSize: Int,
+                      callback: OkCallback<*>) {
+        val params = mapOf<String, String>("beginTime" to beginTime, "endTime" to endTime,
+                "pageNum" to "$pageNum", "pageSize" to "$pageSize")
+        OkHttpProxy.post(HttpUrl.huoLiBang, tag, params, callback)
     }
 }

@@ -119,6 +119,8 @@
                   android:screenOrientation="portrait" />
         <activity android:name=".activity.show.LivingPostActivity"
                   android:screenOrientation="portrait" />
+        <!--悦美榜-->
+        <activity android:name=".activity.bang.ShowBang" android:screenOrientation="portrait" />
     </application>
 
 </manifest>

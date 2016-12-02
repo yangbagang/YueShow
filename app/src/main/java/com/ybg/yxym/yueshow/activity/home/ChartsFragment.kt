@@ -1,94 +1,215 @@
 package com.ybg.yxym.yueshow.activity.home
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-
-import com.umeng.socialize.ShareAction
-import com.umeng.socialize.UMShareAPI
-import com.umeng.socialize.UMShareListener
-import com.umeng.socialize.bean.SHARE_MEDIA
-import com.umeng.socialize.media.UMImage
+import android.widget.RelativeLayout
+import com.google.gson.reflect.TypeToken
+import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yueshow.R
+import com.ybg.yxym.yueshow.activity.bang.ShowBang
 import com.ybg.yxym.yueshow.activity.base.BaseFragment
-import com.ybg.yxym.yueshow.pay.BasePayUtils
-import com.ybg.yxym.yueshow.pay.PayUtilsFactory
+import com.ybg.yxym.yueshow.http.HttpUrl
+import com.ybg.yxym.yueshow.http.SendRequest
+import com.ybg.yxym.yueshow.http.callback.OkCallback
+import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
 import com.ybg.yxym.yueshow.utils.ToastUtil
+import kotlinx.android.synthetic.main.fragment_charts.*
 
 /**
  * 悦美榜
  */
 class ChartsFragment : BaseFragment() {
 
-    private var m_ivImage: ImageView? = null
-    private var mImage: UMImage? = null
-    private var mPayUtils: BasePayUtils? = null
+    private lateinit var zhongHuaBang: RelativeLayout
+    private lateinit var meiLiBang: RelativeLayout
+    private lateinit var renQiBang: RelativeLayout
+    private lateinit var huoLiBang: RelativeLayout
+    private lateinit var haoQiBang: RelativeLayout
 
     override fun setContentViewId(): Int {
         return R.layout.fragment_charts
     }
 
     override fun setUpView() {
-        m_ivImage = mRootView?.findViewById(R.id.iv_image_test) as ImageView
+        zhongHuaBang = mRootView!!.findViewById(R.id.rl_zh_bang) as RelativeLayout
+        meiLiBang = mRootView!!.findViewById(R.id.rl_ml_bang) as RelativeLayout
+        renQiBang = mRootView!!.findViewById(R.id.rl_hl_bang) as RelativeLayout
+        huoLiBang = mRootView!!.findViewById(R.id.rl_rq_bang) as RelativeLayout
+        haoQiBang = mRootView!!.findViewById(R.id.rl_hq_bang) as RelativeLayout
+
+        zhongHuaBang.setOnClickListener {
+            //do nothing
+        }
+        meiLiBang.setOnClickListener {
+            ShowBang.start(mContext!!, 1)
+        }
+        renQiBang.setOnClickListener {
+            ShowBang.start(mContext!!, 2)
+        }
+        huoLiBang.setOnClickListener {
+            ShowBang.start(mContext!!, 3)
+        }
+        haoQiBang.setOnClickListener {
+            //do nothing
+        }
     }
 
     override fun init() {
-        ImageLoaderUtils.instance.loadBitmap(m_ivImage!!, IMAGE_URL)
-        mImage = UMImage(mContext, IMAGE_URL)
+        loadRuiMeiBang()
+        loadMeiLiBang()
+        loadHuoLiBang()
+        loadRenQiBang()
+        loadHaoQiBang()
     }
 
-    fun onClick(view: View) {
-        when (view.id) {
-            R.id.tv_video_test -> {
-            }
-            R.id.tv_login_test -> {
-            }
-            R.id.tv_wechat_share//微信分享测试
-            -> ShareAction(mContext).setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.WEIXIN_FAVORITE).withText("来自友盟分享面板").setCallback(umShareListener).withTitle("this is title").withMedia(mImage).withTargetUrl("http://app.sobig.cc").open()
-            R.id.tv_weibo_share//微博分享测试
-            -> {
-            }
-            R.id.tv_qq_share//QQ分享测试
-            -> ShareAction(mContext).setPlatform(SHARE_MEDIA.QQ).setCallback(umShareListener).withTitle("this is title").withText("hello umeng").withMedia(mImage).withTargetUrl("http://app.sobig.cc").withTitle("qqshare").share()
-            R.id.tv_wechat_pay -> {
-                mPayUtils = PayUtilsFactory.getPayUtils(PayUtilsFactory.PAY_TYPE_WECHAT, mContext!!)
-                //mPayUtils!!.pay(null)
-            }
-            R.id.tv_ali_pay -> {
-                mPayUtils = PayUtilsFactory.getPayUtils(PayUtilsFactory.PAY_TYPE_ALIPAY, mContext!!)
-                //mPayUtils!!.pay(null)
-            }
-        }//LoginActivity.start(mContext);
+    fun loadRuiMeiBang() {
+
     }
 
-    private val umShareListener = object : UMShareListener {
-        override fun onResult(platform: SHARE_MEDIA) {
-            if (platform.name == "WEIXIN_FAVORITE") {
-                ToastUtil.show("${platform}\t收藏成功啦")
-            } else {
-                ToastUtil.show("${platform}\t分享成功啦")
+    fun loadMeiLiBang() {
+        SendRequest.getRuiMeiBang(mContext!!, "2016-01-01", "2999-12-31", 1, 3, object :
+                OkCallback<String>(OkStringParser()){
+
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    val list = mGson!!.fromJson<List<MeiLiItem>>(jsonBean.data, object :
+                            TypeToken<List<MeiLiItem>>(){}.type)
+                    if (list != null) {
+                        if (list.isNotEmpty()) {
+                            val first = list.first()
+                            ImageLoaderUtils.instance.loadBitmap(ml_1_pic, HttpUrl.getImageUrl
+                            (first.avatar))
+                        } else {
+                            fl_ml_1.visibility = View.GONE
+                        }
+                        if (list.size > 1) {
+                            val second = list.get(1)
+                            ImageLoaderUtils.instance.loadBitmap(ml_2_pic, HttpUrl.getImageUrl
+                            (second.avatar))
+                        } else {
+                            fl_ml_2.visibility = View.GONE
+                        }
+                        if (list.size > 2) {
+                            val third = list.get(2)
+                            ImageLoaderUtils.instance.loadBitmap(ml_3_pic, HttpUrl.getImageUrl
+                            (third.avatar))
+                        } else {
+                            fl_ml_3.visibility = View.GONE
+                        }
+                    }
+                } else {
+                    jsonBean?.let {
+                        ToastUtil.show(jsonBean.message)
+                    }
+                }
             }
-        }
 
-        override fun onError(platform: SHARE_MEDIA, t: Throwable) {
-            ToastUtil.show("${platform}\t分享失败啦")
-        }
+            override fun onFailure(e: Throwable) {
+                ToastUtil.show("获取美力榜失败")
+            }
 
-        override fun onCancel(platform: SHARE_MEDIA) {
-            ToastUtil.show("${platform}\t分享取消了")
-        }
+        })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        UMShareAPI.get(mContext).onActivityResult(requestCode, resultCode, data)
+    fun loadHuoLiBang() {
+        SendRequest.getHuoLiBang(mContext!!, "2016-01-01", "2999-12-31", 1, 3, object :
+                OkCallback<String>(OkStringParser()){
+
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    val list = mGson!!.fromJson<List<MeiLiItem>>(jsonBean.data, object :
+                            TypeToken<List<MeiLiItem>>(){}.type)
+                    if (list != null) {
+                        if (list.isNotEmpty()) {
+                            val first = list.first()
+                            ImageLoaderUtils.instance.loadBitmap(hl_1_pic, HttpUrl.getImageUrl
+                            (first.avatar))
+                        } else {
+                            fl_hl_1.visibility = View.GONE
+                        }
+                        if (list.size > 1) {
+                            val second = list.get(1)
+                            ImageLoaderUtils.instance.loadBitmap(hl_2_pic, HttpUrl.getImageUrl
+                            (second.avatar))
+                        } else {
+                            fl_hl_2.visibility = View.GONE
+                        }
+                        if (list.size > 2) {
+                            val third = list.get(2)
+                            ImageLoaderUtils.instance.loadBitmap(hl_3_pic, HttpUrl.getImageUrl
+                            (third.avatar))
+                        } else {
+                            fl_hl_3.visibility = View.GONE
+                        }
+                    }
+                } else {
+                    jsonBean?.let {
+                        ToastUtil.show(jsonBean.message)
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                ToastUtil.show("获取美力榜失败")
+            }
+
+        })
+    }
+
+    fun loadRenQiBang() {
+        SendRequest.getRuiMeiBang(mContext!!, "2016-01-01", "2999-12-31", 1, 3, object :
+                OkCallback<String>(OkStringParser()){
+
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    val list = mGson!!.fromJson<List<MeiLiItem>>(jsonBean.data, object :
+                            TypeToken<List<MeiLiItem>>(){}.type)
+                    if (list != null) {
+                        if (list.isNotEmpty()) {
+                            val first = list.first()
+                            ImageLoaderUtils.instance.loadBitmap(rq_1_pic, HttpUrl.getImageUrl
+                            (first.avatar))
+                        } else {
+                            fl_rq_1.visibility = View.GONE
+                        }
+                        if (list.size > 1) {
+                            val second = list.get(1)
+                            ImageLoaderUtils.instance.loadBitmap(rq_2_pic, HttpUrl.getImageUrl
+                            (second.avatar))
+                        } else {
+                            fl_rq_2.visibility = View.GONE
+                        }
+                        if (list.size > 2) {
+                            val third = list.get(2)
+                            ImageLoaderUtils.instance.loadBitmap(rq_3_pic, HttpUrl.getImageUrl
+                            (third.avatar))
+                        } else {
+                            fl_rq_3.visibility = View.GONE
+                        }
+                    }
+                } else {
+                    jsonBean?.let {
+                        ToastUtil.show(jsonBean.message)
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                ToastUtil.show("获取美力榜失败")
+            }
+
+        })
+    }
+
+    fun loadHaoQiBang() {
+
     }
 
     companion object {
-
-        val IMAGE_URL = "http://img4.duitang.com/uploads/item/201205/31/20120531170732_sSwAu.jpeg"
 
         fun newInstance(): ChartsFragment {
 
@@ -99,4 +220,7 @@ class ChartsFragment : BaseFragment() {
             return fragment
         }
     }
+
+    data class MeiLiItem(var user_id: Long, var avatar: String, var nickName: String, var
+    scoreValue: Int)
 }
