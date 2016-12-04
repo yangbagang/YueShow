@@ -14,7 +14,6 @@ import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yb.utils.DateUtil
-import com.ybg.yxym.yb.utils.LogUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.app.ShowApplication
 import com.ybg.yxym.yueshow.constant.AppConstants
@@ -33,10 +32,8 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
 
     private var width = 0//屏幕的宽度
     private var inflater: LayoutInflater? = null
-    protected var TAG = "HomeShowAdapter"
+    private var TAG = "HomeShowAdapter"
     var mList: List<YueShow>? = null
-    private var user_id: String? = null//用户id
-    private var token: String? = null//令牌
 
     init {
         val wm = mContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -63,11 +60,6 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         //初始化定义
         var convertView = view
         var viewHolder: ViewHolder? = null
-        val careOnClickListener = BtnCareOnClickListener(position)
-        val commentOnClickListener = BtnCommentOnClickListener(position)
-        val pariseOnClickListener = BtnPariseOnClickListener(position)
-        val transOnClickListener = BtnTransOnClickListener(position)
-        val photoOnClickListener = BtnPhotoOnClickListener(position)
         if (convertView == null) {
             inflater = LayoutInflater.from(mContext)
             convertView = inflater!!.inflate(R.layout.item_home_show, parent, false)
@@ -76,6 +68,7 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         } else {
             viewHolder = convertView.tag as ViewHolder
         }
+
         /** 1图片2视频3直播  */
         if (mList!![position].type == 3) {
             initLiveView(viewHolder, position)
@@ -84,9 +77,17 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         } else if (mList!![position].type == 1) {
             initPicView(viewHolder, position)
         }
+
+        //事件定义
+
+        val commentOnClickListener = BtnCommentOnClickListener(position)
+        val zanOnClickListener = BtnZanOnClickListener(viewHolder, position)
+        val transOnClickListener = BtnTransOnClickListener(position)
+        val photoOnClickListener = BtnPhotoOnClickListener(position)
+
         //填充用户信息
         viewHolder.iv_user_photo!!.setOnClickListener(photoOnClickListener)
-        viewHolder.btn_care!!.setOnClickListener(careOnClickListener)
+
         getAuthorInfo(mList!![position].id!!, viewHolder)
         //填充美秀信息
         if (!TextUtils.isEmpty(mList!![position].createTime)) {
@@ -97,17 +98,17 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         viewHolder.tv_content!!.text = str
         /**用户操作 */
         viewHolder.iv_comment!!.setOnClickListener(commentOnClickListener)
-        viewHolder.iv_parise!!.setOnClickListener(pariseOnClickListener)
+        viewHolder.iv_parise!!.setOnClickListener(zanOnClickListener)
         viewHolder.iv_transmit!!.setOnClickListener(transOnClickListener)
-        viewHolder.tv_comment!!.setText("" + mList!![position].pingNum)
-        viewHolder.tv_parise!!.setText("" + mList!![position].zanNum)
-        viewHolder.tv_transmit!!.setText("" + mList!![position].shareNum)
+        viewHolder.tv_comment!!.text = "${mList!![position].pingNum}"
+        viewHolder.tv_parise!!.text = "${mList!![position].zanNum}"
+        viewHolder.tv_transmit!!.text = "${mList!![position].shareNum}"
         return convertView!!
     }
 
     private fun getAuthorInfo(showId: Long, viewHolder: ViewHolder) {
         SendRequest.getAuthorInfo(mContext, showId, ShowApplication.instance!!.token, object :
-                OkCallback<String> (OkStringParser()) {
+                OkCallback<String>(OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 val mGson = GsonBuilder().serializeNulls().create()
                 val jsonBean = JSonResultBean.fromJSON(response)
@@ -162,7 +163,9 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
             viewHolder.btn_care!!.text = "关注"
             viewHolder.btn_care!!.setTextColor(0xffffffff.toInt())
             viewHolder.btn_care!!.isEnabled = true
-            /**已经关注之后不能点击 */
+            /**未关注可能点击 */
+            val careOnClickListener = BtnCareOnClickListener(viewHolder, userBase.id)
+            viewHolder.btn_care!!.setOnClickListener(careOnClickListener)
         }
     }
 
@@ -216,7 +219,7 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
             val img_url_live = HttpUrl.getImageUrl(mList!![position].thumbnail)
             viewHolder.iv_live_cover!!.tag = img_url_live
             if (viewHolder.iv_live_cover!!.tag != null && viewHolder.iv_live_cover!!.tag == img_url_live) {
-                Picasso.with(mContext).load(img_url_live).resize(width, (width*0.75).toInt()).centerCrop()
+                Picasso.with(mContext).load(img_url_live).resize(width, (width * 0.75).toInt()).centerCrop()
                         .into(viewHolder.iv_live_cover)
             }
         }
@@ -240,7 +243,7 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
             val img_url_0 = HttpUrl.getImageUrl(mList!![position].thumbnail)
             viewHolder.iv_picture!!.tag = img_url_0
             if (viewHolder.iv_picture!!.tag != null && viewHolder.iv_picture!!.tag == img_url_0) {
-                Picasso.with(mContext).load(img_url_0).resize(width, (width*0.75).toInt()).centerCrop()
+                Picasso.with(mContext).load(img_url_0).resize(width, (width * 0.75).toInt()).centerCrop()
                         .into(viewHolder.iv_picture!!)
 
             }
@@ -260,7 +263,7 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
             val img_url_0 = HttpUrl.getImageUrl(mList!![position].thumbnail)
             viewHolder.iv_video_cover!!.tag = img_url_0
             if (viewHolder.iv_video_cover!!.tag != null && viewHolder.iv_video_cover!!.tag == img_url_0) {
-                Picasso.with(mContext).load(img_url_0).resize(width, (width*0.75).toInt()).centerCrop()
+                Picasso.with(mContext).load(img_url_0).resize(width, (width * 0.75).toInt()).centerCrop()
                         .into(viewHolder.iv_video_cover)
             }
         }
@@ -300,10 +303,33 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
     /**
      * 关注点击事件
      */
-    private inner class BtnCareOnClickListener(internal var mPosition: Int) : View.OnClickListener {
+    private inner class BtnCareOnClickListener(var viewHolder: ViewHolder, var userId: Long) : View.OnClickListener {
 
         override fun onClick(v: View) {
-            ToastUtil.show("关注 :" + mPosition)
+            if (!ShowApplication.instance!!.hasLogin()) {
+                ToastUtil.show("请登录后再关注")
+            } else {
+                SendRequest.followUser(mContext, ShowApplication.instance!!.token, userId,
+                        object : OkCallback<String>(OkStringParser()) {
+                            override fun onSuccess(code: Int, response: String) {
+                                val resultBean = JSonResultBean.fromJSON(response)
+                                if (resultBean != null && resultBean.isSuccess) {
+                                    viewHolder.btn_care!!.setBackgroundResource(R.drawable.shape_bg_green_edge)
+                                    val img_focus = mContext.resources.getDrawable(R.mipmap.ic_has_focus)
+                                    // 调用setCompoundDrawables时，必须调用Drawable.setBounds()方法,否则图片不显示
+                                    img_focus.setBounds(0, 0, img_focus.minimumWidth, img_focus.minimumHeight)
+                                    viewHolder.btn_care!!.setCompoundDrawables(img_focus, null, null, null) //设置左图标
+                                    viewHolder.btn_care!!.text = "已关注"
+                                    viewHolder.btn_care!!.setTextColor(0Xff7dcf2c.toInt())
+                                    viewHolder.btn_care!!.isEnabled = false
+                                }
+                            }
+
+                            override fun onFailure(e: Throwable) {
+                                ToastUtil.show("关注失败")
+                            }
+                        })
+            }
         }
     }
 
@@ -318,22 +344,27 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         }
     }
 
-    private inner class BtnPariseOnClickListener(internal var mPosition: Int) : View.OnClickListener {
+    private inner class BtnZanOnClickListener(var viewHolder: ViewHolder, var mPosition: Int) : View.OnClickListener {
 
         override fun onClick(v: View) {
-            if (TextUtils.isEmpty(user_id)) {
+            if (!ShowApplication.instance!!.hasLogin()) {
                 ToastUtil.show("请登录后再点赞")
             } else {
-                SendRequest.like(mContext, user_id!!, token!!, mList!![mPosition].id, "1", object : OkCallback<String>(OkStringParser()) {
+                SendRequest.zanLive(mContext, ShowApplication.instance!!.token, getItemId(mPosition),
+                        object : OkCallback<String>(OkStringParser()) {
+                            override fun onSuccess(code: Int, response: String) {
+                                val resultBean = JSonResultBean.fromJSON(response)
+                                if (resultBean != null && resultBean.isSuccess) {
+                                    viewHolder.tv_parise!!.text = "${mList!![mPosition].zanNum + 1}"
+                                    viewHolder.iv_parise!!.isClickable = false
+                                }
+                            }
 
-                    override fun onSuccess(code: Int, response: String) {
-                        LogUtil.d("点赞返回信息" + response)
-                    }
+                            override fun onFailure(e: Throwable) {
+                                ToastUtil.show("点赞失败")
+                            }
 
-                    override fun onFailure(e: Throwable) {
-                        LogUtil.e("点赞失败返回信息" + e.toString())
-                    }
-                })
+                        })
             }
         }
     }

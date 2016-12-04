@@ -224,12 +224,24 @@ object SendRequest {
      * 2.8 获得话题列表
      */
     fun getTopicList(tag: Context, callback: OkCallback<*>) {
-        OkHttpProxy.postJson(HttpUrl.topicListUrl, tag, appendParams(), callback)
+        OkHttpProxy.post(HttpUrl.topicListUrl, tag, params, callback)
     }
 
+    /**
+     * 获取关注列表
+     */
+    fun getFollowList(tag: Context, userId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, Long>("userId" to userId)
+        OkHttpProxy.post(HttpUrl.followListUrl, tag, params, callback)
+    }
 
-
-
+    /**
+     * 关注
+     */
+    fun followUser(tag: Context, token: String, userId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("userId" to "$userId", "token" to token)
+        OkHttpProxy.post(HttpUrl.followUserUrl, tag, params, callback)
+    }
 
     /**
      * 获取好友列表

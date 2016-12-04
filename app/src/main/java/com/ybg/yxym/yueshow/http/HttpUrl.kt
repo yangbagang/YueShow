@@ -53,6 +53,9 @@ object HttpUrl {
     private val FRIEND_LIST = "/userBase/friendList"
     private val DRESSES_LIST = "/userBase/dressList"
 
+    private val FOLLOW_LIST = "/follow/list"
+    private val FOLLOW_FOLLOW = "/follow/follow"
+
     //悦美榜
     val ruiMeiBang: String
         get() = ROOT_URL + "/meiLiHistory/meiliList"
@@ -93,6 +96,11 @@ object HttpUrl {
 
     val authorInfoUrl: String
         get() = ROOT_URL + AUTHOR_INFO
+
+    val followUserUrl: String
+        get() = ROOT_URL + FOLLOW_FOLLOW
+    val followListUrl: String
+        get() = ROOT_URL + FOLLOW_LIST
 
 
     /**
