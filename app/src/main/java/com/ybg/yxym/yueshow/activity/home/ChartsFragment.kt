@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.RelativeLayout
 import com.google.gson.reflect.TypeToken
+import com.ybg.yxym.yb.bean.BangItem
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.bang.ShowBang
@@ -74,8 +75,8 @@ class ChartsFragment : BaseFragment() {
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
-                    val list = mGson!!.fromJson<List<MeiLiItem>>(jsonBean.data, object :
-                            TypeToken<List<MeiLiItem>>(){}.type)
+                    val list = mGson!!.fromJson<List<BangItem>>(jsonBean.data, object :
+                            TypeToken<List<BangItem>>(){}.type)
                     if (list != null) {
                         if (list.isNotEmpty()) {
                             val first = list.first()
@@ -120,8 +121,8 @@ class ChartsFragment : BaseFragment() {
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
-                    val list = mGson!!.fromJson<List<MeiLiItem>>(jsonBean.data, object :
-                            TypeToken<List<MeiLiItem>>(){}.type)
+                    val list = mGson!!.fromJson<List<BangItem>>(jsonBean.data, object :
+                            TypeToken<List<BangItem>>(){}.type)
                     if (list != null) {
                         if (list.isNotEmpty()) {
                             val first = list.first()
@@ -160,14 +161,14 @@ class ChartsFragment : BaseFragment() {
     }
 
     fun loadRenQiBang() {
-        SendRequest.getRuiMeiBang(mContext!!, "2016-01-01", "2999-12-31", 1, 3, object :
+        SendRequest.getRenQiBang(mContext!!, "2016-01-01", "2999-12-31", 1, 3, object :
                 OkCallback<String>(OkStringParser()){
 
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
-                    val list = mGson!!.fromJson<List<MeiLiItem>>(jsonBean.data, object :
-                            TypeToken<List<MeiLiItem>>(){}.type)
+                    val list = mGson!!.fromJson<List<BangItem>>(jsonBean.data, object :
+                            TypeToken<List<BangItem>>(){}.type)
                     if (list != null) {
                         if (list.isNotEmpty()) {
                             val first = list.first()
@@ -221,6 +222,4 @@ class ChartsFragment : BaseFragment() {
         }
     }
 
-    data class MeiLiItem(var user_id: Long, var avatar: String, var nickName: String, var
-    scoreValue: Int)
 }

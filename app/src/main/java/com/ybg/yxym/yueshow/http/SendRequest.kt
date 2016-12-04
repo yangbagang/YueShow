@@ -180,106 +180,37 @@ object SendRequest {
     }
 
     /**
-     * 2.3 switch live
-     * path: /live/v1/live/switch
-     * method: POST
-     * params:
-
-     * @param username username string required
-     * *
-     * @param token    token string required
-     * *
-     * @param type     token_type int required
-     * *
-     * @param livingId living_id int required
-     * *
-     * @param living   living bool required
+     * 评论美秀
+     *
+     * @param token
+     * @param showId
+     * @param content
      */
-    fun switchLive(tag: Context, username: String, token: String, type: Int, livingId: Int, living: Boolean, callback: OkCallback<*>) {
-        mParams!!.put("username", username)
-        mParams!!.put("token", token)
-        mParams!!.put("token_type", type)
-        mParams!!.put("living_id", livingId)
-        mParams!!.put("living", living)
-        OkHttpProxy.postJson(HttpUrl.switchLiveUrl, tag, appendParams(), callback)
+    fun pingLive(tag: Context, token: String, showId: Long, content: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("showId" to "$showId", "token" to token, "content" to content)
+        OkHttpProxy.post(HttpUrl.pingLiveUrl, tag, params, callback)
     }
 
     /**
-     * 2.4 comment live
-     * path: /live/v1/live/comments
-     * method: POST
-     * params:
-
-     * @param username string required
-     * *
-     * @param token    token string required
-     * *
-     * @param type     token_type int required
-     * *
-     * @param livingId living_id int required
-     * *
-     * @param comment  comment string
-     * *
-     * @param extra    extra string
+     * 点赞
+     *
+     * @param token
+     * @param showId
      */
-    fun commentLive(tag: Context, username: String, token: String, type: Int, livingId: Int, comment: String, extra: String, callback: OkCallback<*>) {
-        mParams!!.put("username", username)
-        mParams!!.put("token", token)
-        mParams!!.put("token_type", type)
-        mParams!!.put("living_id", livingId)
-        mParams!!.put("comment", comment)
-        mParams!!.put("extra", extra)
-        OkHttpProxy.postJson(HttpUrl.commentLiveUrl, tag, appendParams(), callback)
+    fun zanLive(tag: Context, token: String, showId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("showId" to "$showId", "token" to token)
+        OkHttpProxy.post(HttpUrl.zanLiveUrl, tag, params, callback)
     }
 
     /**
-     * 2.5 like comment
-     * path: /live/v1/live/like
-     * method: POST
-     * params:
-
-     * @param username username string required
-     * *
-     * @param token    token string required
-     * *
-     * @param type     token_type int required
-     * *
-     * @param livingId living_id int required
-     * *
-     * @param like     like bool
+     * 分享美秀
+     *
+     * @param token
+     * @param showId
      */
-    fun likeLive(tag: Context, username: String, token: String, type: Int, livingId: Int, like: Boolean, callback: OkCallback<*>) {
-        mParams!!.put("username", username)
-        mParams!!.put("token", token)
-        mParams!!.put("token_type", type)
-        mParams!!.put("living_id", livingId)
-        mParams!!.put("like", like)
-        OkHttpProxy.postJson(HttpUrl.likeLiveUrl, tag, appendParams(), callback)
-    }
-
-    /**
-     * 2.6 Forward live
-     * path: /live/v1/live/Forward
-     * method: POST
-     * params:
-
-     * @param username username string required
-     * *
-     * @param token    token string required
-     * *
-     * @param type     token_type int required
-     * *
-     * @param livingId living_id int required
-     * *
-     * @param opinion  opinion string
-     */
-    fun forwardLive(tag: Context, username: String, token: String, type: Int, livingId: Int, opinion: String, callback: OkCallback<*>) {
-        mParams!!.put("username", username)
-        mParams!!.put("token", token)
-        mParams!!.put("token_type", type)
-        mParams!!.put("living_id", livingId)
-        mParams!!.put("opinion", opinion)
-        OkHttpProxy.postJson(HttpUrl.forwardLiveUrl, tag, appendParams(), callback)
+    fun shareLive(tag: Context, token: String, showId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("showId" to "$showId", "token" to token)
+        OkHttpProxy.post(HttpUrl.shareLiveUrl, tag, params, callback)
     }
 
     /**
@@ -296,70 +227,9 @@ object SendRequest {
         OkHttpProxy.postJson(HttpUrl.topicListUrl, tag, appendParams(), callback)
     }
 
-    /**
-     * 搜索用户
 
-     * @param tag
-     * *
-     * @param userid
-     * *
-     * @param token
-     * *
-     * @param keyword
-     * *
-     * @param start
-     * *
-     * @param count
-     * *
-     * @param callback
-     */
-    fun getUserList(tag: Context, userid: String, token: String,
-                    keyword: String, start: String, count: String, callback: OkCallback<*>) {
-        val url = HttpUrl.userList +
-                "?userid=" + userid +
-                "&start=" + start +
-                "&count=" + count +
-                "&&keyword=" + keyword +
-                "&api_key=" + API_KEY +
-                "&token=" + token
-        LogUtil.d(url)
-        try {
-            val builder = OkHttpProxy.get().url(url).tag(tag)
-            builder.enqueue(callback)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
 
-    }
 
-    /**
-     * 首页hot
-     * @param tag
-     * //     * @param userid 不设定时则不显示好友相关信息，设定时显示好友信息
-     * *
-     * @param posttype 1直播，2是图片，3是视频，0全部
-     * *
-     * @param start 起始
-     * *
-     * @param count  多少条
-     * *
-     * @param callback 回调
-     */
-    fun getHomeHot(tag: Context, posttype: Int, start: Int, count: Int, callback: OkCallback<*>) {
-        val url = HttpUrl.homeHot +
-                "?start=" + start +
-                "&count=" + count +
-                "&posttype=" + posttype +
-                "&api_key=" + API_KEY
-        LogUtil.d(url)
-        try {
-            val builder = OkHttpProxy.get().url(url).tag(tag)
-            builder.enqueue(callback)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
 
     /**
      * 获取好友列表
@@ -426,112 +296,6 @@ object SendRequest {
 
     }
 
-
-    /**
-     * 点赞 2016-09-23 提交有问题
-     * method : Post
-     * @param tag
-     * *
-     * @param userid
-     * *
-     * @param token
-     * *
-     * @param livingId
-     * *
-     * @param like
-     * *
-     * @param callback
-     */
-    fun like(tag: Context, userid: String, token: String, livingId: Long?, like: String,
-             callback: OkCallback<*>) {
-        mParams!!.put("userid", userid)
-        mParams!!.put("token", token)
-        mParams!!.put("livingId", livingId!!)
-        mParams!!.put("like", like)
-        mParams!!.put("api_key", API_KEY)
-        OkHttpProxy.post(HttpUrl.like, tag, mParams!!, callback)
-    }
-
-
-    /**
-     * 获取用户详细信息
-     * @param tag
-     * *
-     * @param userid
-     * *
-     * @param token
-     * *
-     * @param callback
-     */
-    fun getUserDetailInfo(tag: Context, userid: String, token: String, callback: OkCallback<*>) {
-        val url = HttpUrl.userInfo +
-                "?userid=" + userid +
-                "&token=" + token +
-                "&api_key=" + API_KEY
-        LogUtil.d(url)
-        try {
-            val builder = OkHttpProxy.get().url(url).tag(tag)
-            builder.enqueue(callback)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
-
-
-    /**
-     * 获取融云token
-     * @param tag
-     * *
-     * @param userid
-     * *
-     * @param token
-     * *
-     * @param callback
-     */
-    fun getRongyunToken(tag: Context, userid: String, token: String, callback: OkCallback<*>) {
-        val url = HttpUrl.rongyunToken +
-                "?userid=" + userid +
-                "&token=" + token +
-                "&api_key=" + API_KEY
-        LogUtil.d(url)
-        try {
-            val builder = OkHttpProxy.get().url(url).tag(tag)
-            builder.enqueue(callback)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
-
-    /**
-     * 获取融云token
-     * @param tag
-     * *
-     * @param userid
-     * *
-     * @param token
-     * *
-     * @param callback
-     */
-    fun getCommentList(tag: Context, userid: String, token: String, livedid: Int, start: Int, count: Int, callback: OkCallback<*>) {
-        val url = HttpUrl.commentList +
-                "?userid=" + userid +
-                "&token=" + token +
-                "&liveid=" + livedid +
-                "&start=" + start +
-                "&count=" + count +
-                "&api_key=" + API_KEY
-        LogUtil.d(url)
-        try {
-            val builder = OkHttpProxy.get().url(url).tag(tag)
-            builder.enqueue(callback)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
-
     /**
      * 上传文件
      */
@@ -565,5 +329,12 @@ object SendRequest {
         val params = mapOf<String, String>("beginTime" to beginTime, "endTime" to endTime,
                 "pageNum" to "$pageNum", "pageSize" to "$pageSize")
         OkHttpProxy.post(HttpUrl.huoLiBang, tag, params, callback)
+    }
+
+    fun getMiAiBang(tag: Context, beginTime: String, endTime: String, pageNum: Int, pageSize: Int,
+                    userId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("beginTime" to beginTime, "endTime" to endTime,
+                "pageNum" to "$pageNum", "pageSize" to "$pageSize", "userId" to "$userId")
+        OkHttpProxy.post(HttpUrl.miAiBang, tag, params, callback)
     }
 }

@@ -1,26 +1,22 @@
 package com.ybg.yxym.yueshow.activity.bang
 
-import com.ybg.yxym.yueshow.R
-import com.ybg.yxym.yueshow.activity.base.BaseFragment
+import com.ybg.yxym.yb.utils.DateUtil
+import java.util.*
 
 /**
  * Created by yangbagang on 2016/12/2.
  */
-class MonthBangFragment : BaseFragment() {
+class MonthBangFragment : BangBaseFragment () {
 
-    var type = 1
-
-    override fun setContentViewId(): Int {
-        return R.layout.fragment_bang_list
+    override fun initParams() {
+        val today = DateUtil.getDate(Date())
+        beginTime = "${DateUtil.getMonthBegin(today)} 00:00:00"
+        endTime = "${DateUtil.getMonthEnd(today)} 23:59:59"
     }
 
-    override fun setUpView() {
-
-    }
-
-    override fun init() {
-        println("in monthBang: type=$type")
-    }
+    override var type = 1
+    override var beginTime = ""
+    override var endTime = ""
 
     companion object {
         var bang: MonthBangFragment? = null

@@ -6,10 +6,13 @@ package com.ybg.yxym.yueshow.http
 object HttpUrl {
     private val debug = true
 
-    //测试服务器地址
+    //开发服务器地址
     val API_HOST_DEBUG = "http://192.168.12.99:8080/ma"
+    //生产服务器地址
     val API_HOST_PRODUCT = "https://139.224.186.241:8443/ma"
+    //上传
     val FILE_SERVER_UPLOAD = "http://120.76.74.2/file/file/upload"
+    //预览
     val FILE_SERVER_PREVIEW = "http://120.76.74.2/file/file/preview"
 
     val ROOT_URL = if (debug) API_HOST_DEBUG else API_HOST_PRODUCT
@@ -36,41 +39,19 @@ object HttpUrl {
     private val CREATE_LIVE = "/ruiShow/create"
     private val APPEND_FILES = "/showFile/addFiles"
     private val APPEND_EVENTS = "/ruiEvent/appendEvent"
-    /*switch live*/
-    private val SWITCH_LIVE = "/live/v1/live/switch"
-    /*comment live*/
-    private val COMMENT_LIVE = "/live/v1/live/comments"
-    /*like live*/
-    private val LIKE_LIVE = "/live/v1/live/like"
-    /*forward live*/
-    private val FORWARD_LIVE = "/live/v1/live/Forward"
-    /*Category list*/
+    /*评论美秀*/
+    private val PING_LIVE = "/ruiShow/ping"
+    /*点赞*/
+    private val ZAN_LIVE = "/ruiShow/zan"
+    /*分享*/
+    private val SHARE_LIVE = "/ruiShow/share"
+    /*美秀板块*/
     private val CATEGORY_LIST = "/ruiBar/list"
-    /*Create Topic*/
+    /*活动主题*/
     private val TOPIC_LIST = "/ruiEvent/list"
-
-
-    /**用户搜索列表 */
-    private val USER_LIST = "/account/v1/user/search"
-    /**首页 hot */
-    private val HOME_HOT = "/live/v1/home/hot"
-    /**首页 最鲜 */
-    private val HOME_NEW = "/live/v1/home/new"
-    /**首页 友秀圈 */
-    private val HOME_FRIEND = "/live/v1/home/friend"
-
-    /**好友列表 */
-    private val FRIEND_LIST = "/account/v1/friend"
-    /**取装扮背景列表] */
-    private val DRESSESS_LIST = "/account/v1/dresses"
-    /**获取用户信息] */
-    private val USER_INFO = "/account/v1/user/get"
-    /**点赞 */
-    private val LIKE = "/live/v1/live/like"
-
-    private val USER_RONGYUN_TOKEN = "/account/v1/user/get_rc_token"
-
-    private val USER_COMMENT_LIST = "/live/v1/live/comments"
+    private val PING_LIST = "/showPing/list"
+    private val FRIEND_LIST = "/userBase/friendList"
+    private val DRESSES_LIST = "/userBase/dressList"
 
     //悦美榜
     val ruiMeiBang: String
@@ -79,6 +60,8 @@ object HttpUrl {
         get() = ROOT_URL + "/meiLiHistory/renqiList"
     val huoLiBang: String
         get() = ROOT_URL + "/meiLiHistory/huoliList"
+    val miAiBang: String
+        get() = ROOT_URL + "/meiLiHistory/miaiList"
 
     //用户模块
     val userLoginUrl: String
@@ -113,30 +96,6 @@ object HttpUrl {
 
 
     /**
-     * @return 搜索用户
-     */
-    val userList: String
-        get() = ROOT_URL + USER_LIST
-
-    /**
-     * @return 首页热门
-     */
-    val homeHot: String
-        get() = ROOT_URL + HOME_HOT
-
-    /**
-     * @return 首页最鲜
-     */
-    val homeNew: String
-        get() = ROOT_URL + HOME_NEW
-
-    /**
-     * @return 首页 友秀圈
-     */
-    val homeFriend: String
-        get() = ROOT_URL + HOME_FRIEND
-
-    /**
      * @return 好友列表 url
      */
     val friendList: String
@@ -146,29 +105,23 @@ object HttpUrl {
      * @return 获取装扮背景列表
      */
     val dressesList: String
-        get() = ROOT_URL + DRESSESS_LIST
+        get() = ROOT_URL + DRESSES_LIST
 
     /**
      * @return 点赞URL
      */
-    val like: String
-        get() = ROOT_URL + LIKE
+    val zanLiveUrl: String
+        get() = ROOT_URL + ZAN_LIVE
 
 
     /**
      * @return 获取用户信息
      */
     val userInfo: String
-        get() = ROOT_URL + USER_INFO
-
-    /**
-     * @return 获取融云token
-     */
-    val rongyunToken: String
-        get() = ROOT_URL + USER_RONGYUN_TOKEN
+        get() = ROOT_URL + GET_USER_INFO
 
     val commentList: String
-        get() = ROOT_URL + USER_COMMENT_LIST
+        get() = ROOT_URL + PING_LIST
 
 
     val createLiveUrl: String
@@ -186,17 +139,11 @@ object HttpUrl {
     val categoryListUrl: String
         get() = ROOT_URL + CATEGORY_LIST
 
-    val forwardLiveUrl: String
-        get() = ROOT_URL + FORWARD_LIVE
+    val shareLiveUrl: String
+        get() = ROOT_URL + SHARE_LIVE
 
-    val likeLiveUrl: String
-        get() = ROOT_URL + LIKE_LIVE
-
-    val commentLiveUrl: String
-        get() = ROOT_URL + COMMENT_LIVE
-
-    val switchLiveUrl: String
-        get() = ROOT_URL + SWITCH_LIVE
+    val pingLiveUrl: String
+        get() = ROOT_URL + PING_LIVE
 
     fun getImageUrl(fid: String): String {
         if (fid.startsWith("http:", true) || fid.startsWith("https:", true)) {
