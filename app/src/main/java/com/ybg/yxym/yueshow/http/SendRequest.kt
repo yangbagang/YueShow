@@ -154,6 +154,38 @@ object SendRequest {
     }
 
     /**
+     * 获取附件信息
+     */
+    fun getShowFiles(tag: Context, showId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("showId" to "$showId")
+        OkHttpProxy.post(HttpUrl.showFilesUrl, tag, params, callback)
+    }
+
+    /**
+     * 获取评论信息信息
+     */
+    fun getShowPingList(tag: Context, showId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("showId" to "$showId")
+        OkHttpProxy.post(HttpUrl.showPingUrl, tag, params, callback)
+    }
+
+    /**
+     * 获取点赞列表信息
+     */
+    fun getShowZanList(tag: Context, showId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("showId" to "$showId")
+        OkHttpProxy.post(HttpUrl.showZanUrl, tag, params, callback)
+    }
+
+    /**
+     * 获取分享列表信息
+     */
+    fun getShowShareList(tag: Context, showId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("showId" to "$showId")
+        OkHttpProxy.post(HttpUrl.showShareUrl, tag, params, callback)
+    }
+
+    /**
      * 2.2 新建美秀
      *
      * @param token

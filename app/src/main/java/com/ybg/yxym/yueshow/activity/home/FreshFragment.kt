@@ -10,6 +10,7 @@ import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseFragment
+import com.ybg.yxym.yueshow.activity.show.ShowDetailActivity
 import com.ybg.yxym.yueshow.adapter.HomeShowAdapter
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
@@ -65,7 +66,7 @@ class FreshFragment : BaseFragment() {
 //        } else {
 //            ToastUtil.show("直播已经结束")
 //        }
-        ToastUtil.show("查看详情")
+        ShowDetailActivity.start(mContext!!, hotEntityList[position])
     }
 
     private fun getHomeNewInfo() {

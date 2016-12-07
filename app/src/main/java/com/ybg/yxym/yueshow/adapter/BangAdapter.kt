@@ -73,11 +73,11 @@ class BangAdapter(private var mContext: Activity): BaseAdapter() {
             viewHolder.tv_pm!!.visibility = View.GONE
             //前三名
             if (position == 0) {
-                viewHolder.iv_pm!!.setImageResource(R.mipmap.bang1)
+                viewHolder.iv_pm!!.setImageResource(R.mipmap.pm1)
             } else if (position == 1) {
-                viewHolder.iv_pm!!.setImageResource(R.mipmap.bang2)
+                viewHolder.iv_pm!!.setImageResource(R.mipmap.pm2)
             } else if (position == 2) {
-                viewHolder.iv_pm!!.setImageResource(R.mipmap.bang3)
+                viewHolder.iv_pm!!.setImageResource(R.mipmap.pm3)
             }
         }
 

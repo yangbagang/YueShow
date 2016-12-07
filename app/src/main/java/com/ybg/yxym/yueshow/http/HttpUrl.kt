@@ -35,6 +35,10 @@ object HttpUrl {
     /*美秀列表*/
     private val LIVE_LIST = "/ruiShow/list"
     private val AUTHOR_INFO = "/userBase/getAuthorInfoByShowId"
+    private val SHOW_FIELS = "/showFile/list"
+    private val SHOW_PING_LIST = "/showPing/list"
+    private val SHOW_ZAN_LIST = "/showZan/list"
+    private val SHOW_SHARE_LIST = "/showShare/list"
     /*新建美秀*/
     private val CREATE_LIVE = "/ruiShow/create"
     private val APPEND_FILES = "/showFile/addFiles"
@@ -96,6 +100,18 @@ object HttpUrl {
 
     val authorInfoUrl: String
         get() = ROOT_URL + AUTHOR_INFO
+
+    val showFilesUrl: String
+        get() = ROOT_URL + SHOW_FIELS
+
+    val showPingUrl: String
+        get() = ROOT_URL + SHOW_PING_LIST
+
+    val showZanUrl: String
+        get() = ROOT_URL + SHOW_ZAN_LIST
+
+    val showShareUrl: String
+        get() = ROOT_URL + SHOW_SHARE_LIST
 
     val followUserUrl: String
         get() = ROOT_URL + FOLLOW_FOLLOW

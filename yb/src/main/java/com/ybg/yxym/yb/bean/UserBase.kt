@@ -15,6 +15,7 @@ class UserBase : Serializable {
     var ymMemo = ""//宣言
     var flag = 1//扩展用字段，为1可以关注，0不能关注。
     var ml = 0//扩展用字段，记录美秀美力值。
+    var score = 0//扩展字段，记录用户总美力值
 
     override fun toString(): String {
         return "UserBase{" +

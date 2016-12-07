@@ -17,11 +17,12 @@ object DateUtil {
     @JvmOverloads fun parseDate(dateStr: String, format: String = "yyyy-MM-dd"): Date? {
         try {
             val dateFormat = SimpleDateFormat(format)
-            var dt = dateStr.replace("-".toRegex(), "/")
-            if (dt != "" && dt.length < format.length) {
-                dt += format.substring(dt.length).replace("[YyMmDdHhSs]".toRegex(), "0")
-            }
-            return dateFormat.parse(dt)
+//            var dt = dateStr.replace("-".toRegex(), "/")
+//            if (dt != "" && dt.length < format.length) {
+//                dt += format.substring(dt.length).replace("[YyMmDdHhSs]".toRegex(), "0")
+//            }
+//            return dateFormat.parse(dt)
+            return dateFormat.parse(dateStr)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -222,6 +223,9 @@ object DateUtil {
     fun getMonthEnd(strdate: String): String {
         val date = parseDate(getMonthBegin(strdate))
         val calendar = Calendar.getInstance()
+        if (calendar == null) {
+            println("calendar is null...")
+        }
         calendar.time = date
         calendar.add(Calendar.MONTH, 1)
         calendar.add(Calendar.DAY_OF_YEAR, -1)

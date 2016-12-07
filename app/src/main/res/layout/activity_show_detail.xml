@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!--第一部分，显示图片或视频，可播入或滑动查看全部-->
+        <LinearLayout
+            android:id="@+id/ll_show_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_info_bg"/>
+        </LinearLayout>
+        <!--第二部分，查看用户消息或与发布者约会-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/px_20"
+                android:layout_marginLeft="@dimen/px_30"
+                android:layout_marginRight="@dimen/px_30"
+                android:layout_marginTop="@dimen/px_20"
+                android:orientation="horizontal">
+
+                <com.ybg.yxym.yueshow.view.CircleImageView
+                    android:id="@+id/iv_user_logo"
+                    android:layout_width="@dimen/px_100"
+                    android:layout_height="@dimen/px_100"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:src="@mipmap/ic_default_girl"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/px_30"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_user_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="邓肯"
+                            android:textColor="#545866"
+                            android:textSize="@dimen/px_32"/>
+
+                        <ImageView
+                            android:id="@+id/iv_level_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px_16"
+                            android:src="@mipmap/ic_show_user_level"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px_28"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_meilizhi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="美力值 + 15"
+                            android:textColor="#bfc5ca"
+                            android:textSize="@dimen/px_20"/>
+
+                        <TextView
+                            android:id="@+id/tv_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px_30"
+                            android:text="21分钟前"
+                            android:textColor="#bfc5ca"
+                            android:textSize="@dimen/px_20"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical">
+
+                    <Button
+                        android:id="@+id/btn_care"
+                        android:layout_width="@dimen/px_148"
+                        android:layout_height="@dimen/px_50"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/shape_btn_login"
+                        android:clickable="true"
+                        android:drawableLeft="@mipmap/ic_add_focus"
+                        android:focusable="false"
+                        android:paddingLeft="@dimen/px_24"
+                        android:text="约TA"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/px_24"/>
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <!--第三部分 美秀备注-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#ecedf3" />
+        <TextView
+            android:id="@+id/tv_show_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/px_30"
+            android:textSize="@dimen/px_text_24"
+            android:textColor="#545866"
+            android:text="dfasdfassdf"/>
+        <!--第四部分 点赞图标-->
+        <include layout="@layout/item_user_info_like"/>
+        <include layout="@layout/item_show_h_line"/>
+        <!--第五部分 评论列表-->
+
+    </LinearLayout>
+</ScrollView>

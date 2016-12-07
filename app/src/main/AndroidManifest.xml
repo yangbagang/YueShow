@@ -121,6 +121,9 @@
                   android:screenOrientation="portrait" />
         <!--悦美榜-->
         <activity android:name=".activity.bang.ShowBang" android:screenOrientation="portrait" />
+        <!--美秀详情-->
+        <activity android:name=".activity.show.ShowDetailActivity"
+                  android:screenOrientation="portrait" />
     </application>
 
 </manifest>

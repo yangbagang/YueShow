@@ -85,6 +85,7 @@ abstract class BangBaseFragment: BaseFragment() {
                     message.obj = response
                     mHandler.sendMessage(message)
                 }
+                mRefreshLayout.endRefreshing()
             }
 
             override fun onFailure(e: Throwable) {
@@ -110,6 +111,7 @@ abstract class BangBaseFragment: BaseFragment() {
                     message.obj = response
                     mHandler.sendMessage(message)
                 }
+                mRefreshLayout.endRefreshing()
             }
 
             override fun onFailure(e: Throwable) {
@@ -135,6 +137,7 @@ abstract class BangBaseFragment: BaseFragment() {
                     message.obj = response
                     mHandler.sendMessage(message)
                 }
+                mRefreshLayout.endRefreshing()
             }
 
             override fun onFailure(e: Throwable) {
@@ -201,13 +204,13 @@ abstract class BangBaseFragment: BaseFragment() {
 
         private fun loadData() {
             when(type) {
-                1 -> {
+                0 -> {
                     ToastUtil.show("没有更多数据!")
                 }
-                2 -> loadMeiLiBang()
-                3 -> loadHuoLiBang()
-                4 -> loadRenQiBang()
-                5 -> {
+                1 -> loadMeiLiBang()
+                2 -> loadHuoLiBang()
+                3 -> loadRenQiBang()
+                4 -> {
                     ToastUtil.show("没有更多数据!")
                 }
             }

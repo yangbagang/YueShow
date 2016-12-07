@@ -274,20 +274,22 @@ class BGARefreshLayout @JvmOverloads constructor(context: Context, attrs: Attrib
                 val field = AbsListView::class.java.getDeclaredField("mOnScrollListener")
                 field.isAccessible = true
                 // 开发者自定义的滚动监听器//TODO kotlin.TypeCastException: null cannot be cast to non-null
-                val onScrollListener = field.get(mAbsListView) as AbsListView.OnScrollListener
-                mAbsListView!!.setOnScrollListener(object : AbsListView.OnScrollListener {
-                    override fun onScrollStateChanged(absListView: AbsListView, scrollState: Int) {
-                        if ((scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE || scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) && shouldHandleAbsListViewLoadingMore(mAbsListView)) {
-                            beginLoadingMore()
+                if (field.get(mAbsListView) != null) {
+                    val onScrollListener = field.get(mAbsListView) as AbsListView.OnScrollListener
+                    mAbsListView!!.setOnScrollListener(object : AbsListView.OnScrollListener {
+                        override fun onScrollStateChanged(absListView: AbsListView, scrollState: Int) {
+                            if ((scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE || scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) && shouldHandleAbsListViewLoadingMore(mAbsListView)) {
+                                beginLoadingMore()
+                            }
+
+                            onScrollListener.onScrollStateChanged(absListView, scrollState)
                         }
 
-                        onScrollListener?.onScrollStateChanged(absListView, scrollState)
-                    }
-
-                    override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
-                        onScrollListener?.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount)
-                    }
-                })
+                        override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+                            onScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount)
+                        }
+                    })
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
