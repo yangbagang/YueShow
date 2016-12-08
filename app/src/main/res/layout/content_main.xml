@@ -58,7 +58,7 @@
                 android:layout_height="22dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
-                android:background="@mipmap/ic_tab_home"/>
+                android:background="@drawable/selector_hall"/>
 
             <TextView
                 android:id="@+id/tv_tab_menu_0"
@@ -88,7 +88,7 @@
                 android:layout_height="@dimen/px_44"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
-                android:background="@mipmap/ic_tab_charts"/>
+                android:background="@drawable/selector_charts"/>
 
             <TextView
                 android:id="@+id/tv_tab_menu_1"

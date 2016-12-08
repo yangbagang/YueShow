@@ -188,13 +188,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (view.id) {
             R.id.rl_tab_menu_0 -> {
                 vp_main_content!!.currentItem = 0
-                iv_tab_menu_0.setImageResource(R.mipmap.ic_tab_home)
-                iv_tab_menu_1.setImageResource(R.mipmap.ic_tab_charts)
+                //iv_tab_menu_0.setImageResource(R.mipmap.ic_tab_home)
+                //iv_tab_menu_1.setImageResource(R.mipmap.ic_tab_charts)
             }
             R.id.rl_tab_menu_1 -> {
                 vp_main_content!!.currentItem = 1
-                iv_tab_menu_0.setImageResource(R.mipmap.ic_tab_home_unselected)
-                iv_tab_menu_1.setImageResource(R.mipmap.ic_tab_charts_selected)
+                //iv_tab_menu_0.setImageResource(R.mipmap.ic_tab_home_unselected)
+                //iv_tab_menu_1.setImageResource(R.mipmap.ic_tab_charts_selected)
             }
             R.id.rl_tab_publish -> {
                 if (showApplication.hasLogin()) {
