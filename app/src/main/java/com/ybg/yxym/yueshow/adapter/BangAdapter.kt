@@ -102,8 +102,8 @@ class BangAdapter(private var mContext: Activity): BaseAdapter() {
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
-                    val list = GsonUtil.createGson().fromJson<List<UserBase>>(jsonBean.data, object :
-                            TypeToken<List<UserBase>>(){}.type)
+                    val list = GsonUtil.createGson().fromJson<List<BangItem>>(jsonBean.data, object :
+                            TypeToken<List<BangItem>>(){}.type)
                     if (list != null) {
                         if (list.isNotEmpty()) {
                             val first = list.first()

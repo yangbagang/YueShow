@@ -134,6 +134,22 @@ object SendRequest {
     }
 
     /**
+     * 获取关注数
+     */
+    fun getFollowNum(tag: Context, userId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, Long>("userId" to userId)
+        OkHttpProxy.post(HttpUrl.followNumUrl, tag, params, callback)
+    }
+
+    /**
+     * 获取粉丝数
+     */
+    fun getFansNum(tag: Context, userId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, Long>("userId" to userId)
+        OkHttpProxy.post(HttpUrl.fansNumUrl, tag, params, callback)
+    }
+
+    /**
      * 2.1 获取美秀列表
      *
      * @param pageNum  第几页

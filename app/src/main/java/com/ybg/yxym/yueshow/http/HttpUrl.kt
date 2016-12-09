@@ -68,7 +68,7 @@ object HttpUrl {
     val huoLiBang: String
         get() = ROOT_URL + "/meiLiHistory/huoliList"
     val miAiBang: String
-        get() = ROOT_URL + "/meiLiHistory/miaiList"
+        get() = ROOT_URL + "/meiLiHistory/miAiList"
 
     //用户模块
     val userLoginUrl: String
@@ -117,6 +117,12 @@ object HttpUrl {
         get() = ROOT_URL + FOLLOW_FOLLOW
     val followListUrl: String
         get() = ROOT_URL + FOLLOW_LIST
+
+    val followNumUrl: String
+        get() = ROOT_URL + "/follow/getFollowNum"
+
+    val fansNumUrl: String
+        get() = ROOT_URL + "/follow/getFansNum"
 
 
     /**

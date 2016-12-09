@@ -2,6 +2,8 @@ package com.ybg.yxym.yueshow.activity.user
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -13,10 +15,22 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.google.gson.reflect.TypeToken
+import com.ybg.yxym.yb.bean.BangItem
+import com.ybg.yxym.yb.bean.JSonResultBean
+import com.ybg.yxym.yb.bean.UserBase
+import com.ybg.yxym.yb.utils.GsonUtil
+import com.ybg.yxym.yb.utils.MeiLiUtil
 
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.MainActivity
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
+import com.ybg.yxym.yueshow.adapter.BangAdapter
+import com.ybg.yxym.yueshow.http.HttpUrl
+import com.ybg.yxym.yueshow.http.SendRequest
+import com.ybg.yxym.yueshow.http.callback.OkCallback
+import com.ybg.yxym.yueshow.http.parser.OkStringParser
+import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.CircleImageView
 import kotlinx.android.synthetic.main.activity_user_center_listview.*
@@ -134,6 +148,41 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
         rl_user_level = headview.findViewById(R.id.rl_user_level) as RelativeLayout
         tv_go_aimi!!.setOnClickListener(this)
         rl_user_level!!.setOnClickListener(this)
+
+        loadUserBase { userBase ->
+            setUserInfo(userBase)
+        }
+    }
+
+    private fun setUserInfo(userBase: UserBase) {
+        //头像
+        val utils = ImageLoaderUtils.instance
+        if (TextUtils.isEmpty(userBase.avatar)) {
+            //utils.loadBitmap(userImage, R.mipmap.ic_default_girl);
+        } else {
+            utils.loadBitmap(iv_user_logo!!, userBase.avatar)
+        }
+        if (TextUtils.isEmpty(userBase.avatarBG)) {
+            //navHeader.setBackgroundResource(R.drawable.side_nav_bar);
+        } else {
+            val bitmap = utils.loadBitmap(userBase.avatarBG)
+            rl_user_wall?.background = BitmapDrawable(resources, bitmap)
+        }
+        //呢称
+        tv_nickname?.text = userBase.nickName
+        //签名
+        tv_sign_name?.text = userBase.ymMemo
+        //级别
+        val num = MeiLiUtil.getLevelNum(userBase.ml)
+        tv_level_name?.text = MeiLiUtil.getLevelName(num)
+        tv_level?.text = "LV$num"
+        tv_meilizhi?.text = "${userBase.ml}"
+        //粉丝数
+        loadFansNum(userBase)
+        //关注数
+        loadFollowNum(userBase)
+        //蜜爱
+        loadMiAi(userBase)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -275,6 +324,88 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
             vJoinGame_float!!.setBackgroundColor(VL_COLOR_NORMAL)
             vAchievement_float!!.setBackgroundColor(VL_COLOR_SELECT)
         }
+    }
+
+    private fun loadFansNum(userBase: UserBase) {
+        SendRequest.getFansNum(mContext!!, userBase.id, object : OkCallback<String>
+        (OkStringParser()){
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    runOnUiThread {
+                        tv_fans?.text = jsonBean.data
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                //不理会
+            }
+        })
+    }
+
+    private fun loadFollowNum(userBase: UserBase) {
+        SendRequest.getFollowNum(mContext!!, userBase.id, object : OkCallback<String>
+        (OkStringParser()){
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    runOnUiThread {
+                        tv_care?.text = jsonBean.data
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                //不理会
+            }
+        })
+    }
+
+    private fun loadMiAi(userBase: UserBase) {
+        SendRequest.getMiAiBang(mContext!!, "2016-01-01", "2999-12-31", 1, 3, userBase.id, object :
+                OkCallback<String>(OkStringParser()){
+
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    val list = GsonUtil.createGson().fromJson<List<BangItem>>(jsonBean.data, object :
+                            TypeToken<List<BangItem>>(){}.type)
+                    if (list != null) {
+                        if (list.isNotEmpty()) {
+                            val first = list.first()
+                            ImageLoaderUtils.instance.loadBitmap(iv_miai_1!!, HttpUrl.getImageUrl
+                            (first.avatar))
+                        } else {
+                            iv_miai_1!!.visibility = View.GONE
+                        }
+                        if (list.size > 1) {
+                            val second = list[1]
+                            ImageLoaderUtils.instance.loadBitmap(iv_miai_2!!, HttpUrl.getImageUrl
+                            (second.avatar))
+                        } else {
+                            iv_miai_2!!.visibility = View.GONE
+                        }
+                        if (list.size > 2) {
+                            val third = list[2]
+                            ImageLoaderUtils.instance.loadBitmap(iv_miai_3!!, HttpUrl.getImageUrl
+                            (third.avatar))
+                        } else {
+                            iv_miai_3!!.visibility = View.GONE
+                        }
+                    }
+                } else {
+                    jsonBean?.let {
+                        ToastUtil.show(jsonBean.message)
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                //ToastUtil.show("获取美力榜失败")
+            }
+
+        })
     }
 
     companion object {
