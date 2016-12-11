@@ -2,6 +2,7 @@ package com.ybg.yxym.yueshow.activity.user
 
 import android.content.Intent
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 
@@ -11,7 +12,7 @@ import com.ybg.yxym.yueshow.activity.base.BaseActivity
 
 class UpdataUserMsgActivity : BaseActivity() {
 
-    private var metMsg: MaterialEditText? = null
+    private lateinit var metMsg: MaterialEditText
 
     private var type: String? = null
 
@@ -29,24 +30,26 @@ class UpdataUserMsgActivity : BaseActivity() {
     override fun init() {
     }
 
-    //    @OnClick({R.id.iv_back})
-    //    public void onClick(View view) {
-    //        switch (view.getId()) {
-    //            case R.id.iv_back:
-    //                Intent response = new Intent(mContext, MyInformationActivity.class);
-    //                if(type.equals("昵称")){
-    //                    response.putExtra("nickname", metMsg.getText().toString());
-    //                    setResult(RESULT_OK, response);
-    //                }else if(type.equals("职业")){
-    //                    response.putExtra("profession", metMsg.getText().toString());
-    //                    setResult(RESULT_OK, response);
-    //                }else if(type.equals("个性签名")){
-    //                    response.putExtra("signname", metMsg.getText().toString());
-    //                    setResult(RESULT_OK, response);
-    //                }
-    //                finish();
-    //                Log.d("AAAA","修改信息页面： " + metMsg.getText().toString());
-    //                break;
-    //        }
-    //    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                val response = Intent(mContext, MyInformationActivity::class.java)
+                if(type.equals("昵称")){
+                    response.putExtra("nickname", metMsg.text.toString())
+                    setResult(RESULT_OK, response);
+                }else if(type.equals("职业")){
+                    response.putExtra("profession", metMsg.text.toString())
+                    setResult(RESULT_OK, response);
+                }else if(type.equals("个性签名")){
+                    response.putExtra("signname", metMsg.text.toString())
+                    setResult(RESULT_OK, response);
+                }
+                finish();
+                Log.d("UpdataUserMsgActivity","修改信息页面： " + metMsg.text.toString())
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 }

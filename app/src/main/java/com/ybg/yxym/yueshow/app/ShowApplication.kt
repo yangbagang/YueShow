@@ -45,4 +45,20 @@ class ShowApplication : YbgAPP() {
     }
 
     fun checkNeedLogin(message: String) = message.contains("重新登录")
+
+    fun setAutoPlay(boolean: Boolean) {
+        preference.setBoolean("autoPlay", boolean)
+    }
+
+    fun isAutoPlay(): Boolean {
+        return preference.getBoolean("autoPlay", false)
+    }
+
+    fun setReceiverMsg(boolean: Boolean) {
+        preference.setBoolean("receiverMsg", boolean)
+    }
+
+    fun isReceiverMsg(): Boolean {
+        return preference.getBoolean("receiverMsg", false)
+    }
 }

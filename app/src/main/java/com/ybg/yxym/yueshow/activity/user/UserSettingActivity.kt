@@ -7,8 +7,10 @@ import android.view.View
 import android.widget.CompoundButton
 import android.widget.Switch
 import android.widget.TextView
+import com.ybg.yxym.yb.utils.AppUtil
 
 import com.ybg.yxym.yueshow.R
+import com.ybg.yxym.yueshow.activity.MainActivity
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.CustomerDialog
@@ -38,42 +40,60 @@ class UserSettingActivity : BaseActivity() {
     }
 
     override fun init() {
+        if (mApplication.isAutoPlay()) {
+            switchWifiAuto?.isChecked = true
+        }
+        if (mApplication.isReceiverMsg()) {
+            switchNewMsg?.isChecked = true
+        }
         switchWifiAuto!!.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                ToastUtil.show("WIFI下自动播放")
+                mApplication.setAutoPlay(true)
             } else {
-                ToastUtil.show("关闭WIFI下自动播放")
+                mApplication.setAutoPlay(false)
             }
         }
         switchNewMsg!!.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                ToastUtil.show("接收新消息")
+                mApplication.setReceiverMsg(true)
             } else {
-                ToastUtil.show("不接收消息")
+                mApplication.setReceiverMsg(false)
             }
         }
+        tvCopyright?.text = AppUtil.getAppVersion(mContext!!, "com.ybg.yxym.yueshow")
     }
 
     fun onClick(view: View) {
         when (view.id) {
-            R.id.rl_drafts -> ToastUtil.show("草稿箱")
-            R.id.tv_caech -> ToastUtil.show("本地缓存")
-            R.id.tv_copyright -> ToastUtil.show("版本更新")
-            R.id.rl_agreement -> ToastUtil.show("协议")
-            R.id.tv_logout -> logout()
+            R.id.rl_drafts -> {
+                //ToastUtil.show("草稿箱")
+            }
+            R.id.tv_caech -> {
+                //ToastUtil.show("本地缓存")
+            }
+            R.id.tv_copyright -> {
+                //ToastUtil.show("版本更新")
+            }
+            R.id.rl_agreement -> {
+                //ToastUtil.show("协议")
+            }
+            R.id.tv_logout -> {
+                mApplication.token = ""
+                MainActivity.instance?.removeUserInfo()
+            }
         }
     }
 
     /**
      * 推出提示
      */
-    private fun logout() {
-        val builder = CustomerDialog.Builder(mContext!!)
-        builder.setMessage("今天是星期二")
-        builder.setPositiveButton("确定", DialogInterface.OnClickListener { dialogInterface, i -> dialogInterface.dismiss() })
-        builder.setNegativeButton("取消", DialogInterface.OnClickListener { dialogInterface, i -> dialogInterface.dismiss() })
-        builder.create().show()
-    }
+    //    private fun logout() {
+//        val builder = CustomerDialog.Builder(mContext!!)
+//        builder.setMessage("今天是星期二")
+//        builder.setPositiveButton("确定", DialogInterface.OnClickListener { dialogInterface, i -> dialogInterface.dismiss() })
+//        builder.setNegativeButton("取消", DialogInterface.OnClickListener { dialogInterface, i -> dialogInterface.dismiss() })
+//        builder.create().show()
+//    }
 
     companion object {
 

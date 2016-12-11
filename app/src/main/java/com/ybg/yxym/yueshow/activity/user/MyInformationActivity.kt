@@ -145,7 +145,7 @@ class MyInformationActivity : BaseActivity() {
     private fun getUserData() {
         //获取服务器数据
         loadUserBase { userBase ->
-            strlist[0] = "${userBase.ymCode}"
+            strlist[0] = userBase.ymCode
             strlist[1] = userBase.nickName
             strlist[9] = userBase.ymMemo
             adapter.notifyDataSetChanged()
