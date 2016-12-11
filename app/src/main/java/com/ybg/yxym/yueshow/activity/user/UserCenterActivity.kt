@@ -68,6 +68,8 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
     private var tv_go_aimi: TextView? = null//跳转到密爱页面
     private var rl_user_level: RelativeLayout? = null//等级页面
 
+    private var user: UserBase? = null
+
     private val TV_COLOR_SELECT = 0xFF545866.toInt()
     private val TV_COLOR_NORMAL = 0xFFAFB6BC.toInt()
     private val VL_COLOR_SELECT = 0xFFF84F21.toInt()
@@ -155,6 +157,7 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun setUserInfo(userBase: UserBase) {
+        user = userBase
         //头像
         val utils = ImageLoaderUtils.instance
         if (TextUtils.isEmpty(userBase.avatar)) {
@@ -260,7 +263,11 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
                 ToastUtil.show("成就")
             }
             R.id.rl_user_level -> LevelActivity.start(mContext!!)
-            R.id.tv_go_aimi -> MiAiActivity.start(mContext!!)
+            R.id.tv_go_aimi -> {
+                if (user != null) {
+                    MiAiActivity.start(mContext!!, user!!.id, user!!.nickName)
+                }
+            }
         }
     }
 

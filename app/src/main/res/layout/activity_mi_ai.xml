@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_f2f2f2"
+    android:orientation="vertical">
 
+    <com.ybg.yxym.yueshow.view.bgarefresh.BGARefreshLayout
+        android:id="@+id/rl_fresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/rv_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:divider="@null" />
+
+    </com.ybg.yxym.yueshow.view.bgarefresh.BGARefreshLayout>
 </LinearLayout>

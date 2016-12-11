@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/px_136">
+
+    <TextView
+        android:id="@+id/tv_mi_ai_pm"
+        android:layout_width="@dimen/px_130"
+        android:layout_height="@dimen/px_62"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="@dimen/px_36"
+        android:background="@drawable/shape_mi_ai_2"
+        android:gravity="center"
+        android:text="NO.4"
+        android:textColor="#545866"
+        android:textSize="@dimen/px_text_30" />
+
+    <com.ybg.yxym.yueshow.view.CircleImageView
+        android:id="@+id/ci_mi_ai_user"
+        android:layout_width="@dimen/px_90"
+        android:layout_height="@dimen/px_90"
+        android:layout_marginLeft="@dimen/px_10"
+        android:layout_toRightOf="@id/tv_mi_ai_pm"
+        android:layout_marginTop="@dimen/px_20"
+        android:layout_gravity="center"
+        android:src="@mipmap/ic_default_girl" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_mi_ai_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px_36"
+            android:text="xxxx"
+            android:textColor="#4d5359"
+            android:textSize="@dimen/px_text_24" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px_18">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="贡献"
+                android:textColor="#aab1b8"
+                android:textSize="@dimen/px_text_24" />
+
+            <TextView
+                android:id="@+id/tv_mi_ai_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1000"
+                android:textColor="#de4942"
+                android:textSize="@dimen/px_text_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="美力值"
+                android:textColor="#aab1b8"
+                android:textSize="@dimen/px_text_24" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_1"
+        android:background="#d3d9df"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>
