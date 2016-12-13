@@ -1,22 +1,43 @@
 package com.ybg.yxym.yueshow.activity.user
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.AsyncTask
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import com.ybg.yxym.yb.utils.AppUtil
 import com.ybg.yxym.yb.utils.DateUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.adapter.InterestGridViewAdapter
 import com.ybg.yxym.yueshow.adapter.MyInfoAdapter
+import com.ybg.yxym.yueshow.constant.AppConstants
+import com.ybg.yxym.yueshow.constant.IntentExtra
+import com.ybg.yxym.yueshow.http.Model.Progress
+import com.ybg.yxym.yueshow.http.SendRequest
+import com.ybg.yxym.yueshow.http.listener.UploadListener
+import com.ybg.yxym.yueshow.utils.BitmapUtils
+import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
 import com.ybg.yxym.yueshow.utils.OnoptionsUtils
 import com.ybg.yxym.yueshow.utils.ToastUtil
+import com.ybg.yxym.yueshow.view.CircleImageView
 import com.ybg.yxym.yueshow.view.CustomerGridView
+import com.ybg.yxym.yueshow.view.gallery.MultiImageSelectorActivity
 import com.ybg.yxym.yueshow.view.pickerview.OptionsPopupWindow
 import com.ybg.yxym.yueshow.view.pickerview.TimePopupWindow
 import kotlinx.android.synthetic.main.activity_my_information.*
+import okhttp3.Call
+import okhttp3.Response
+import org.json.JSONObject
+import java.io.File
+import java.io.IOException
 import java.io.Serializable
 import java.util.*
 
@@ -38,6 +59,9 @@ class MyInformationActivity : BaseActivity() {
     private var gridView: CustomerGridView? = null
     private lateinit var intlist: MutableList<String>
 
+    private lateinit var userAvatar: CircleImageView
+    private var mAvatar = ""
+
     override fun setContentViewId(): Int {
         return R.layout.activity_my_information
     }
@@ -50,7 +74,11 @@ class MyInformationActivity : BaseActivity() {
         lv_info.addFooterView(footView)
         lv_info.addHeaderView(headerView)
         setPhoto = headerView.findViewById(R.id.iv_set_photo) as ImageView
-        setPhoto!!.setOnClickListener { ToastUtil.show("设置头像") }
+        userAvatar = headerView.findViewById(R.id.iv_user_logo) as CircleImageView
+        setPhoto!!.setOnClickListener {
+            MultiImageSelectorActivity.start(mContext!!, true, 1,
+                    MultiImageSelectorActivity.MODE_SINGLE)
+        }
         gridView = footView.findViewById(R.id.gridview) as CustomerGridView
         gridView!!.setOnItemClickListener { parent, view, position, id ->
             if (position == intlist.size) {
@@ -59,7 +87,7 @@ class MyInformationActivity : BaseActivity() {
                 startActivityForResult(starter, REQUEST_BIAOQIAN)
             }
         }
-        setCustomTitle("个人资料")
+        setCustomTitle("编辑个人资料")
     }
 
     override fun init() {
@@ -188,7 +216,98 @@ class MyInformationActivity : BaseActivity() {
             strlist[8] = data.getStringExtra("place")
             adapter.setData(strlist)
             adapter.notifyDataSetChanged()
+        } else if (requestCode == IntentExtra.RequestCode.REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK) {
+            val path = data.getStringExtra(MultiImageSelectorActivity.EXTRA_RESULT)
+            if (path == "") return
+            ImageLoaderUtils.instance.loadFileBitmap(userAvatar, path!!)
+            saveAvatar(path)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.save, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+
+        if (id == R.id.action_save) {
+            updateUserBase()
+            updateUserInfo()
+            updateUserLabel()
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun saveAvatar(path: String) {
+
+        object : AsyncTask<String, String, String>(){
+
+            override fun onPostExecute(result: String?) {
+                super.onPostExecute(result)
+                if (result == null) {
+                    return
+                }
+                uploadAvatar(result)
+            }
+
+            override fun onPreExecute() {
+                super.onPreExecute()
+            }
+
+            override fun doInBackground(vararg p0: String?): String {
+                if (p0 == null) return ""
+                //取得上传目标
+                var bitmap = BitmapFactory.decodeFile(path)
+                //压缩尺寸
+                bitmap = BitmapUtils.resizeImage(bitmap, 300, 300)
+                //保存
+                return BitmapUtils.saveToFile(AppConstants.IMAGE_CACHE_PATH, true, bitmap)
+            }
+
+        }.execute()
+    }
+
+    private fun uploadAvatar(path: String) {
+        SendRequest.uploadFile(mContext!!, "avatar", File(path), object: UploadListener(){
+            override fun onResponse(call: Call?, response: Response?) {
+                response?.let { onSuccess(response) }
+            }
+
+            override fun onFailure(call: Call?, e: IOException?) {
+                e?.let { onFailure(it) }
+            }
+
+            override fun onSuccess(response: Response) {
+                val json = JSONObject(response.body().string())
+                mAvatar = json.getString("fid")
+            }
+
+            override fun onFailure(e: Exception) {
+                workInLoopThread {
+                    ToastUtil.show("上传头像失败")
+                }
+            }
+
+            override fun onUIProgress(progress: Progress) {
+
+            }
+        })
+    }
+
+    private fun updateUserInfo() {
+
+    }
+
+    private fun updateUserBase() {
+
+    }
+
+    private fun updateUserLabel() {
+
     }
 
     /**

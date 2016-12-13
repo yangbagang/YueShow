@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/iv_meilizhi_caculate"
@@ -13,17 +13,16 @@
 
     <View
         android:id="@+id/v_line"
-        android:layout_below="@id/iv_meilizhi_caculate"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px_10"
+        android:layout_height="@dimen/px_1"
+        android:layout_below="@id/iv_meilizhi_caculate"
         android:background="#ecedf3"/>
+
     <ImageView
-        android:layout_below="@id/v_line"
-        android:layout_marginTop="@dimen/px_26"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/px_60"
-        android:layout_marginRight="@dimen/px_60"
+        android:layout_below="@id/v_line"
+        android:layout_margin="@dimen/px_26"
         android:background="@mipmap/ic_meilizhi_level"/>
 
 </RelativeLayout>

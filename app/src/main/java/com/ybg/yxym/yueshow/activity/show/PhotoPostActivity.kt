@@ -111,7 +111,6 @@ class PhotoPostActivity : PostShowActivity() {
             override fun onSuccess(response: Response) {
                 val json = JSONObject(response.body().string())
                 val fileId = json.getString("fid")
-                println("fileId=" + fileId)
                 mFiles.add(fileId)
                 mIndex++
                 if (mIndex == mPics.size) {

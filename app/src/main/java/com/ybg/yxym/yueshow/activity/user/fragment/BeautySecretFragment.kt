@@ -39,12 +39,12 @@ class BeautySecretFragment : BaseFragment() {
 
     companion object {
 
-        var instance: BeautySecretFragment? = null
-            get() {
-                if (instance == null) {
-                    instance = BeautySecretFragment()
-                }
-                return instance
+        var inst: BeautySecretFragment? = null
+        fun getInstance(): BeautySecretFragment {
+            if (inst == null) {
+                inst = BeautySecretFragment()
             }
+            return inst!!
+        }
     }
 }

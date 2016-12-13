@@ -3,6 +3,7 @@ package com.ybg.yxym.yueshow.utils
 import android.annotation.TargetApi
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.os.Build
 import android.util.Base64
 import com.ybg.yxym.yb.utils.LogUtil
@@ -10,6 +11,7 @@ import com.ybg.yxym.yueshow.constant.AppConstants
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 /**
  * 对bitmap处理的工具类
@@ -115,12 +117,13 @@ object BitmapUtils {
     /**
      * 对图片进行压缩
      */
-    fun compressImage(image: Bitmap): Bitmap {
+    fun compressImage(image: Bitmap, maxSize: Int): Bitmap {
 
         val baos = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos)//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
         var options = 100
-        while (baos.toByteArray().size / 1024 > 100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+        while (baos.toByteArray().size / 1024 > maxSize && options > 0) {  //循环判断如果压缩后图片是否大于100kb,
+            // 大于继续压缩
             baos.reset()//重置baos即清空baos
             image.compress(Bitmap.CompressFormat.JPEG, options, baos)//这里压缩options%，把压缩后的数据存放到baos中
             options -= 10//每次都减少10
@@ -130,6 +133,25 @@ object BitmapUtils {
         return bitmap
     }
 
+    fun resizeImage(bitmap: Bitmap, w: Int, h: Int): Bitmap {
+        val bitmapOrg = bitmap
+        val width = bitmapOrg.width
+        val height = bitmapOrg.height
+        val newWidth = w
+        val newHeight = h
+        
+        if (newHeight > width && newHeight > height) {
+            return bitmap
+        }
+
+        val scaleWidth = newWidth.toFloat() / width
+        val scaleHeight = newHeight.toFloat() / height
+
+        val matrix = Matrix()
+        matrix.postScale(scaleWidth, scaleHeight)
+        return Bitmap.createBitmap(bitmapOrg, 0, 0, width,
+                height, matrix, true)
+    }
 
     /**
      * 对图片进行高斯模糊效果

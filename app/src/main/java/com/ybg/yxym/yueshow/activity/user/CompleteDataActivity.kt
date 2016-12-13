@@ -24,6 +24,7 @@ import com.ybg.yxym.yueshow.view.pickerview.TimePopupWindow
 import kotlinx.android.synthetic.main.activity_complete_data.*
 import okhttp3.Call
 import okhttp3.Response
+import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -147,7 +148,8 @@ class CompleteDataActivity : BaseActivity() {
                 workInLoopThread {
                     btn_complete_register.loadingText = "头像上传成功，正在保存数据"
                 }
-                mAvatar = response.toString()
+                val json = JSONObject(response.body().string())
+                mAvatar = json.getString("fid")
                 path = ""
                 completeUserInfo()
             }

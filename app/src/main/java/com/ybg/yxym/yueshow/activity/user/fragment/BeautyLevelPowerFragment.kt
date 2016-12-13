@@ -19,12 +19,12 @@ class BeautyLevelPowerFragment : BaseFragment() {
 
     companion object {
 
-        var instance: BeautyLevelPowerFragment? = null
-            get() {
-                if (instance == null) {
-                    instance = BeautyLevelPowerFragment()
-                }
-                return instance
+        var inst: BeautyLevelPowerFragment? = null
+        fun getInstance(): BeautyLevelPowerFragment {
+            if (inst == null) {
+                inst = BeautyLevelPowerFragment()
             }
+            return inst!!
+        }
     }
 }

@@ -39,9 +39,9 @@ class LevelActivity : BaseActivity() {
     }
 
     override fun init() {
-        mFragment.add(BeautySecretFragment.instance!!)
-        mFragment.add(BeautyLevelFragment.instance!!)
-        mFragment.add(BeautyLevelPowerFragment.instance!!)
+        mFragment.add(BeautySecretFragment.getInstance())
+        mFragment.add(BeautyLevelFragment.getInstance())
+        mFragment.add(BeautyLevelPowerFragment.getInstance())
         adatper = ViewPagerFragmentAdatper(supportFragmentManager)
         vpMainContent!!.adapter = adatper
         slidingTabs!!.addTab(slidingTabs!!.newTab().setText("美力秘籍"))
