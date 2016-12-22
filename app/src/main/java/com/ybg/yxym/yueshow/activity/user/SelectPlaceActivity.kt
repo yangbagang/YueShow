@@ -74,9 +74,9 @@ class SelectPlaceActivity : BaseActivity() {
             TYPE_PROVINCE = false
         } else {
             if (province == citylist!![provinceTay][position]) {
-                place = "中国" + province
+                place = "$province,"
             } else {
-                place = "中国" + province + citylist!![provinceTay][position]
+                place = "$province,${citylist!![provinceTay][position]}"
             }
             val response = Intent(mContext, MyInformationActivity::class.java)
             response.putExtra("place", place)
@@ -153,7 +153,7 @@ class SelectPlaceActivity : BaseActivity() {
         private fun getStringFromInputStream(a_is: InputStream): String {
             var br: BufferedReader? = null
             val sb = StringBuilder()
-            var line: String
+            var line: String?
             try {
                 br = BufferedReader(InputStreamReader(a_is))
                 line = br.readLine()

@@ -163,7 +163,7 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
         if (TextUtils.isEmpty(userBase.avatar)) {
             //utils.loadBitmap(userImage, R.mipmap.ic_default_girl);
         } else {
-            utils.loadBitmap(iv_user_logo!!, userBase.avatar)
+            utils.loadBitmap(iv_user_logo!!, HttpUrl.getImageUrl(userBase.avatar))
         }
         if (TextUtils.isEmpty(userBase.avatarBG)) {
             //navHeader.setBackgroundResource(R.drawable.side_nav_bar);

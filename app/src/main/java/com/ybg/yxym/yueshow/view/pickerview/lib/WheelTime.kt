@@ -193,7 +193,7 @@ class WheelTime {
 
     companion object {
         var dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
-        var starT_YEAR = 1990
+        var starT_YEAR = 1900
         var enD_YEAR = 2100
     }
 }

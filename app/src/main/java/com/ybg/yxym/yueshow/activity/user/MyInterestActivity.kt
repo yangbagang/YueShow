@@ -3,6 +3,8 @@ package com.ybg.yxym.yueshow.activity.user
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.GridView
@@ -97,11 +99,17 @@ class MyInterestActivity : BaseActivity() {
         return isExist
     }
 
-    fun onClick() {
-        val response = Intent(mContext, MyInformationActivity::class.java)
-        response.putExtra("mBiaoqian", myBiaoqian as Serializable?)
-        setResult(Activity.RESULT_OK, response)
-        finish()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                val response = Intent(mContext, MyInformationActivity::class.java)
+                response.putExtra("mBiaoqian", myBiaoqian as Serializable?)
+                setResult(Activity.RESULT_OK, response)
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     /**
@@ -111,7 +119,7 @@ class MyInterestActivity : BaseActivity() {
         var isHave = false
         biaoqianList!!.clear()
         for (i in taste.indices) {
-            val biaoqian = SystemLabel()
+            val systemLabel = SystemLabel()
             for (n in myBiaoqian!!.indices) {
                 if (myBiaoqian!![n] == taste[i]) {
                     isHave = true
@@ -120,9 +128,9 @@ class MyInterestActivity : BaseActivity() {
                     isHave = false
                 }
             }
-            biaoqian.isSelected = isHave
-            biaoqian.label = taste[i]
-            biaoqianList!!.add(biaoqian)
+            systemLabel.isSelected = isHave
+            systemLabel.labelName = taste[i]
+            biaoqianList!!.add(systemLabel)
         }
     }
 

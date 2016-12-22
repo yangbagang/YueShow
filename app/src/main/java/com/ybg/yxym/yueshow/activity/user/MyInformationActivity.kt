@@ -1,10 +1,8 @@
 package com.ybg.yxym.yueshow.activity.user
 
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.view.LayoutInflater
@@ -12,7 +10,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import com.ybg.yxym.yb.utils.AppUtil
+import com.google.gson.reflect.TypeToken
+import com.ybg.yxym.yb.bean.JSonResultBean
+import com.ybg.yxym.yb.bean.SystemLabel
 import com.ybg.yxym.yb.utils.DateUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
@@ -20,9 +20,12 @@ import com.ybg.yxym.yueshow.adapter.InterestGridViewAdapter
 import com.ybg.yxym.yueshow.adapter.MyInfoAdapter
 import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.constant.IntentExtra
+import com.ybg.yxym.yueshow.http.HttpUrl
 import com.ybg.yxym.yueshow.http.Model.Progress
 import com.ybg.yxym.yueshow.http.SendRequest
+import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.listener.UploadListener
+import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.BitmapUtils
 import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
 import com.ybg.yxym.yueshow.utils.OnoptionsUtils
@@ -94,7 +97,6 @@ class MyInformationActivity : BaseActivity() {
         strlist = ArrayList<String>()
         adapter = MyInfoAdapter(mContext!!)
         initUserData()
-        getUserData()
         adapter.setData(strlist)
         lv_info!!.adapter = adapter
         gridViewAdapter = InterestGridViewAdapter(mContext!!)
@@ -152,6 +154,8 @@ class MyInformationActivity : BaseActivity() {
                 startActivityForResult(up_place, REQUEST_PLACES)
             }
         }
+
+        getUserData()
     }
 
     private fun initUserData() {
@@ -176,12 +180,45 @@ class MyInformationActivity : BaseActivity() {
             strlist[0] = userBase.ymCode
             strlist[1] = userBase.nickName
             strlist[9] = userBase.ymMemo
+            ImageLoaderUtils.instance.loadBitmap(userAvatar, HttpUrl.getImageUrl(userBase.avatar))
             adapter.notifyDataSetChanged()
         }
         loadUserInfo { userInfo ->
-            strlist[2] = userInfo.birthday
+            if (userInfo.birthday.length > 10) {
+                strlist[2] = userInfo.birthday.substringBefore(" ")
+            } else {
+                strlist[2] = userInfo.birthday
+            }
+            strlist[3] = if (userInfo.sex == 1) "男" else "女"
+            strlist[4] = userInfo.position
+            strlist[5] = "${userInfo.bodyHigh}cm"
+            strlist[6] = "${userInfo.bodyWeight}kg"
+            strlist[7] = "${userInfo.cupSize}${userInfo.bust}-${userInfo.waist}-${userInfo.hips}"
+            strlist[8] = "${userInfo.province},${userInfo.city}"
             adapter.notifyDataSetChanged()
         }
+        SendRequest.getUserLabel(mContext!!, mApplication.token, object : OkCallback<String>
+        (OkStringParser()){
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    val data = mGson!!.fromJson<List<SystemLabel>>(jsonBean.data,
+                            object : TypeToken<List<SystemLabel>>() {}.type)
+                    if (data.isNotEmpty()) {
+                        intlist.clear()
+                        data.forEach { systemLabel ->
+                            intlist.add(systemLabel.labelName)
+                        }
+                        gridViewAdapter!!.setData(intlist)
+                        gridViewAdapter!!.notifyDataSetChanged()
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+
+            }
+        })
     }
 
     fun onClick(view: View) {
@@ -192,9 +229,11 @@ class MyInformationActivity : BaseActivity() {
 //        //                break;
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        if (data == null) {
+            return
+        }
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_BIAOQIAN) {
             intlist.clear()
             intlist = data.getSerializableExtra("mBiaoqian") as MutableList<String>
@@ -234,8 +273,7 @@ class MyInformationActivity : BaseActivity() {
 
         if (id == R.id.action_save) {
             updateUserBase()
-            updateUserInfo()
-            updateUserLabel()
+            //updateUserLabel()
             return true
         }
 
@@ -299,15 +337,71 @@ class MyInformationActivity : BaseActivity() {
     }
 
     private fun updateUserInfo() {
+        val birthday = strlist[2]
+        val position = strlist[4]
+        val bodyHigh = strlist[5].substringBefore("cm").toInt()
+        val bodyWeight = strlist[6].substringBefore("kg").toInt()
+        val cupSize = "${strlist[7].first()}"
+        val bwh = strlist[7].substring(1).split("-")
+        val bust = bwh[0].toInt()
+        val waist = bwh[1].toInt()
+        val hips = bwh[2].toInt()
+        val place = strlist[8].split(",")
+        val province = place[0]
+        val city = place[1]
+        SendRequest.updateUserInfo(mContext!!, mApplication.token, birthday, position,
+                bodyHigh, bodyWeight, cupSize, bust, waist, hips, province, city, object :
+                OkCallback<String>(OkStringParser()){
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    updateUserLabel()
+                }
+            }
 
+            override fun onFailure(e: Throwable) {
+                ToastUtil.show("保存失败")
+                e.printStackTrace()
+            }
+        })
     }
 
     private fun updateUserBase() {
+        SendRequest.updateUserBase(mContext!!, mApplication.token, strlist[1], mAvatar,
+                strlist[9], object : OkCallback<String>(OkStringParser()){
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    updateUserInfo()
+                } else {
+                    jsonBean?.let {
+                        ToastUtil.show(jsonBean.message)
+                    }
+                }
+            }
 
+            override fun onFailure(e: Throwable) {
+                ToastUtil.show("保存失败")
+                e.printStackTrace()
+            }
+        })
     }
 
     private fun updateUserLabel() {
+        val labels = intlist.joinToString(",")
+        SendRequest.updateUserLabel(mContext!!, mApplication.token, labels, object :
+                OkCallback<String>(OkStringParser()){
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    ToastUtil.show("操作完成")
+                }
+            }
 
+            override fun onFailure(e: Throwable) {
+                e.printStackTrace()
+            }
+        })
     }
 
     /**

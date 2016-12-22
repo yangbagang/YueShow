@@ -8,13 +8,13 @@ import java.io.Serializable
 
 class SystemLabel : Serializable {
 
-    var label: String = ""
+    var labelName: String = ""
     var catalog: String = ""
     var isSelected: Boolean = false
 
     override fun toString(): String {
         return "SystemLabel{" +
-                "label='" + label + '\'' +
+                "labelName='" + labelName + '\'' +
                 ", catalog='" + catalog + '\'' +
                 ", isSelected=" + isSelected +
                 '}'

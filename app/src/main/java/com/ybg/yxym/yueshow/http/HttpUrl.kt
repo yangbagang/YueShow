@@ -26,10 +26,15 @@ object HttpUrl {
     private val USER_LOGIN = "/userBase/login"
     //用户基本信息
     private val GET_USER_BASE = "/userBase/getUserBase"
+    private val UPDATE_USER_BASE = "/userBase/updateUserBase"
     //用户个性化信息
     private val GET_USER_INFO = "/userInfo/getUserInfo"
+    private val UPDATE_USER_INFO = "/userInfo/updateUserInfo"
     //用户个性化信息
     private val COMPLETE_USER_INFO = "/userBase/completeData"
+    //用户爱好
+    private val GET_USER_LABEL = "/userLabel/list"
+    private val UPDATE_USER_LABEL = "/userLabel/update"
     //第三方用户登录
     private val UM_USER_LOGIN = "/userBase/umLogin"
     /*美秀列表*/
@@ -86,11 +91,23 @@ object HttpUrl {
     val userBaseUrl: String
         get() = ROOT_URL + GET_USER_BASE
 
+    val updateUserBaseUrl: String
+        get() = ROOT_URL + UPDATE_USER_BASE
+
     val userInfoUrl: String
         get() = ROOT_URL + GET_USER_INFO
 
+    val updateUserInfoUrl: String
+        get() = ROOT_URL + UPDATE_USER_INFO
+
     val userCompleteUrl: String
         get() = ROOT_URL + COMPLETE_USER_INFO
+
+    val getUserLabelUrl: String
+        get() = ROOT_URL + GET_USER_LABEL
+
+    val updateUserLabelUrl: String
+        get() = ROOT_URL + UPDATE_USER_LABEL
 
     val umLoginUrl: String
         get() = ROOT_URL + UM_USER_LOGIN

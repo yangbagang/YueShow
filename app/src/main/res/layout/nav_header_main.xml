@@ -14,7 +14,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:id="@+id/navHeader">
 
-    <ImageView
+    <com.ybg.yxym.yueshow.view.CircleImageView
         android:id="@+id/userImage"
         android:layout_width="80dp"
         android:layout_height="80dp"

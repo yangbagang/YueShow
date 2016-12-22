@@ -95,6 +95,12 @@ object SendRequest {
         OkHttpProxy.post(HttpUrl.userBaseUrl, tag, params, callback)
     }
 
+    fun updateUserBase(tag: Context, token: String, nickName: String, avatar: String, ymMemo: String,
+                       callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "nickName" to nickName, "avatar" to avatar, "ymMemo" to ymMemo)
+        OkHttpProxy.post(HttpUrl.updateUserBaseUrl, tag, params, callback)
+    }
+
     /**
      * 1.6 获取用户个性化信息
      *
@@ -103,6 +109,16 @@ object SendRequest {
     fun getUserInfo(tag: Context, token: String, callback: OkCallback<*>) {
         val params = mapOf<String, String>("token" to token)
         OkHttpProxy.post(HttpUrl.userInfoUrl, tag, params, callback)
+    }
+
+    fun updateUserInfo(tag: Context, token: String, birthday: String, position: String,
+                       bodyHigh: Int, bodyWeight: Int, cupSize: String, bust: Int, waist: Int,
+                       hips: Int, province: String, city: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "birthday" to birthday,
+                "position" to position, "bodyHigh" to "$bodyHigh", "bodyWeight" to "$bodyWeight", "cupSize"
+                to cupSize, "bust" to "$bust", "waist" to "$waist", "hips" to "$hips", "province" to
+                province, "city" to city)
+        OkHttpProxy.post(HttpUrl.updateUserInfoUrl, tag, params, callback)
     }
 
     /**
@@ -147,6 +163,17 @@ object SendRequest {
     fun getFansNum(tag: Context, userId: Long, callback: OkCallback<*>) {
         val params = mapOf<String, Long>("userId" to userId)
         OkHttpProxy.post(HttpUrl.fansNumUrl, tag, params, callback)
+    }
+
+
+    fun getUserLabel(tag: Context, token: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token)
+        OkHttpProxy.post(HttpUrl.getUserLabelUrl, tag, params, callback)
+    }
+
+    fun updateUserLabel(tag: Context, token: String, labels: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "labels" to labels)
+        OkHttpProxy.post(HttpUrl.updateUserLabelUrl, tag, params, callback)
     }
 
     /**

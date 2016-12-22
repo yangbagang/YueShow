@@ -29,12 +29,14 @@ import com.ybg.yxym.yueshow.activity.home.HallFragment
 import com.ybg.yxym.yueshow.activity.user.*
 import com.ybg.yxym.yueshow.adapter.ViewPagerAdapter
 import com.ybg.yxym.yueshow.app.ShowApplication
+import com.ybg.yxym.yueshow.http.HttpUrl
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.AndroidPermissonRequest
 import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
 import com.ybg.yxym.yueshow.utils.ToastUtil
+import com.ybg.yxym.yueshow.view.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
@@ -51,7 +53,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     //左侧菜单
     private lateinit var headView: View
-    private lateinit var userImage: ImageView
+    private lateinit var userImage: CircleImageView
     private lateinit var userName: TextView
     private lateinit var userLevel: TextView
     private lateinit var navHeader: LinearLayout
@@ -129,7 +131,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun setUpView() {
         //左侧菜单
         headView = nav_view.getHeaderView(0)
-        userImage = headView.findViewById(R.id.userImage) as ImageView
+        userImage = headView.findViewById(R.id.userImage) as CircleImageView
         userName = headView.findViewById(R.id.userName) as TextView
         userLevel = headView.findViewById(R.id.userLevel) as TextView
         navHeader = headView.findViewById(R.id.navHeader) as LinearLayout
@@ -227,7 +229,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (TextUtils.isEmpty(userBase.avatar)) {
             //utils.loadBitmap(userImage, R.mipmap.ic_default_girl);
         } else {
-            utils.loadBitmap(userImage, userBase.avatar)
+            utils.loadBitmap(userImage, HttpUrl.getImageUrl(userBase.avatar))
         }
         if (TextUtils.isEmpty(userBase.avatarBG)) {
             //navHeader.setBackgroundResource(R.drawable.side_nav_bar);

@@ -46,7 +46,7 @@ class LabelAdapter(private val mContext: Context) : BaseAdapter() {
             viewHolder = convertView.tag as ViewHolder
         }
 
-        viewHolder.tv_biaoqian!!.text = stringList!![position].label
+        viewHolder.tv_biaoqian!!.text = stringList!![position].labelName
         if (stringList!![position].isSelected) {//被选中
             viewHolder.tv_biaoqian!!.setTextColor(WHITE)
             viewHolder.tv_biaoqian!!.background = mContext.resources.getDrawable(R.drawable.shape_biaoqian_blue_bg)
