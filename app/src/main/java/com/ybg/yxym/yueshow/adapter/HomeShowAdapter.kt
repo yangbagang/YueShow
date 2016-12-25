@@ -79,7 +79,6 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         }
 
         //事件定义
-
         val commentOnClickListener = BtnCommentOnClickListener(position)
         val zanOnClickListener = BtnZanOnClickListener(viewHolder, position)
         val transOnClickListener = BtnTransOnClickListener(position)

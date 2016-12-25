@@ -137,7 +137,9 @@ class PhotoProcessActivity : BaseActivity() {
 
         override fun onPostExecute(result: Unit?) {
             super.onPostExecute(result)
-            progress.dismiss()
+            if (progress.isShowing) {
+                progress.dismiss()
+            }
             //启动发布界面
             val list: ArrayList<String> = savedFiles
             PhotoPostActivity.start(mContext!!, list)
@@ -152,7 +154,14 @@ class PhotoProcessActivity : BaseActivity() {
                             "/" + FileUtils.getFileName(mPics[index])
                     savedFiles.add(file)
                     val saveFile = File(file)
-                    val bitmap = gpuImageView.capture()
+                    //val bitmap = gpuImageView.capture()
+                    //应用过滤效果
+                    var bitmap = gpuImageView.gpuImage.bitmapWithFilterApplied
+                    //缩放尺寸
+                    bitmap = BitmapUtils.resizeImage(bitmap, 1024, 768)
+                    //压缩大小
+                    bitmap = BitmapUtils.compressImage(bitmap, 500)
+                    //保存
                     BitmapUtils.saveBitmap(bitmap, saveFile)
                 } else {
                     savedFiles.add(mPics[index])
@@ -172,15 +181,15 @@ class PhotoProcessActivity : BaseActivity() {
             }
             R.id.rb_process_text//文字
             -> {
-                ToastUtil.show("文字")
+                //ToastUtil.show("文字")
             }
             R.id.rb_process_stickers//贴纸
             -> {
-                ToastUtil.show("贴纸")
+                //ToastUtil.show("贴纸")
             }
             R.id.rb_process_music//音乐
             -> {
-                ToastUtil.show("音乐")
+                //ToastUtil.show("音乐")
             }
         }
     }

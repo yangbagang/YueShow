@@ -2,18 +2,23 @@ package com.ybg.yxym.yueshow.activity.show
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.View
 import android.widget.*
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import com.ybg.yxym.yb.bean.JSonResultBean
-import com.ybg.yxym.yb.bean.ShowFile
-import com.ybg.yxym.yb.bean.UserBase
-import com.ybg.yxym.yb.bean.YueShow
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject
+import com.tencent.mm.sdk.openapi.IWXAPI
+import com.ybg.yxym.yb.bean.*
 import com.ybg.yxym.yb.utils.DateUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
+import com.ybg.yxym.yueshow.adapter.PingItemAdapter
 import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.http.HttpUrl
 import com.ybg.yxym.yueshow.http.SendRequest
@@ -25,6 +30,7 @@ import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.BannerFrame
 import com.ybg.yxym.yueshow.view.CircleImageView
 import kotlinx.android.synthetic.main.activity_home_show_detail.*
+import java.util.*
 
 /**
  * Created by yangbagang on 2016/12/5.
@@ -48,6 +54,9 @@ class ShowDetailActivity : BaseActivity() {
     private lateinit var zanLayout: LinearLayout
     private lateinit var zanNum: TextView
 
+    private lateinit var pingAdapter: PingItemAdapter
+    private lateinit var pingRecyclerView: RecyclerView
+
     private var w = 0
 
     override fun setContentViewId(): Int {
@@ -65,15 +74,10 @@ class ShowDetailActivity : BaseActivity() {
         showContent = findViewById(R.id.tv_fu_content) as TextView
         zanLayout = findViewById(R.id.ll_user_like_list) as LinearLayout
         zanNum = findViewById(R.id.tv_like_num) as TextView
+        pingRecyclerView = findViewById(R.id.recycleview) as RecyclerView
 
         w = ScreenUtils.getScreenWidth(mContext!!)
-//        val toolBar = findViewById(R.id.toolbar) as android.support.v7.widget.Toolbar
-//        toolBar.title = "查看悦秀"
-//        setSupportActionBar(toolBar)
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        toolBar.setNavigationOnClickListener {
-//            onBackPressed()
-//        }
+
         setCustomTitle("查看悦秀")
     }
 
@@ -84,6 +88,15 @@ class ShowDetailActivity : BaseActivity() {
                 show = showItem
                 //开始展示美秀
                 displayRuiShow()
+                //click event
+                iv_comment.setOnClickListener(commentOnClickListener)
+                iv_like.setOnClickListener(zanOnClickListener)
+                iv_transmit.setOnClickListener(transOnClickListener)
+                //初始化适配器
+                pingAdapter = PingItemAdapter()
+                pingRecyclerView.adapter = pingAdapter
+                val layoutManager = LinearLayoutManager.VERTICAL
+                pingRecyclerView.layoutManager = LinearLayoutManager(mContext!!, layoutManager, false)
             } else {
                 //
             }
@@ -192,8 +205,6 @@ class ShowDetailActivity : BaseActivity() {
                             val pics = files.map { it.file }
                             picFrame.setImageResources(pics)
                             picFrame.startPlay()
-                            println("ll_photo_video.width=${ll_photo_video.width}")
-                            println("picFrame.width=${picFrame.width}")
                         }
                     }
                 } else {
@@ -210,11 +221,56 @@ class ShowDetailActivity : BaseActivity() {
     }
 
     private fun loadZanUserList() {
+        SendRequest.getShowZanList(mContext!!, show.id!!, object : OkCallback<String>(OkStringParser()){
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    val zanUserList = mGson!!.fromJson<List<ShowZan>>(jsonBean.data,
+                            object : TypeToken<List<ShowZan>>(){}.type)
+                    zanNum.text = "${zanUserList.size}"
+                    val limitNum = Math.min(6, zanUserList.size)
+                    zanLayout.removeAllViews()
+                    for (i in 0..limitNum) {
+                        val imageView = CircleImageView(mContext!!)
+                        zanLayout.addView(imageView)
+                        Picasso.with(mContext).load(HttpUrl.getImageUrl(zanUserList[i].avatar))
+                                .resize(96, 96).centerCrop().into(imageView)
+                    }
+                } else {
+                    jsonBean?.let {
+                        ToastUtil.show(jsonBean.message)
+                    }
+                }
+            }
 
+            override fun onFailure(e: Throwable) {
+                ToastUtil.show("获取点赞用户失败")
+                e.printStackTrace()
+            }
+        })
     }
 
     private fun loadPingList() {
+        SendRequest.getShowPingList(mContext!!, show.id!!, object : OkCallback<String>(OkStringParser()){
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    val pingList = mGson!!.fromJson<List<ShowPing>>(jsonBean.data,
+                            object : TypeToken<List<ShowPing>>(){}.type)
+                    pingAdapter.setData(pingList)
+                    pingAdapter.notifyDataSetChanged()
+                } else {
+                    jsonBean?.let {
+                        ToastUtil.show(jsonBean.message)
+                    }
+                }
+            }
 
+            override fun onFailure(e: Throwable) {
+                ToastUtil.show("获取评论失败")
+                e.printStackTrace()
+            }
+        })
     }
 
     /**
@@ -223,7 +279,25 @@ class ShowDetailActivity : BaseActivity() {
     private inner class BtnCommentOnClickListener() : View.OnClickListener {
 
         override fun onClick(v: View) {
-            ToastUtil.show("评论 :")
+            val pingContent = et_comment_content.text.toString()
+            SendRequest.pingLive(mContext!!, mApplication.token, show.id!!, pingContent,
+                    object : OkCallback<String>(OkStringParser()){
+                        override fun onSuccess(code: Int, response: String) {
+                            val jsonBean = JSonResultBean.fromJSON(response)
+                            if (jsonBean != null && jsonBean.isSuccess) {
+                                loadPingList()
+                            } else {
+                                jsonBean?.let {
+                                    ToastUtil.show(jsonBean.message)
+                                }
+                            }
+                        }
+
+                        override fun onFailure(e: Throwable) {
+                            e.printStackTrace()
+                            ToastUtil.show("评论失败")
+                        }
+                    })
         }
     }
 
@@ -238,8 +312,9 @@ class ShowDetailActivity : BaseActivity() {
                             override fun onSuccess(code: Int, response: String) {
                                 val resultBean = JSonResultBean.fromJSON(response)
                                 if (resultBean != null && resultBean.isSuccess) {
-                                    zanNum.text = "${show.zanNum + 1}"
+                                    zanNum.text = resultBean.data
                                     iv_like.isClickable = false
+                                    loadZanUserList()
                                 }
                             }
 
@@ -271,6 +346,47 @@ class ShowDetailActivity : BaseActivity() {
             ToastUtil.show("头像 :")
         }
     }
+
+    /**
+     * 微信分享
+
+     * @param view
+     */
+    private fun shareWeixin(view: View) {
+        wechatShare(0)
+    }
+
+    /**
+     * 分享到朋友圈
+
+     * @param view
+     */
+    private fun shareFriend(view: View) {
+        wechatShare(1)
+    }
+
+    private fun wechatShare(flag: Int) {
+        // int flag = 0;//0分享到微信好友,1分享到微信朋友圈
+        val webpage = WXWebpageObject()
+        webpage.webpageUrl = ""
+        val msg = WXMediaMessage(webpage)
+        msg.title = "！"
+        msg.description = ""
+        val thumb = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
+        msg.setThumbImage(thumb)
+
+        val req = SendMessageToWX.Req()
+        req.transaction = System.currentTimeMillis().toString()
+        req.message = msg
+        req.scene = if (flag == 0)
+            SendMessageToWX.Req.WXSceneSession
+        else
+            SendMessageToWX.Req.WXSceneTimeline
+        wxApi!!.sendReq(req)
+    }
+
+    // 微信分享
+    private var wxApi: IWXAPI? = null
 
     companion object {
 

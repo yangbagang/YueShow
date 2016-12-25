@@ -27,6 +27,13 @@
             android:hint="骚年，评论一发吧！"/>
 
         <ImageView
+            android:id="@+id/iv_comment"
+            android:layout_width="@dimen/px_38"
+            android:layout_height="@dimen/px_36"
+            android:layout_marginLeft="@dimen/px_30"
+            android:src="@mipmap/ic_show_comment"/>
+
+        <ImageView
             android:id="@+id/iv_like"
             android:layout_width="@dimen/px_38"
             android:layout_height="@dimen/px_36"
