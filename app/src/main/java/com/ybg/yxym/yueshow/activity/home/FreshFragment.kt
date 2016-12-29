@@ -52,21 +52,6 @@ class FreshFragment : BaseFragment() {
         mAdapter = HomeShowAdapter(mContext!!)
         mAdapter.setDataList(hotEntityList)
         mListView.adapter = mAdapter
-        mListView.onItemClickListener = onItemClickListener
-    }
-
-    /**
-     * ListView ITEM 点击事件
-     */
-    private val onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-//        if (hotEntityList[position].type == 2 || hotEntityList[position].type == 3) {
-//            //TODO
-//            //HomeShowItemDetailActivity.start(mContext, hotEntityList.get(position).getLive()
-//            //        , hotEntityList.get(position).getUser());
-//        } else {
-//            ToastUtil.show("直播已经结束")
-//        }
-        ShowDetailActivity.start(mContext!!, hotEntityList[position])
     }
 
     private fun getHomeNewInfo() {

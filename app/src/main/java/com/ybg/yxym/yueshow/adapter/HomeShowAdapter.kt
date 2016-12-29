@@ -15,6 +15,7 @@ import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yb.utils.DateUtil
 import com.ybg.yxym.yueshow.R
+import com.ybg.yxym.yueshow.activity.show.ShowDetailActivity
 import com.ybg.yxym.yueshow.app.ShowApplication
 import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.http.HttpUrl
@@ -244,7 +245,9 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
             if (viewHolder.iv_picture!!.tag != null && viewHolder.iv_picture!!.tag == img_url_0) {
                 Picasso.with(mContext).load(img_url_0).resize(width, (width * 0.75).toInt()).centerCrop()
                         .into(viewHolder.iv_picture!!)
-
+                viewHolder.iv_picture!!.setOnClickListener {
+                    ShowDetailActivity.start(mContext, mList!![position])
+                }
             }
         }
     }

@@ -230,6 +230,10 @@ class ShowDetailActivity : BaseActivity() {
                     zanNum.text = "${zanUserList.size}"
                     val limitNum = Math.min(6, zanUserList.size)
                     zanLayout.removeAllViews()
+                    if (limitNum == 0) {
+                        // 还没有点赞用户，跳过。
+                        return
+                    }
                     for (i in 0..limitNum) {
                         val imageView = CircleImageView(mContext!!)
                         zanLayout.addView(imageView)
