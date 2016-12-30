@@ -258,8 +258,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     setUserInfo(userBase)
                 } else {
                     if (showApplication.checkNeedLogin(jsonBean?.message ?: "")) {
+                        //登录凭证失效，需要重新登录。去除己经相关信息。
                         showApplication.token = ""
-                        LoginActivity.start(this@MainActivity)
+                        //LoginActivity.start(this@MainActivity)
+                        removeUserInfo()
                     } else {
                         ToastUtil.show(jsonBean?.message ?: "")
                     }

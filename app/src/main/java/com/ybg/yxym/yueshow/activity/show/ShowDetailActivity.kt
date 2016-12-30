@@ -283,6 +283,11 @@ class ShowDetailActivity : BaseActivity() {
     private inner class BtnCommentOnClickListener() : View.OnClickListener {
 
         override fun onClick(v: View) {
+            if (!mApplication.hasLogin()) {
+                //未登录不能评论
+                ToastUtil.show("你还没有登录，请登录后再发表评论。")
+                return
+            }
             val pingContent = et_comment_content.text.toString()
             SendRequest.pingLive(mContext!!, mApplication.token, show.id!!, pingContent,
                     object : OkCallback<String>(OkStringParser()){
