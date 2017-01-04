@@ -40,6 +40,12 @@ object BitmapUtils {
         if (file == null) {
             return
         }
+        if (!file.exists()) {
+            if (!file.parentFile.exists()) {
+                file.parentFile.mkdirs()
+            }
+            file.createNewFile()
+        }
         try {
             baos = ByteArrayOutputStream()
             mBitmap.compress(Bitmap.CompressFormat.PNG, 80, baos)

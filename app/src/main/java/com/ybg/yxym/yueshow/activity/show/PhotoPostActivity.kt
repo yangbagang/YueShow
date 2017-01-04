@@ -139,8 +139,8 @@ class PhotoPostActivity : PostShowActivity() {
     private fun createShow() {
         val barId = "1"
         val thumbnail = mFiles.first()
-        SendRequest.createShow(mContext!!, mApplication.token, barId, thumbnail, title, object :
-                OkCallback<String>(OkStringParser()) {
+        SendRequest.createShow(mContext!!, mApplication.token, barId, thumbnail, title, "1",
+                object : OkCallback<String>(OkStringParser()) {
 
             override fun onSuccess(code: Int, response: String) {
                 val resultBean = JSonResultBean.fromJSON(response)

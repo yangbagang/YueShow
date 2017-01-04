@@ -3,6 +3,7 @@ package com.ybg.yxym.yueshow.activity.photo
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.media.ThumbnailUtils
 import android.os.AsyncTask
 import android.support.v7.widget.LinearLayoutManager
@@ -22,13 +23,13 @@ import com.ybg.yxym.yueshow.adapter.SelectedImageAdapter
 import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.constant.IntentExtra
 import com.ybg.yxym.yueshow.gpuimage.GPUImage
-import com.ybg.yxym.yueshow.gpuimage.GPUImageView
 import com.ybg.yxym.yueshow.gpuimage.util.GPUImageFilterTools
 import com.ybg.yxym.yueshow.utils.BitmapUtils
 import com.ybg.yxym.yueshow.utils.FileUtils
-import com.ybg.yxym.yueshow.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_photo_process.*
 import java.io.File
+import java.io.FileInputStream
+import java.io.InputStream
 import java.util.*
 
 /**
@@ -37,11 +38,10 @@ import java.util.*
 class PhotoProcessActivity : BaseActivity() {
 
     private var mSmallPreviewImage: Bitmap? = null
-    private var mCurrentImage: Bitmap? = null
     private var mFilterAdapter: FilterAdapter? = null//滤镜部分
     private var mFilterList: MutableList<FilterEffect>? = null
     private var mPics: MutableList<String> = ArrayList<String>()
-    private var mGPUImageViews: MutableList<GPUImageView> = ArrayList<GPUImageView>()
+    private var mBitmapList: MutableList<Bitmap?> = ArrayList<Bitmap?>()
     private var mIndex = 0
 
     //选择多图片
@@ -68,7 +68,7 @@ class PhotoProcessActivity : BaseActivity() {
                     } else {
                         mPics.add(String.format("file://%s", pic))
                     }
-                    mGPUImageViews.add(GPUImageView(mContext))
+                    mBitmapList.add(null)
                 }
                 rv_photo_list.visibility = View.VISIBLE
                 mImageAdapter.notifyDataSetChanged()
@@ -104,10 +104,10 @@ class PhotoProcessActivity : BaseActivity() {
         ImageLoader.getInstance().loadImage(mPics[mIndex], object : SimpleImageLoadingListener() {
             override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
                 super.onLoadingComplete(imageUri, view, loadedImage)
-                mCurrentImage = loadedImage
-                ll_photo_process.removeAllViews()
-                mGPUImageViews[mIndex].setImage(mCurrentImage)
-                ll_photo_process.addView(mGPUImageViews[mIndex])
+                if (loadedImage != null) {
+                    mBitmapList[mIndex] = loadedImage
+                    iv_photo_process.setImageBitmap(mBitmapList[mIndex])
+                }
                 asyncLoadSmallImage().execute()
             }
         })
@@ -116,7 +116,7 @@ class PhotoProcessActivity : BaseActivity() {
     private inner class asyncLoadSmallImage : AsyncTask<Void, Void, Bitmap>() {
 
         override fun doInBackground(vararg params: Void): Bitmap {
-            return ThumbnailUtils.extractThumbnail(mCurrentImage, 300, 300)
+            return ThumbnailUtils.extractThumbnail(mBitmapList[mIndex], 300, 300)
         }
 
         override fun onPostExecute(bitmap: Bitmap) {
@@ -149,40 +149,34 @@ class PhotoProcessActivity : BaseActivity() {
         }
 
         override fun doInBackground(vararg p0: Unit?) {
-            for ((index, gpuImageView) in mGPUImageViews.withIndex()) {
-                println("index=$index")
-                if (gpuImageView.filter != null) {
-                    println("begin to process")
-                    val file = AppConstants.IMAGE_SAVE_PATH + "/" + System.currentTimeMillis() +
-                            "/" + FileUtils.getFileName(mPics[index])
-                    savedFiles.add(file)
-                    val saveFile = File(file)
-                    //val bitmap = gpuImageView.capture()
-                    //应用过滤效果
-                    println("应用过滤效果")
-                    if (gpuImageView.gpuImage == null) {
-                        println("gpuImage is null...")
-                    }
-                    //var bitmap = gpuImageView.gpuImage.bitmapWithFilterApplied
-                    val gpuImage = GPUImage(this@PhotoProcessActivity)
-                    gpuImage.setImage(mCurrentImage)
-                    gpuImage.setFilter(gpuImageView.filter)
-                    var bitmap = gpuImage.bitmapWithFilterApplied
-                    //缩放尺寸
-                    println("缩放尺寸s")
-                    bitmap = BitmapUtils.resizeImage(bitmap, 1024, 768)
-                    //压缩大小
-                    println("压缩大小")
-                    bitmap = BitmapUtils.compressImage(bitmap, 500)
-                    //保存
-                    println("保存")
-                    BitmapUtils.saveBitmap(bitmap, saveFile)
+            for ((index, bitmap) in mBitmapList.withIndex()) {
+                if (bitmap != null) {
+                    savePic(bitmap, mPics[index])
                 } else {
-                    savedFiles.add(mPics[index])
+                    var sourceFile = mPics[index]
+                    if (sourceFile.startsWith("file:", true)) {
+                        sourceFile = sourceFile.substring(5)
+                        println("sourceFile=$sourceFile")
+                    }
+                    val inputStream = FileInputStream(sourceFile)
+                    val b = BitmapFactory.decodeStream(inputStream)
+                    savePic(b, mPics[index])
                 }
             }
         }
 
+        fun savePic(bitmap: Bitmap, sourceFile: String) {
+            val file = AppConstants.IMAGE_SAVE_PATH + "/" + System.currentTimeMillis() +
+                    "/" + FileUtils.getFileName(sourceFile)
+            savedFiles.add(file)
+            val saveFile = File(file)
+            //缩放尺寸
+            var b = BitmapUtils.resizeImage(bitmap, 1024, 768)
+            //压缩大小
+            b = BitmapUtils.compressImage(b, 500)
+            //保存
+            BitmapUtils.saveBitmap(b, saveFile)
+        }
     }
 
     //底部RadioGroup切换监听
@@ -231,7 +225,12 @@ class PhotoProcessActivity : BaseActivity() {
         mFilterAdapter!!.setOnItemClickListener(object : RecyclerBaseAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 val filter = GPUImageFilterTools.createFilterForType(mContext, mFilterList!![position].type)
-                mGPUImageViews[mIndex].filter = filter
+                val gpuImage = GPUImage(this@PhotoProcessActivity)
+                gpuImage.setImage(mBitmapList[mIndex])
+                gpuImage.setFilter(filter)
+                //应用过滤效果
+                mBitmapList[mIndex] = gpuImage.bitmapWithFilterApplied
+                iv_photo_process.setImageBitmap(mBitmapList[mIndex])
             }
         })
         rv_process_tools.adapter = mFilterAdapter

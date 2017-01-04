@@ -237,9 +237,9 @@ object SendRequest {
      * @param title
      */
     fun createShow(tag: Context, token: String, barId: String, thumbnail: String,
-                   title: String, callback: OkCallback<*>) {
+                   title: String, type: String, callback: OkCallback<*>) {
         val params = mapOf<String, String>("token" to token, "barId" to barId, "thumbnail" to thumbnail,
-                "title" to title)
+                "title" to title, "type" to type)
         OkHttpProxy.post(HttpUrl.createLiveUrl, tag, params, callback)
     }
 

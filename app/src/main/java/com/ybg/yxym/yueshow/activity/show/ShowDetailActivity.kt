@@ -3,11 +3,13 @@ package com.ybg.yxym.yueshow.activity.show
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.View
 import android.widget.*
+import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX
@@ -20,6 +22,7 @@ import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.adapter.PingItemAdapter
 import com.ybg.yxym.yueshow.constant.AppConstants
+import com.ybg.yxym.yueshow.decoration.SpaceItemDecoration
 import com.ybg.yxym.yueshow.http.HttpUrl
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
@@ -30,6 +33,7 @@ import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.BannerFrame
 import com.ybg.yxym.yueshow.view.CircleImageView
 import kotlinx.android.synthetic.main.activity_home_show_detail.*
+import kotlinx.android.synthetic.main.activity_home_show_detail.view.*
 import java.util.*
 
 /**
@@ -97,6 +101,8 @@ class ShowDetailActivity : BaseActivity() {
                 pingRecyclerView.adapter = pingAdapter
                 val layoutManager = LinearLayoutManager.VERTICAL
                 pingRecyclerView.layoutManager = LinearLayoutManager(mContext!!, layoutManager, false)
+                pingRecyclerView.itemAnimator = DefaultItemAnimator()
+                pingRecyclerView.addItemDecoration(SpaceItemDecoration(2))
             } else {
                 //
             }

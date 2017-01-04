@@ -473,8 +473,8 @@ object FileUtils {
         if (TextUtils.isEmpty(filePath)) {
             return filePath
         }
-        val index = filePath.lastIndexOf(File.separator)
-        return if (index == -1) filePath else filePath.substring(index)
+        val extName = getFileExtension(filePath)
+        return "${System.currentTimeMillis()}.$extName"
     }
 
 }
