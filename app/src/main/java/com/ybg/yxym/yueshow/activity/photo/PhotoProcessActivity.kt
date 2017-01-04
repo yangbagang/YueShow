@@ -21,6 +21,7 @@ import com.ybg.yxym.yueshow.adapter.RecyclerBaseAdapter
 import com.ybg.yxym.yueshow.adapter.SelectedImageAdapter
 import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.constant.IntentExtra
+import com.ybg.yxym.yueshow.gpuimage.GPUImage
 import com.ybg.yxym.yueshow.gpuimage.GPUImageView
 import com.ybg.yxym.yueshow.gpuimage.util.GPUImageFilterTools
 import com.ybg.yxym.yueshow.utils.BitmapUtils
@@ -149,19 +150,32 @@ class PhotoProcessActivity : BaseActivity() {
 
         override fun doInBackground(vararg p0: Unit?) {
             for ((index, gpuImageView) in mGPUImageViews.withIndex()) {
+                println("index=$index")
                 if (gpuImageView.filter != null) {
+                    println("begin to process")
                     val file = AppConstants.IMAGE_SAVE_PATH + "/" + System.currentTimeMillis() +
                             "/" + FileUtils.getFileName(mPics[index])
                     savedFiles.add(file)
                     val saveFile = File(file)
                     //val bitmap = gpuImageView.capture()
                     //应用过滤效果
-                    var bitmap = gpuImageView.gpuImage.bitmapWithFilterApplied
+                    println("应用过滤效果")
+                    if (gpuImageView.gpuImage == null) {
+                        println("gpuImage is null...")
+                    }
+                    //var bitmap = gpuImageView.gpuImage.bitmapWithFilterApplied
+                    val gpuImage = GPUImage(this@PhotoProcessActivity)
+                    gpuImage.setImage(mCurrentImage)
+                    gpuImage.setFilter(gpuImageView.filter)
+                    var bitmap = gpuImage.bitmapWithFilterApplied
                     //缩放尺寸
+                    println("缩放尺寸s")
                     bitmap = BitmapUtils.resizeImage(bitmap, 1024, 768)
                     //压缩大小
+                    println("压缩大小")
                     bitmap = BitmapUtils.compressImage(bitmap, 500)
                     //保存
+                    println("保存")
                     BitmapUtils.saveBitmap(bitmap, saveFile)
                 } else {
                     savedFiles.add(mPics[index])

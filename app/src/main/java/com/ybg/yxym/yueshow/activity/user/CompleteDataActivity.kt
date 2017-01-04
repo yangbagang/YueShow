@@ -8,6 +8,7 @@ import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.utils.DateUtil
 import com.ybg.yxym.yb.utils.LogUtil
 import com.ybg.yxym.yueshow.R
+import com.ybg.yxym.yueshow.activity.MainActivity
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.constant.IntentExtra
 import com.ybg.yxym.yueshow.http.Model.Progress
@@ -117,6 +118,7 @@ class CompleteDataActivity : BaseActivity() {
                 val resultBean = mGson!!.fromJson(response, JSonResultBean::class.java)
                 if (resultBean.isSuccess) {
                     btn_complete_register.progress = btn_complete_register.maxProgress
+                    MainActivity.instance?.loadUserInfo()
                     setResult(Activity.RESULT_OK)
                     finish()
                 } else {
