@@ -6,6 +6,11 @@ import com.ybg.yxym.yueshow.constant.AppConstants
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
+import android.provider.MediaStore.Images.ImageColumns
+import android.content.ContentResolver
+import android.content.Context
+import android.net.Uri
+
 
 object FileUtils {
 
@@ -477,4 +482,26 @@ object FileUtils {
         return "${System.currentTimeMillis()}.$extName"
     }
 
+    fun getRealFilePath(context: Context, uri: Uri?): String? {
+        if (null == uri) return null
+        val scheme = uri.scheme
+        var data: String? = null
+        if (scheme == null)
+            data = uri.path
+        else if (ContentResolver.SCHEME_FILE == scheme) {
+            data = uri.path
+        } else if (ContentResolver.SCHEME_CONTENT == scheme) {
+            val cursor = context.contentResolver.query(uri, arrayOf(ImageColumns.DATA), null, null, null)
+            if (null != cursor) {
+                if (cursor.moveToFirst()) {
+                    val index = cursor.getColumnIndex(ImageColumns.DATA)
+                    if (index > -1) {
+                        data = cursor.getString(index)
+                    }
+                }
+                cursor.close()
+            }
+        }
+        return data
+    }
 }

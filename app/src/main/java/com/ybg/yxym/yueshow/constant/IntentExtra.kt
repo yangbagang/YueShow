@@ -9,6 +9,7 @@ class IntentExtra {
         val REQUEST_CODE_EDIT = 1003//编辑
         val RECORDE_SHOW = 1004//趣拍短视频部分
         val REQUEST_CODE_REGISTER = 1005//注册完善资料
+        val REQUEST_CODE_VIDEO = 2001//视频文件
     }
 
     companion object {

@@ -16,6 +16,11 @@ import com.tencent.mm.sdk.modelmsg.SendMessageToWX
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject
 import com.tencent.mm.sdk.openapi.IWXAPI
+import com.volokh.danylo.video_player_manager.manager.PlayerItemChangeListener
+import com.volokh.danylo.video_player_manager.manager.SingleVideoPlayerManager
+import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager
+import com.volokh.danylo.video_player_manager.meta.MetaData
+import com.volokh.danylo.video_player_manager.ui.SimpleMainThreadMediaPlayerListener
 import com.ybg.yxym.yb.bean.*
 import com.ybg.yxym.yb.utils.DateUtil
 import com.ybg.yxym.yueshow.R
@@ -28,6 +33,7 @@ import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.picasso.Picasso
+import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
 import com.ybg.yxym.yueshow.utils.ScreenUtils
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.BannerFrame
@@ -63,6 +69,10 @@ class ShowDetailActivity : BaseActivity() {
     private lateinit var pingHeaderView: RecyclerViewHeader
 
     private var w = 0
+
+    //视频播放相关
+    private var videoUrl: String? = null
+    private var mVideoPlayerManager: VideoPlayerManager<MetaData>? = null
 
     override fun setContentViewId(): Int {
         return R.layout.activity_home_show_detail
@@ -195,6 +205,37 @@ class ShowDetailActivity : BaseActivity() {
     private fun initVideoView() {
         rl_video.visibility = View.VISIBLE
         ll_photo_video.visibility = View.GONE
+        ImageLoaderUtils.instance.loadBitmap(iv_video_cover, HttpUrl.getImageUrl(show.thumbnail))
+        mVideoPlayerManager = SingleVideoPlayerManager(PlayerItemChangeListener { })
+        v_player.addMediaPlayerListener(object : SimpleMainThreadMediaPlayerListener() {
+            override fun onVideoCompletionMainThread() {
+                super.onVideoCompletionMainThread()
+                iv_video_cover.visibility = View.VISIBLE
+                iv_video_play.visibility = View.VISIBLE
+                v_player.visibility = View.INVISIBLE
+            }
+
+            override fun onVideoStoppedMainThread() {
+                super.onVideoStoppedMainThread()
+                iv_video_cover.visibility = View.INVISIBLE
+                iv_video_play.visibility = View.VISIBLE
+                v_player.visibility = View.VISIBLE
+            }
+
+            override fun onVideoPreparedMainThread() {
+                super.onVideoPreparedMainThread()
+                iv_video_cover.visibility = View.INVISIBLE
+                iv_video_play.visibility = View.INVISIBLE
+                v_player.visibility = View.VISIBLE
+            }
+        })
+        iv_video_play.setOnClickListener {
+            if (mVideoPlayerManager != null) {
+                if (videoUrl != null) {
+                    mVideoPlayerManager!!.playNewVideo(null, v_player, videoUrl)
+                }
+            }
+        }
     }
 
     private fun loadShowFiles() {
@@ -205,9 +246,9 @@ class ShowDetailActivity : BaseActivity() {
                 if (jsonBean != null && jsonBean.isSuccess) {
                     val files = mGson!!.fromJson<List<ShowFile>>(jsonBean.data, object :
                             TypeToken<List<ShowFile>>(){}.type)
-                    runOnUiThread {
-                        val params = LinearLayout.LayoutParams(w, (w * 0.75).toInt())
-                        if (show.type == 1) {
+                    val params = LinearLayout.LayoutParams(w, (w * 0.75).toInt())
+                    if (show.type == 1) {
+                        runOnUiThread {
                             ll_photo_video.removeAllViews()
                             val picFrame = BannerFrame(mContext!!)
                             picFrame.layoutParams = params
@@ -215,6 +256,16 @@ class ShowDetailActivity : BaseActivity() {
                             val pics = files.map { it.file }
                             picFrame.setImageResources(pics)
                             picFrame.startPlay()
+                        }
+                    } else if (show.type == 2) {
+                        if (files.isNotEmpty()) {
+                            val first = files.first()
+                            videoUrl = HttpUrl.getVideoUrl(first.file)
+                            if (mVideoPlayerManager != null) {
+                                if (videoUrl != null) {
+                                    mVideoPlayerManager!!.playNewVideo(null, v_player, videoUrl)
+                                }
+                            }
                         }
                     }
                 } else {

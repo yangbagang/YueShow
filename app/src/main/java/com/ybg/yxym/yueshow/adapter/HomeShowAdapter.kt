@@ -267,6 +267,9 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
             if (viewHolder.iv_video_cover!!.tag != null && viewHolder.iv_video_cover!!.tag == img_url_0) {
                 Picasso.with(mContext).load(img_url_0).resize(width, (width * 0.75).toInt()).centerCrop()
                         .into(viewHolder.iv_video_cover)
+                viewHolder.iv_video_cover!!.setOnClickListener {
+                    ShowDetailActivity.start(mContext, mList!![position])
+                }
             }
         }
     }

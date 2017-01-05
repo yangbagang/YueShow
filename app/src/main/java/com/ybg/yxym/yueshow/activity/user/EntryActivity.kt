@@ -15,6 +15,12 @@ import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.gallery.MultiImageSelectorActivity
 import kotlinx.android.synthetic.main.activity_entry.*
 import java.util.*
+import android.provider.MediaStore
+import android.R.attr.data
+import com.ybg.yxym.yueshow.activity.video.VideoProcessActivity
+import com.ybg.yxym.yueshow.activity.video.VideoShotActivity
+import com.ybg.yxym.yueshow.utils.FileUtils
+
 
 /**
  * 类描述：拍摄入口
@@ -50,6 +56,13 @@ class EntryActivity : BaseActivity() {
             }
             PhotoProcessActivity.start(mContext!!, list)
             finish()
+        } else if (requestCode == IntentExtra.RequestCode.REQUEST_CODE_VIDEO && resultCode ==
+                Activity.RESULT_OK) {
+            if (data == null) return
+            val uri = data.data
+            val path = FileUtils.getRealFilePath(mContext!!, uri) ?: return
+            VideoProcessActivity.start(mContext!!, path)
+            finish()
         }
     }
 
@@ -68,7 +81,12 @@ class EntryActivity : BaseActivity() {
                             .MODE_MULTI)
                 }
                 R.id.rl_entry_updata_video//上传视频
-                -> ToastUtil.show("上传视频!")
+                -> {
+                    val intent = Intent(Intent.ACTION_GET_CONTENT)
+                    intent.type = "video/*"//选择视频 （mp4 3gp 是android支持的视频格式）
+                    intent.addCategory(Intent.CATEGORY_OPENABLE)
+                    startActivityForResult(intent, IntentExtra.RequestCode.REQUEST_CODE_VIDEO)
+                }
                 R.id.rl_entry_photograph//拍照
                 -> {
                     CameraActivity.start(mContext!!)
@@ -79,7 +97,10 @@ class EntryActivity : BaseActivity() {
                     StartLiveActivity.start(mContext!!)
                 }
                 R.id.rl_entry_video_play//视频
-                -> showVideoRecord()
+                -> {
+                    VideoShotActivity.start(mContext!!)
+                    finish()
+                }
             }
         }//CameraActivity.start(mContext);
         //                    SharedPreferences pref = getSharedPreferences("user", Context.MODE_PRIVATE);

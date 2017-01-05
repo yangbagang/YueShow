@@ -14,6 +14,8 @@ object HttpUrl {
     val FILE_SERVER_UPLOAD = "http://120.76.74.2/file/file/upload"
     //预览
     val FILE_SERVER_PREVIEW = "http://120.76.74.2/file/file/preview"
+    //下载
+    val FILE_SERVER_DOWNLOAD = "http://120.76.74.2/file/file/download"
 
     val ROOT_URL = if (debug) API_HOST_DEBUG else API_HOST_PRODUCT
     //获取验证码
@@ -201,5 +203,12 @@ object HttpUrl {
             return fid
         }
         return FILE_SERVER_PREVIEW + "/" + fid
+    }
+
+    fun getVideoUrl(fid: String): String {
+        if (fid.startsWith("http:", true) || fid.startsWith("https:", true)) {
+            return fid
+        }
+        return FILE_SERVER_DOWNLOAD + "/" + fid
     }
 }
