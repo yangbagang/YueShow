@@ -255,6 +255,18 @@ object SendRequest {
     }
 
     /**
+     * 美秀详情
+     *
+     * @param token
+     * @param showId
+     * @param content
+     */
+    fun viewLive(tag: Context, showId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("showId" to "$showId")
+        OkHttpProxy.post(HttpUrl.showDetailUrl, tag, params, callback)
+    }
+
+    /**
      * 评论美秀
      *
      * @param token

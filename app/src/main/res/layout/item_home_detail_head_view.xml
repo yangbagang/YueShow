@@ -10,5 +10,8 @@
         android:background="#ecedf3"/>
     <include layout="@layout/item_user_info_fu_text"/>
     <include layout="@layout/item_user_info_like"/>
-    <include layout="@layout/item_show_h_line"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_20"
+        android:background="@android:color/white" />
 </LinearLayout>

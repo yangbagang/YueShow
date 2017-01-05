@@ -60,6 +60,7 @@ class ShowDetailActivity : BaseActivity() {
 
     private lateinit var pingAdapter: PingItemAdapter
     private lateinit var pingRecyclerView: RecyclerView
+    private lateinit var pingHeaderView: RecyclerViewHeader
 
     private var w = 0
 
@@ -79,6 +80,7 @@ class ShowDetailActivity : BaseActivity() {
         zanLayout = findViewById(R.id.ll_user_like_list) as LinearLayout
         zanNum = findViewById(R.id.tv_like_num) as TextView
         pingRecyclerView = findViewById(R.id.recycleview) as RecyclerView
+        pingHeaderView = findViewById(R.id.header) as RecyclerViewHeader
 
         w = ScreenUtils.getScreenWidth(mContext!!)
 
@@ -103,6 +105,7 @@ class ShowDetailActivity : BaseActivity() {
                 pingRecyclerView.layoutManager = LinearLayoutManager(mContext!!, layoutManager, false)
                 pingRecyclerView.itemAnimator = DefaultItemAnimator()
                 pingRecyclerView.addItemDecoration(SpaceItemDecoration(2))
+                pingHeaderView.attachTo(pingRecyclerView)
             } else {
                 //
             }
@@ -112,6 +115,7 @@ class ShowDetailActivity : BaseActivity() {
     }
 
     private fun displayRuiShow() {
+        getDetailInfo()
         /** 1图片2视频3直播  */
         if (show.type == 3) {
             initLiveView()
@@ -240,7 +244,7 @@ class ShowDetailActivity : BaseActivity() {
                         // 还没有点赞用户，跳过。
                         return
                     }
-                    for (i in 0..limitNum) {
+                    for (i in 0..limitNum - 1) {
                         val imageView = CircleImageView(mContext!!)
                         zanLayout.addView(imageView)
                         Picasso.with(mContext).load(HttpUrl.getImageUrl(zanUserList[i].avatar))
@@ -283,6 +287,26 @@ class ShowDetailActivity : BaseActivity() {
         })
     }
 
+    private fun getDetailInfo() {
+        SendRequest.viewLive(mContext!!, show.id!!, object : OkCallback<String>(OkStringParser()){
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    //TODO
+                } else {
+                    jsonBean?.let {
+                        println(jsonBean.message)
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                e.printStackTrace()
+            }
+
+        })
+    }
+
     /**
      * 评论点击事件
      */
@@ -294,6 +318,7 @@ class ShowDetailActivity : BaseActivity() {
                 ToastUtil.show("你还没有登录，请登录后再发表评论。")
                 return
             }
+            iv_comment.isClickable = false
             val pingContent = et_comment_content.text.toString()
             SendRequest.pingLive(mContext!!, mApplication.token, show.id!!, pingContent,
                     object : OkCallback<String>(OkStringParser()){
@@ -301,16 +326,20 @@ class ShowDetailActivity : BaseActivity() {
                             val jsonBean = JSonResultBean.fromJSON(response)
                             if (jsonBean != null && jsonBean.isSuccess) {
                                 loadPingList()
+                                et_comment_content.text.clear()
+                                ToastUtil.show("评论完成")
                             } else {
                                 jsonBean?.let {
                                     ToastUtil.show(jsonBean.message)
                                 }
                             }
+                            iv_comment.isClickable = true
                         }
 
                         override fun onFailure(e: Throwable) {
                             e.printStackTrace()
                             ToastUtil.show("评论失败")
+                            iv_comment.isClickable = true
                         }
                     })
         }
@@ -322,6 +351,7 @@ class ShowDetailActivity : BaseActivity() {
             if (!mApplication.hasLogin()) {
                 ToastUtil.show("请登录后再点赞")
             } else {
+                iv_like.isClickable = false
                 SendRequest.zanLive(mContext!!, mApplication.token, show.id!!,
                         object : OkCallback<String>(OkStringParser()) {
                             override fun onSuccess(code: Int, response: String) {
@@ -335,6 +365,7 @@ class ShowDetailActivity : BaseActivity() {
 
                             override fun onFailure(e: Throwable) {
                                 ToastUtil.show("点赞失败")
+                                iv_like.isClickable = true
                             }
 
                         })
