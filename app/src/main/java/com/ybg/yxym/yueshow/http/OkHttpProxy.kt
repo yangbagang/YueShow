@@ -13,6 +13,11 @@ import okhttp3.Call
 import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.security.KeyManagementException
+import java.security.NoSuchAlgorithmException
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl.*
 
 /**
  * Created by zhaokaiqiang on 15/11/22.
@@ -24,7 +29,7 @@ object OkHttpProxy {
     private fun init(): OkHttpClient {
         synchronized(OkHttpProxy::class.java) {
             if (mHttpClient == null) {
-                mHttpClient = OkHttpClient()
+                mHttpClient = getOkHttpClient()
             }
         }
         return mHttpClient!!
@@ -93,5 +98,38 @@ object OkHttpProxy {
         }
     }
 
+    fun getOkHttpClient(): OkHttpClient {
+        val xtm = object : X509TrustManager {
 
+            override fun getAcceptedIssuers(): Array<out X509Certificate> {
+                return arrayOf<X509Certificate>()
+            }
+
+            override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
+
+            }
+            override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
+
+            }
+
+        }
+
+        var sslContext: SSLContext? = null
+        try {
+            sslContext = SSLContext.getInstance("SSL")
+            sslContext!!.init(null, arrayOf<TrustManager>(xtm), SecureRandom())
+        } catch (e: NoSuchAlgorithmException) {
+            e.printStackTrace()
+        } catch (e: KeyManagementException) {
+            e.printStackTrace()
+        }
+
+        val DO_NOT_VERIFY = HostnameVerifier { hostname, session -> true }
+        val okHttpClient = OkHttpClient.Builder()
+                //.addInterceptor(interceptor)
+                .sslSocketFactory(sslContext!!.getSocketFactory())
+                .hostnameVerifier(DO_NOT_VERIFY)
+                .build()
+        return okHttpClient
+    }
 }
