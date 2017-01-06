@@ -429,6 +429,7 @@ class ShowDetailActivity : BaseActivity() {
             }
             iv_comment.isClickable = false
             val pingContent = et_comment_content.text.toString()
+            hideKeyboard()//关闭键盘
             SendRequest.pingLive(mContext!!, mApplication.token, show.id!!, pingContent,
                     object : OkCallback<String>(OkStringParser()){
                         override fun onSuccess(code: Int, response: String) {
