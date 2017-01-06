@@ -13,6 +13,8 @@ object AppConstants {
     private val BasePath = ExternalStorageRootPath + "/yuemei/"
     // 文件存放路径
     val FILE_CACHE_PATH = BasePath + "filecache/"
+    // 视频存放路径
+    val VIDEO_CACHE_PATH = BasePath + "videoCache/"
     //缓存的图片
     val IMAGE_CACHE_PATH = BasePath + "imagecache/"
     val VIDEO_SAVE_PATH = BasePath + "video/"

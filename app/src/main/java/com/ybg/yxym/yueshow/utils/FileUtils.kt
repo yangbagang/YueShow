@@ -482,6 +482,14 @@ object FileUtils {
         return "${System.currentTimeMillis()}.$extName"
     }
 
+    fun getResourceName(resource: String): String? {
+        if (TextUtils.isEmpty(resource)) {
+            return null
+        }
+        val index = resource.lastIndexOf("/")
+        return resource.substring(index + 1)
+    }
+
     fun getRealFilePath(context: Context, uri: Uri?): String? {
         if (null == uri) return null
         val scheme = uri.scheme

@@ -29,10 +29,14 @@ import com.ybg.yxym.yueshow.adapter.PingItemAdapter
 import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.decoration.SpaceItemDecoration
 import com.ybg.yxym.yueshow.http.HttpUrl
+import com.ybg.yxym.yueshow.http.Model.Progress
+import com.ybg.yxym.yueshow.http.OkHttpProxy
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
+import com.ybg.yxym.yueshow.http.listener.DownloadListener
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.picasso.Picasso
+import com.ybg.yxym.yueshow.utils.FileUtils
 import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
 import com.ybg.yxym.yueshow.utils.ScreenUtils
 import com.ybg.yxym.yueshow.utils.ToastUtil
@@ -40,6 +44,10 @@ import com.ybg.yxym.yueshow.view.BannerFrame
 import com.ybg.yxym.yueshow.view.CircleImageView
 import kotlinx.android.synthetic.main.activity_home_show_detail.*
 import kotlinx.android.synthetic.main.activity_home_show_detail.view.*
+import okhttp3.Call
+import okhttp3.Response
+import java.io.File
+import java.io.IOException
 import java.util.*
 
 /**
@@ -71,7 +79,7 @@ class ShowDetailActivity : BaseActivity() {
     private var w = 0
 
     //视频播放相关
-    private var videoUrl: String? = null
+    private var videoAddress: String? = null
     private var mVideoPlayerManager: VideoPlayerManager<MetaData>? = null
 
     override fun setContentViewId(): Int {
@@ -230,11 +238,7 @@ class ShowDetailActivity : BaseActivity() {
             }
         })
         iv_video_play.setOnClickListener {
-            if (mVideoPlayerManager != null) {
-                if (videoUrl != null) {
-                    mVideoPlayerManager!!.playNewVideo(null, v_player, videoUrl)
-                }
-            }
+            playVideo()
         }
     }
 
@@ -260,12 +264,7 @@ class ShowDetailActivity : BaseActivity() {
                     } else if (show.type == 2) {
                         if (files.isNotEmpty()) {
                             val first = files.first()
-                            videoUrl = HttpUrl.getVideoUrl(first.file)
-                            if (mVideoPlayerManager != null) {
-                                if (videoUrl != null) {
-                                    mVideoPlayerManager!!.playNewVideo(null, v_player, videoUrl)
-                                }
-                            }
+                            loadVideo(HttpUrl.getVideoUrl(first.file))
                         }
                     }
                 } else {
@@ -356,6 +355,65 @@ class ShowDetailActivity : BaseActivity() {
             }
 
         })
+    }
+
+    private fun loadVideo(videoUrl: String) {
+        val videoName = FileUtils.getResourceName(videoUrl) ?: return
+
+        val videoCache = AppConstants.VIDEO_CACHE_PATH
+        val videoDir = File(videoCache)
+        if (!videoDir.exists()) {
+            videoDir.mkdirs()
+        }
+
+        val videoFile = File(videoCache + videoName)
+        if (videoFile.exists()) {
+            videoAddress = videoFile.absolutePath
+            playVideo()
+        }
+
+        iv_video_cover.visibility = View.INVISIBLE
+        iv_video_play.visibility = View.INVISIBLE
+        tv_video_progress.visibility = View.VISIBLE
+        OkHttpProxy.download(videoUrl, object : DownloadListener(videoCache, videoName){
+            override fun onResponse(call: Call?, response: Response?) {
+                response?.let {
+                    super.onResponse(response)
+                }
+            }
+
+            override fun onFailure(call: Call?, e: IOException?) {
+                e?.let {
+                    onFailure(e)
+                }
+            }
+
+            override fun onSuccess(file: File) {
+                videoAddress = file.absolutePath
+                tv_video_progress.visibility = View.INVISIBLE
+                playVideo()
+            }
+
+            override fun onFailure(e: Exception) {
+                ToastUtil.show("视频缓存失败")
+            }
+
+            override fun onUIProgress(progress: Progress) {
+                runOnUiThread {
+                    val p = (progress.currentBytes * 100 / progress.totalBytes).toInt()
+                    tv_video_progress.text = String.format("正在缓冲%d", p)
+                }
+            }
+
+        })
+    }
+
+    private fun playVideo() {
+        if (mVideoPlayerManager != null) {
+            if (videoAddress != null) {
+                mVideoPlayerManager!!.playNewVideo(null, v_player, videoAddress)
+            }
+        }
     }
 
     /**
