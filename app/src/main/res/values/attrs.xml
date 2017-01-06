@@ -33,4 +33,11 @@
         <attr name="pb_colorNormal" format="color" />
         <attr name="pb_cornerRadius" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="VideoRecorderView">
+        <attr name="width" format="dimension" />
+        <attr name="height" format="dimension" />
+        <attr name="is_open_camera" format="boolean" />
+        <attr name="record_max_time" format="integer" />
+    </declare-styleable>
 </resources>

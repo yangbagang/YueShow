@@ -93,6 +93,7 @@ class PhotoPostActivity : PostShowActivity() {
     }
 
     override fun postShow() {
+        hideKeyboard()
         //开始上传图片，图片上传完成后再建美秀。
         uploadPics()
     }

@@ -39,6 +39,7 @@ class VideoPostActivity : PostShowActivity(){
     }
 
     override fun postShow() {
+        hideKeyboard()
         uploadPic()
     }
 
