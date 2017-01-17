@@ -48,6 +48,9 @@ object HttpUrl {
     private val SHOW_SHARE_LIST = "/showShare/list"
     /*新建美秀*/
     private val CREATE_LIVE = "/ruiShow/create"
+    private val CREATE_LIVE2 = "/ruiShow/createLive"
+    private val CLOSE_LIVE = "/ruiShow/closeLive"
+    private val SHOW_LIVE = "/ruiShow/showLive"
     private val APPEND_FILES = "/showFile/addFiles"
     private val APPEND_EVENTS = "/ruiEvent/appendEvent"
     private val LIVE_DETAIL = "/ruiShow/detail"
@@ -179,6 +182,15 @@ object HttpUrl {
 
     val createLiveUrl: String
         get() = ROOT_URL + CREATE_LIVE
+
+    val createLiveUrl2: String
+        get() = ROOT_URL + CREATE_LIVE2
+
+    val closeLiveUrl: String
+        get() = ROOT_URL + CLOSE_LIVE
+
+    val showLiveUrl: String
+        get() = ROOT_URL + SHOW_LIVE
 
     val appendFileUrl: String
         get() = ROOT_URL + APPEND_FILES

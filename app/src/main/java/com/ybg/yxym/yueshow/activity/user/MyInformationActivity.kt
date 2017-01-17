@@ -221,14 +221,6 @@ class MyInformationActivity : BaseActivity() {
         })
     }
 
-    fun onClick(view: View) {
-//        when (view.id) {
-//            R.id.iv_back -> finish()
-//        }//            case R.id.tv_dress_up:
-//        //                DressUpActivity.start(mContext);
-//        //                break;
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (data == null) {

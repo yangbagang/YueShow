@@ -9,18 +9,14 @@ import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.activity.live.StartLiveActivity
 import com.ybg.yxym.yueshow.activity.photo.CameraActivity
 import com.ybg.yxym.yueshow.activity.photo.PhotoProcessActivity
+import com.ybg.yxym.yueshow.activity.video.VideoProcessActivity
+import com.ybg.yxym.yueshow.activity.video.VideoShotActivity
 import com.ybg.yxym.yueshow.constant.IntentExtra
 import com.ybg.yxym.yueshow.utils.AndroidPermissonRequest
+import com.ybg.yxym.yueshow.utils.FileUtils
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.gallery.MultiImageSelectorActivity
 import kotlinx.android.synthetic.main.activity_entry.*
-import java.util.*
-import android.provider.MediaStore
-import android.R.attr.data
-import com.ybg.yxym.yueshow.activity.video.VideoProcessActivity
-import com.ybg.yxym.yueshow.activity.video.VideoShotActivity
-import com.ybg.yxym.yueshow.utils.FileUtils
-
 
 /**
  * 类描述：拍摄入口
@@ -102,31 +98,7 @@ class EntryActivity : BaseActivity() {
                     finish()
                 }
             }
-        }//CameraActivity.start(mContext);
-        //                    SharedPreferences pref = getSharedPreferences("user", Context.MODE_PRIVATE);
-        //                    String user_id = pref.getString("user_id", "");
-        //                    String user_name = pref.getString("userPhone", "");
-        //                    RongIMConnect.connect(EntryActivity.this, user_id, user_name);
-        //StartLiveActivity.start(mContext);
-        //finish();
-    }
-
-    private fun showVideoRecord() {
-        //        QupaiService qupaiService = AlibabaSDK.getService(QupaiService.class);
-        //        if (qupaiService == null) {
-        //            ToastUtils.show("插件没有初始化,请稍后重试!");
-        //            return;
-        //        }
-        //        //引导，只显示一次，这里用SharedPreferences记录
-        //        final AppGlobalSetting sp = new AppGlobalSetting(getApplicationContext());
-        //        Boolean isGuideShow = sp.getBooleanGlobalItem(AppConfig.PREF_VIDEO_EXIST_USER, true);
-        //        qupaiService.showRecordPage(mContext, IntentExtra.RequestCode.RECORDE_SHOW, isGuideShow, new FailureCallback() {
-        //            @Override
-        //            public void onFailure(int i, String s) {
-        //                ToastUtils.show("onFailure:" + s + "CODE" + i);
-        //            }
-        //        });
-        //        sp.saveGlobalConfigItem(AppConfig.PREF_VIDEO_EXIST_USER, false);
+        }
     }
 
     companion object {

@@ -12,6 +12,7 @@ class YueShow : Serializable {
     var thumbnail = ""//缩略图
     var title = ""//说明
     var createTime: String? = null//发布时间
+    var updateTime: String? = null//结束时间
     var pingNum: Int = 0//评论次数
     var zanNum: Int = 0//赞次数
     var shareNum: Int = 0//分享次数
@@ -24,6 +25,7 @@ class YueShow : Serializable {
                 "thumbnail='" + thumbnail + '\'' +
                 ", title='" + title + '\'' +
                 ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
                 ", pingNum=" + pingNum +
                 ", zanNum=" + zanNum +
                 ", shareNum=" + shareNum +

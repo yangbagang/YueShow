@@ -8,7 +8,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -43,12 +46,10 @@ import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.BannerFrame
 import com.ybg.yxym.yueshow.view.CircleImageView
 import kotlinx.android.synthetic.main.activity_home_show_detail.*
-import kotlinx.android.synthetic.main.activity_home_show_detail.view.*
 import okhttp3.Call
 import okhttp3.Response
 import java.io.File
 import java.io.IOException
-import java.util.*
 
 /**
  * Created by yangbagang on 2016/12/5.
