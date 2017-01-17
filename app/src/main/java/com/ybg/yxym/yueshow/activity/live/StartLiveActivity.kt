@@ -129,7 +129,8 @@ class StartLiveActivity : BaseActivity() {
                     val url = json.getString("url")
                     val show = mGson!!.fromJson<YueShow>(json.getString("show"), object
                         : TypeToken<YueShow>(){}.type)
-
+                    LivingActivity.start(mContext!!, show, url)
+                    finish()
                 } else {
                     jsonBean?.let {
                         ToastUtil.show(jsonBean.message)

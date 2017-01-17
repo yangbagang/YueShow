@@ -455,16 +455,16 @@ object SendRequest {
     /**
      * 3.2 关闭直播
      */
-    fun closeLive(tag: Context, token: String, barId: String, callback: OkCallback<*>) {
-        val params = mapOf<String, String>("token" to token, "barId" to barId)
+    fun closeLive(tag: Context, token: String, showId: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "showId" to showId)
         OkHttpProxy.post(HttpUrl.closeLiveUrl, tag, params, callback)
     }
 
     /**
      * 3.3 观看直播
      */
-    fun showLive(tag: Context, token: String, barId: String, callback: OkCallback<*>) {
-        val params = mapOf<String, String>("token" to token, "barId" to barId)
+    fun showLive(tag: Context, token: String, showId: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "showId" to showId)
         OkHttpProxy.post(HttpUrl.showLiveUrl, tag, params, callback)
     }
 

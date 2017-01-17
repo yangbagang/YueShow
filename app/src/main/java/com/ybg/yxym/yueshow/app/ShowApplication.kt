@@ -5,6 +5,7 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType
+import com.qiniu.pili.droid.streaming.StreamingEnv
 import com.ybg.yxym.yb.app.YbgAPP
 
 
@@ -18,7 +19,8 @@ class ShowApplication : YbgAPP() {
         super.onCreate()
         instance = this
 
-        initImageLoader(applicationContext);
+        initImageLoader(applicationContext)
+        StreamingEnv.init(applicationContext)
     }
 
     fun initImageLoader(context: Context) {

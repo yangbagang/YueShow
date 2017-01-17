@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="@null"
-                android:text="21"
+                android:text="0"
                 android:textColor="@color/color_live_word"
                 android:textSize="@dimen/px_30" />
         </RelativeLayout>
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="@null"
-                android:text="20"
+                android:text="0"
                 android:textColor="@color/color_live_word"
                 android:textSize="@dimen/px_30" />
         </RelativeLayout>
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="@null"
-                android:text="20"
+                android:text="0"
                 android:textColor="@color/color_live_word"
                 android:textSize="@dimen/px_30" />
         </RelativeLayout>

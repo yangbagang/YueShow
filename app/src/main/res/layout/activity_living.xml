@@ -7,6 +7,21 @@
     android:layout_height="match_parent"
     tools:context="com.ybg.yxym.yueshow.activity.live.LivingActivity">
 
+    <com.qiniu.pili.droid.streaming.widget.AspectFrameLayout
+        android:id="@+id/cameraPreview_afl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true">
+
+        <android.opengl.GLSurfaceView
+            android:id="@+id/cameraPreview_surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
+    </com.qiniu.pili.droid.streaming.widget.AspectFrameLayout>
+
     <LinearLayout
         android:id="@+id/timeCover"
         android:layout_width="match_parent"
@@ -14,6 +29,7 @@
         android:orientation="vertical"
         android:gravity="center">
         <TextView
+            android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5"

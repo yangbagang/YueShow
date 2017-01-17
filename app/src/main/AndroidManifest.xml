@@ -157,6 +157,8 @@
         </activity>
         <activity android:name=".activity.live.LivingActivity">
         </activity>
+        <activity android:name=".activity.live.ShowLiveActivity">
+        </activity>
     </application>
 
 </manifest>
