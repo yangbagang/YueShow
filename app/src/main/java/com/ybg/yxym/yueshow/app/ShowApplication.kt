@@ -7,6 +7,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType
 import com.qiniu.pili.droid.streaming.StreamingEnv
 import com.ybg.yxym.yb.app.YbgAPP
+import com.ybg.yxym.yueshow.constant.AppConstants
+import com.ybg.yxym.yueshow.picasso.OkHttp3Downloader
+import com.ybg.yxym.yueshow.picasso.Picasso
+import java.io.File
 
 
 /**
@@ -21,6 +25,10 @@ class ShowApplication : YbgAPP() {
 
         initImageLoader(applicationContext)
         StreamingEnv.init(applicationContext)
+
+        //初始化picasso
+        val picasso = Picasso.Builder(applicationContext).downloader(OkHttp3Downloader(File(AppConstants.IMAGE_CACHE_PATH))).build()
+        Picasso.setSingletonInstance(picasso)
     }
 
     fun initImageLoader(context: Context) {

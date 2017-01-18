@@ -4,13 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.support.annotation.DrawableRes
 import android.widget.ImageView
-
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.app.ShowApplication
 import com.ybg.yxym.yueshow.constant.AppConstants
-import com.ybg.yxym.yueshow.picasso.OkHttp3Downloader
 import com.ybg.yxym.yueshow.picasso.Picasso
-
 import java.io.File
 import java.io.IOException
 
@@ -18,12 +15,6 @@ import java.io.IOException
  * 用来加载图片的工具类对Picasso一些常用的方法进行封装
  */
 class ImageLoaderUtils(private val mContext: Context) {
-
-    init {
-        //设置缓存位置
-        val picasso = Picasso.Builder(mContext).downloader(OkHttp3Downloader(File(AppConstants.IMAGE_CACHE_PATH))).build()
-        Picasso.setSingletonInstance(picasso)
-    }
 
     /**
      * 加载图片 assets, files, content providers

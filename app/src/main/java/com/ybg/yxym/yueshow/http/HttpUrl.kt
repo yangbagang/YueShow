@@ -4,7 +4,8 @@ package com.ybg.yxym.yueshow.http
  * 网络请求相关设置,配置请求地址及参数
  */
 object HttpUrl {
-    private val debug = false
+
+    private val debug = true
 
     //开发服务器地址
     val API_HOST_DEBUG = "http://192.168.12.99:8080/ma"
