@@ -31,6 +31,7 @@ import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
+import com.ybg.yxym.yueshow.utils.MeiLiImgUtil
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.CircleImageView
 import kotlinx.android.synthetic.main.activity_user_center_listview.*
@@ -103,24 +104,24 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
         initHeadview(headerView)
         lv_user!!.setHeaderDividersEnabled(false)
         lv_user!!.setOnScrollListener(scrollListener)
-        list1.add("你好")
-        list1.add("同学")
-        list1.add("你好")
-        list1.add("你好")
-        list1.add("同学")
-        list1.add("你好")
-        list1.add("你好")
-        list1.add("同学")
-        list1.add("你好")
-        list1.add("你好")
-        list1.add("同学")
-        list1.add("你好")
-        list1.add("你好")
-        list1.add("同学")
-        list1.add("你好")
-        list1.add("你好")
-        list1.add("同学")
-        list1.add("你好")
+//        list1.add("你好")
+//        list1.add("同学")
+//        list1.add("你好")
+//        list1.add("你好")
+//        list1.add("同学")
+//        list1.add("你好")
+//        list1.add("你好")
+//        list1.add("同学")
+//        list1.add("你好")
+//        list1.add("你好")
+//        list1.add("同学")
+//        list1.add("你好")
+//        list1.add("你好")
+//        list1.add("同学")
+//        list1.add("你好")
+//        list1.add("你好")
+//        list1.add("同学")
+//        list1.add("你好")
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list1)
         lv_user!!.adapter = adapter!!
     }
@@ -179,6 +180,7 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
         val num = MeiLiUtil.getLevelNum(userBase.ml)
         tv_level_name?.text = MeiLiUtil.getLevelName(num)
         tv_level?.text = "LV$num"
+        iv_level?.setImageResource(MeiLiImgUtil.getImgId(num))
         tv_meilizhi?.text = "${userBase.ml}"
         //粉丝数
         loadFansNum(userBase)

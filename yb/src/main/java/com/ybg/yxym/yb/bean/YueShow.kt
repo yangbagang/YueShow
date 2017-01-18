@@ -18,6 +18,7 @@ class YueShow : Serializable {
     var shareNum: Int = 0//分享次数
     var type: Int = 1//1图片2视频3直播
     var fileNum: Int = 1//附带文件数量
+    var flag: Int = 1//是否有效
     var user: UserBase? = null
 
     override fun toString(): String {

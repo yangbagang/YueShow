@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.view.Menu
+import android.view.MenuItem
 import android.view.MotionEvent
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
@@ -16,6 +18,8 @@ class VideoShotActivity : BaseActivity() {
 
     private var isFinish = true
     private var isSuccess = false
+
+    private var flashMode = 0
 
     override fun setContentViewId(): Int {
         return R.layout.activity_video_shot
@@ -55,6 +59,64 @@ class VideoShotActivity : BaseActivity() {
             }
             true
         }
+        videoRecorderView.setFlashMode(0)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.video_shot, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+
+        when(id) {
+            R.id.action_change_camera -> {
+                //切换前后摄像头
+                videoRecorderView.switchCamera()
+            }
+            R.id.action_flash_off -> {
+                //切换闪光灯方式
+                flashMode = 1
+                invalidateOptionsMenu()
+                videoRecorderView.setFlashMode(1)
+            }
+            R.id.action_flash_on -> {
+                //切换闪光灯方式
+                flashMode = 2
+                invalidateOptionsMenu()
+                videoRecorderView.setFlashMode(2)
+            }
+            R.id.action_flash_auto -> {
+                //切换闪光灯方式
+                flashMode = 0
+                invalidateOptionsMenu()
+                videoRecorderView.setFlashMode(0)
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        when(flashMode) {
+            0 -> {
+                menu.findItem(R.id.action_flash_on).isVisible = false
+                menu.findItem(R.id.action_flash_off).isVisible = true
+                menu.findItem(R.id.action_flash_auto).isVisible = false
+            }
+            1 -> {
+                menu.findItem(R.id.action_flash_on).isVisible = true
+                menu.findItem(R.id.action_flash_off).isVisible = false
+                menu.findItem(R.id.action_flash_auto).isVisible = false
+            }
+            2 -> {
+                menu.findItem(R.id.action_flash_on).isVisible = false
+                menu.findItem(R.id.action_flash_off).isVisible = false
+                menu.findItem(R.id.action_flash_auto).isVisible = true
+            }
+        }
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onResume() {
@@ -75,8 +137,11 @@ class VideoShotActivity : BaseActivity() {
         override fun handleMessage(msg: Message) {
             if (isSuccess) {
                 val videoFile = videoRecorderView.getVecordFile()?.absolutePath
-                println("videoFile=$videoFile")
-                VideoProcessActivity.start(mContext!!, videoFile ?: "")
+                if (videoFile == null) {
+                    ToastUtil.show("视频录制失败")
+                    return
+                }
+                VideoProcessActivity.start(mContext!!, videoFile)
                 finish()
             }
         }

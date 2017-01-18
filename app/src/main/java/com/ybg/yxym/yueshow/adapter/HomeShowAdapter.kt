@@ -8,13 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import com.volokh.danylo.video_player_manager.ui.VideoPlayerView
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yb.utils.DateUtil
+import com.ybg.yxym.yb.utils.MeiLiUtil
 import com.ybg.yxym.yueshow.R
+import com.ybg.yxym.yueshow.activity.live.ShowLiveActivity
 import com.ybg.yxym.yueshow.activity.show.ShowDetailActivity
 import com.ybg.yxym.yueshow.app.ShowApplication
 import com.ybg.yxym.yueshow.constant.AppConstants
@@ -23,8 +27,10 @@ import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.picasso.Picasso
+import com.ybg.yxym.yueshow.utils.MeiLiImgUtil
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.CircleImageView
+import org.json.JSONObject
 
 /**
  * Created by yangbagang on 2016/11/25.
@@ -221,6 +227,9 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
             if (viewHolder.iv_live_cover!!.tag != null && viewHolder.iv_live_cover!!.tag == img_url_live) {
                 Picasso.with(mContext).load(img_url_live).resize(width, (width * 0.75).toInt()).centerCrop()
                         .into(viewHolder.iv_live_cover)
+                viewHolder.iv_live_cover!!.setOnClickListener {
+                    loadLiveInfo(position)
+                }
             }
         }
     }
@@ -272,6 +281,43 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
                 }
             }
         }
+    }
+
+    private fun loadLiveInfo(position: Int) {
+        val showApplication = mContext.application as ShowApplication
+        if (!showApplication.hasLogin()) {
+            //登录后才可以看直播
+            ToastUtil.show("请登录后再观看直播")
+            return
+        }
+        val show = mList!![position]
+        if (show.flag == 0) {
+            ToastUtil.show("直播己经结束")
+            return
+        }
+        SendRequest.showLive(mContext, showApplication.token, "${show.id}", object :
+                OkCallback<String>(OkStringParser()) {
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    val mGson = Gson()
+                    val json = JSONObject(jsonBean.data)
+                    val url = json.getString("url")
+                    val yueShow = mGson.fromJson<YueShow>(json.getString("show"), object
+                        : TypeToken<YueShow>() {}.type)
+                    ShowLiveActivity.start(mContext, yueShow, url)
+                } else {
+                    jsonBean?.let {
+                        ToastUtil.show(jsonBean.message)
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                e.printStackTrace()
+                ToastUtil.show("获取直播信息失败，请稍候再试。")
+            }
+        })
     }
 
     /**
@@ -345,7 +391,12 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
     private inner class BtnCommentOnClickListener(internal var mPosition: Int) : View.OnClickListener {
 
         override fun onClick(v: View) {
-            ToastUtil.show("评论 :" + mPosition)
+            val show = mList!![mPosition]
+            if (show.type == 1 || show.type == 2) {
+                ShowDetailActivity.start(mContext, show)
+            } else {
+                loadLiveInfo(mPosition)
+            }
         }
     }
 
@@ -361,7 +412,14 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
                                 val resultBean = JSonResultBean.fromJSON(response)
                                 if (resultBean != null && resultBean.isSuccess) {
                                     viewHolder.tv_parise!!.text = "${mList!![mPosition].zanNum + 1}"
+                                    viewHolder.tv_parise!!.text = "${mList!![mPosition].zanNum + 1}"
                                     viewHolder.iv_parise!!.isClickable = false
+                                    //刷新美力值，获取时间，等级。
+                                    val meili = viewHolder.tv_meilizhi!!.text.toString().toInt()
+                                    viewHolder.tv_meilizhi!!.text = "${meili + 1}"
+                                    viewHolder.tv_time!!.text = "刚刚"
+                                    viewHolder.iv_level_img!!.setImageResource(MeiLiImgUtil
+                                            .getImgId(MeiLiUtil.getLevelNum(meili)))
                                 }
                             }
 
@@ -380,7 +438,8 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
     private inner class BtnTransOnClickListener(internal var mPosition: Int) : View.OnClickListener {
 
         override fun onClick(v: View) {
-            ToastUtil.show("转发 :" + mPosition)
+            //TODO
+            //ToastUtil.show("转发 :" + mPosition)
         }
     }
 
@@ -390,7 +449,8 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
     private inner class BtnPhotoOnClickListener(internal var mPosition: Int) : View.OnClickListener {
 
         override fun onClick(v: View) {
-            ToastUtil.show("头像 :" + mPosition)
+            //TODO
+            //ToastUtil.show("头像 :" + mPosition)
         }
     }
 

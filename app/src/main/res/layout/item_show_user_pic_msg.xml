@@ -44,7 +44,7 @@
                         android:id="@+id/tv_user_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="邓肯"
+                        android:text=""
                         android:textColor="#545866"
                         android:textSize="@dimen/px_32"/>
 
@@ -66,7 +66,7 @@
                         android:id="@+id/tv_meilizhi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="美力值 + 15"
+                        android:text=""
                         android:textColor="#bfc5ca"
                         android:textSize="@dimen/px_20"/>
 
@@ -75,7 +75,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/px_30"
-                        android:text="21分钟前"
+                        android:text=""
                         android:textColor="#bfc5ca"
                         android:textSize="@dimen/px_20"/>
                 </LinearLayout>

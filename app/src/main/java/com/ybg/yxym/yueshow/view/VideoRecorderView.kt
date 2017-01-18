@@ -46,6 +46,8 @@ constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : LinearLayou
     var timeCount: Int = 0// 时间计数
     private var mVecordFile: File? = null// 文件
 
+    private var cameraFlag = 0
+
     @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : this(context, attrs, 0) {}
 
     init {
@@ -111,7 +113,13 @@ constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : LinearLayou
             freeCameraResource()
         }
         try {
-            mCamera = Camera.open()
+            if (cameraFlag == 0) {
+                //后置摄像头
+                mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK)
+            } else {
+                //前置摄像头
+                mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             freeCameraResource()
@@ -135,6 +143,42 @@ constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : LinearLayou
             val params = mCamera!!.parameters
             params.set("orientation", "portrait")
             mCamera!!.parameters = params
+        }
+    }
+
+    fun setFlashMode(flashMode: Int) {
+        println("设置闪光灯模式")
+        try {
+            if (mCamera != null) {
+                mCamera?.lock()
+                val params = mCamera!!.parameters
+                if (flashMode == 0) {
+                    params.flashMode = Camera.Parameters.FLASH_MODE_OFF
+                    params.set("flash-mode", "off")
+                } else if (flashMode == 1) {
+                    params.flashMode = Camera.Parameters.FLASH_MODE_ON
+                    params.set("flash-mode", "on")
+                } else if (flashMode == 2) {
+                    params.flashMode = Camera.Parameters.FLASH_MODE_AUTO
+                    params.set("flash-mode", "auto")
+                }
+                mCamera!!.parameters = params
+                mCamera?.unlock()
+            }
+        } catch(e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun switchCamera() {
+        if (cameraFlag == 0) {
+            cameraFlag = 1
+            freeCameraResource()
+            initCamera()
+        } else {
+            cameraFlag = 0
+            freeCameraResource()
+            initCamera()
         }
     }
 

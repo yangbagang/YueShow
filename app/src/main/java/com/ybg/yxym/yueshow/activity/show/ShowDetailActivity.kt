@@ -15,15 +15,12 @@ import android.widget.TextView
 import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import com.pili.pldroid.player.AVOptions
+import com.pili.pldroid.player.widget.PLVideoView
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject
 import com.tencent.mm.sdk.openapi.IWXAPI
-import com.volokh.danylo.video_player_manager.manager.PlayerItemChangeListener
-import com.volokh.danylo.video_player_manager.manager.SingleVideoPlayerManager
-import com.volokh.danylo.video_player_manager.manager.VideoPlayerManager
-import com.volokh.danylo.video_player_manager.meta.MetaData
-import com.volokh.danylo.video_player_manager.ui.SimpleMainThreadMediaPlayerListener
 import com.ybg.yxym.yb.bean.*
 import com.ybg.yxym.yb.utils.DateUtil
 import com.ybg.yxym.yueshow.R
@@ -32,24 +29,17 @@ import com.ybg.yxym.yueshow.adapter.PingItemAdapter
 import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.decoration.SpaceItemDecoration
 import com.ybg.yxym.yueshow.http.HttpUrl
-import com.ybg.yxym.yueshow.http.Model.Progress
-import com.ybg.yxym.yueshow.http.OkHttpProxy
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
-import com.ybg.yxym.yueshow.http.listener.DownloadListener
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.picasso.Picasso
-import com.ybg.yxym.yueshow.utils.FileUtils
 import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
 import com.ybg.yxym.yueshow.utils.ScreenUtils
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.BannerFrame
 import com.ybg.yxym.yueshow.view.CircleImageView
+import com.ybg.yxym.yueshow.view.MediaController
 import kotlinx.android.synthetic.main.activity_home_show_detail.*
-import okhttp3.Call
-import okhttp3.Response
-import java.io.File
-import java.io.IOException
 
 /**
  * Created by yangbagang on 2016/12/5.
@@ -80,8 +70,8 @@ class ShowDetailActivity : BaseActivity() {
     private var w = 0
 
     //视频播放相关
-    private var videoAddress: String? = null
-    private var mVideoPlayerManager: VideoPlayerManager<MetaData>? = null
+    private val mIsLiveStreaming = 0
+    private var hasVideo = false
 
     override fun setContentViewId(): Int {
         return R.layout.activity_home_show_detail
@@ -125,11 +115,41 @@ class ShowDetailActivity : BaseActivity() {
                 pingRecyclerView.itemAnimator = DefaultItemAnimator()
                 pingRecyclerView.addItemDecoration(SpaceItemDecoration(2))
                 pingHeaderView.attachTo(pingRecyclerView)
+
+                et_comment_content.setOnFocusChangeListener { view, b ->
+                    if (b) {
+                        iv_comment.visibility = View.VISIBLE
+                        iv_like.visibility = View.GONE
+                        iv_transmit.visibility = View.GONE
+                        iv_gift.visibility = View.GONE
+                    }
+                }
             } else {
                 //
             }
         } else {
             //
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (hasVideo) {
+            v_player.start()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (hasVideo) {
+            v_player.pause()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (hasVideo) {
+            v_player.stopPlayback()
         }
     }
 
@@ -215,42 +235,25 @@ class ShowDetailActivity : BaseActivity() {
         rl_video.visibility = View.VISIBLE
         ll_photo_video.visibility = View.GONE
         ImageLoaderUtils.instance.loadBitmap(iv_video_cover, HttpUrl.getImageUrl(show.thumbnail))
-        mVideoPlayerManager = SingleVideoPlayerManager(PlayerItemChangeListener { })
-        v_player.addMediaPlayerListener(object : SimpleMainThreadMediaPlayerListener() {
-            override fun onVideoCompletionMainThread() {
-                super.onVideoCompletionMainThread()
-                iv_video_cover.visibility = View.VISIBLE
-                iv_video_play.visibility = View.VISIBLE
-                v_player.visibility = View.INVISIBLE
-            }
+        v_player.setCoverView(iv_video_cover)
+        v_player.setBufferingIndicator(loadingView)
+        loadingView.visibility = View.VISIBLE
 
-            override fun onVideoStoppedMainThread() {
-                super.onVideoStoppedMainThread()
-                iv_video_cover.visibility = View.INVISIBLE
-                iv_video_play.visibility = View.VISIBLE
-                v_player.visibility = View.VISIBLE
-            }
+        setOptions(0)
 
-            override fun onVideoPreparedMainThread() {
-                super.onVideoPreparedMainThread()
-                iv_video_cover.visibility = View.INVISIBLE
-                iv_video_play.visibility = View.INVISIBLE
-                v_player.visibility = View.VISIBLE
-            }
-        })
-        iv_video_play.setOnClickListener {
-            playVideo()
-        }
+        val mMediaController = MediaController(this)
+        v_player.setMediaController(mMediaController)
+        v_player.displayAspectRatio = PLVideoView.ASPECT_RATIO_FIT_PARENT
     }
 
     private fun loadShowFiles() {
         SendRequest.getShowFiles(mContext!!, show.id!!, object : OkCallback<String>
-        (OkStringParser()){
+        (OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
                     val files = mGson!!.fromJson<List<ShowFile>>(jsonBean.data, object :
-                            TypeToken<List<ShowFile>>(){}.type)
+                            TypeToken<List<ShowFile>>() {}.type)
                     val params = LinearLayout.LayoutParams(w, (w * 0.75).toInt())
                     if (show.type == 1) {
                         runOnUiThread {
@@ -265,7 +268,9 @@ class ShowDetailActivity : BaseActivity() {
                     } else if (show.type == 2) {
                         if (files.isNotEmpty()) {
                             val first = files.first()
-                            loadVideo(HttpUrl.getVideoUrl(first.file))
+                            v_player.setVideoPath(HttpUrl.getVideoUrl(first.file))
+                            hasVideo = true
+                            v_player.start()
                         }
                     }
                 } else {
@@ -282,12 +287,12 @@ class ShowDetailActivity : BaseActivity() {
     }
 
     private fun loadZanUserList() {
-        SendRequest.getShowZanList(mContext!!, show.id!!, object : OkCallback<String>(OkStringParser()){
+        SendRequest.getShowZanList(mContext!!, show.id!!, object : OkCallback<String>(OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
                     val zanUserList = mGson!!.fromJson<List<ShowZan>>(jsonBean.data,
-                            object : TypeToken<List<ShowZan>>(){}.type)
+                            object : TypeToken<List<ShowZan>>() {}.type)
                     zanNum.text = "${zanUserList.size}"
                     val limitNum = Math.min(6, zanUserList.size)
                     zanLayout.removeAllViews()
@@ -316,12 +321,12 @@ class ShowDetailActivity : BaseActivity() {
     }
 
     private fun loadPingList() {
-        SendRequest.getShowPingList(mContext!!, show.id!!, object : OkCallback<String>(OkStringParser()){
+        SendRequest.getShowPingList(mContext!!, show.id!!, object : OkCallback<String>(OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
                     val pingList = mGson!!.fromJson<List<ShowPing>>(jsonBean.data,
-                            object : TypeToken<List<ShowPing>>(){}.type)
+                            object : TypeToken<List<ShowPing>>() {}.type)
                     pingAdapter.setData(pingList)
                     pingAdapter.notifyDataSetChanged()
                 } else {
@@ -339,7 +344,7 @@ class ShowDetailActivity : BaseActivity() {
     }
 
     private fun getDetailInfo() {
-        SendRequest.viewLive(mContext!!, show.id!!, object : OkCallback<String>(OkStringParser()){
+        SendRequest.viewLive(mContext!!, show.id!!, object : OkCallback<String>(OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
@@ -358,63 +363,26 @@ class ShowDetailActivity : BaseActivity() {
         })
     }
 
-    private fun loadVideo(videoUrl: String) {
-        val videoName = FileUtils.getResourceName(videoUrl) ?: return
+    private fun setOptions(codecType: Int) {
+        val options = AVOptions()
 
-        val videoCache = AppConstants.VIDEO_CACHE_PATH
-        val videoDir = File(videoCache)
-        if (!videoDir.exists()) {
-            videoDir.mkdirs()
+        // the unit of timeout is ms
+        options.setInteger(AVOptions.KEY_PREPARE_TIMEOUT, 10 * 1000)
+        options.setInteger(AVOptions.KEY_GET_AV_FRAME_TIMEOUT, 10 * 1000)
+        options.setInteger(AVOptions.KEY_PROBESIZE, 128 * 1024)
+        // Some optimization with buffering mechanism when be set to 1
+        options.setInteger(AVOptions.KEY_LIVE_STREAMING, mIsLiveStreaming)
+        if (mIsLiveStreaming === 1) {
+            options.setInteger(AVOptions.KEY_DELAY_OPTIMIZATION, 1)
         }
 
-        val videoFile = File(videoCache + videoName)
-        if (videoFile.exists()) {
-            videoAddress = videoFile.absolutePath
-            playVideo()
-        }
+        // 1 -> hw codec enable, 0 -> disable [recommended]
+        options.setInteger(AVOptions.KEY_MEDIACODEC, codecType)
 
-        iv_video_cover.visibility = View.INVISIBLE
-        iv_video_play.visibility = View.INVISIBLE
-        tv_video_progress.visibility = View.VISIBLE
-        OkHttpProxy.download(videoUrl, object : DownloadListener(videoCache, videoName){
-            override fun onResponse(call: Call?, response: Response?) {
-                response?.let {
-                    super.onResponse(response)
-                }
-            }
+        // whether start play automatically after prepared, default value is 1
+        options.setInteger(AVOptions.KEY_START_ON_PREPARED, 0)
 
-            override fun onFailure(call: Call?, e: IOException?) {
-                e?.let {
-                    onFailure(e)
-                }
-            }
-
-            override fun onSuccess(file: File) {
-                videoAddress = file.absolutePath
-                tv_video_progress.visibility = View.INVISIBLE
-                playVideo()
-            }
-
-            override fun onFailure(e: Exception) {
-                ToastUtil.show("视频缓存失败")
-            }
-
-            override fun onUIProgress(progress: Progress) {
-                runOnUiThread {
-                    val p = (progress.currentBytes * 100 / progress.totalBytes).toInt()
-                    tv_video_progress.text = String.format("正在缓冲%d", p)
-                }
-            }
-
-        })
-    }
-
-    private fun playVideo() {
-        if (mVideoPlayerManager != null) {
-            if (videoAddress != null) {
-                mVideoPlayerManager!!.playNewVideo(null, v_player, videoAddress)
-            }
-        }
+        v_player.setAVOptions(options)
     }
 
     /**
@@ -432,13 +400,17 @@ class ShowDetailActivity : BaseActivity() {
             val pingContent = et_comment_content.text.toString()
             hideKeyboard()//关闭键盘
             SendRequest.pingLive(mContext!!, mApplication.token, show.id!!, pingContent,
-                    object : OkCallback<String>(OkStringParser()){
+                    object : OkCallback<String>(OkStringParser()) {
                         override fun onSuccess(code: Int, response: String) {
                             val jsonBean = JSonResultBean.fromJSON(response)
                             if (jsonBean != null && jsonBean.isSuccess) {
                                 loadPingList()
                                 et_comment_content.text.clear()
-                                ToastUtil.show("评论完成")
+                                ToastUtil.show("发表评论完成")
+                                iv_comment.visibility = View.GONE
+                                iv_like.visibility = View.VISIBLE
+                                iv_transmit.visibility = View.VISIBLE
+                                iv_gift.visibility = View.VISIBLE
                             } else {
                                 jsonBean?.let {
                                     ToastUtil.show(jsonBean.message)

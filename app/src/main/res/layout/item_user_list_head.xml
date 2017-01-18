@@ -28,7 +28,7 @@
             android:layout_below="@id/iv_user_logo"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/px_22"
-            android:text="你比从前快乐"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="@dimen/px_24"/>
 
@@ -54,7 +54,7 @@
                 android:layout_marginLeft="@dimen/px_8"
                 android:layout_toRightOf="@id/iv_level"
                 android:gravity="center_vertical"
-                android:text="LV4"
+                android:text="LV1"
                 android:textColor="@color/color_7dcf2c"
                 android:textSize="@dimen/px_24"/>
 
@@ -77,7 +77,7 @@
             android:layout_below="@+id/rl_user_level"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/px_48"
-            android:text="飞流直下三千尺"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="@dimen/px_24"/>
     </RelativeLayout>
@@ -106,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/px_16"
-                android:text="12万"
+                android:text="0"
                 android:textColor="@color/color_f84f21"
                 android:textSize="@dimen/px_24"/>
         </LinearLayout>
@@ -130,7 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/px_16"
-                android:text="58"
+                android:text="0"
                 android:textColor="#545866"
                 android:textSize="@dimen/px_24"/>
         </LinearLayout>
@@ -155,7 +155,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/px_16"
-                android:text="1024"
+                android:text="0"
                 android:textColor="#545866"
                 android:textSize="@dimen/px_24"/>
         </LinearLayout>
