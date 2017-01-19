@@ -3,6 +3,7 @@ package com.ybg.yxym.yueshow.activity.user
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.provider.MediaStore
 import android.view.View
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
@@ -59,6 +60,13 @@ class EntryActivity : BaseActivity() {
             val path = FileUtils.getRealFilePath(mContext!!, uri) ?: return
             VideoProcessActivity.start(mContext!!, path)
             finish()
+        } else if (requestCode == IntentExtra.RequestCode.REQUEST_CAPTURE_VIDEO && resultCode ==
+                Activity.RESULT_OK) {
+            if (data == null) return
+            val uri = data.data
+            val path = FileUtils.getRealFilePath(mContext!!, uri) ?: return
+            VideoProcessActivity.start(mContext!!, path)
+            finish()
         }
     }
 
@@ -94,8 +102,13 @@ class EntryActivity : BaseActivity() {
                 }
                 R.id.rl_entry_video_play//视频
                 -> {
-                    VideoShotActivity.start(mContext!!)
-                    finish()
+                    //自定义视频拍摄界面
+                    //VideoShotActivity.start(mContext!!)
+                    //finish()
+                    //系统拍摄组件
+                    val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+                    intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10)
+                    startActivityForResult(intent, IntentExtra.RequestCode.REQUEST_CAPTURE_VIDEO)
                 }
             }
         }

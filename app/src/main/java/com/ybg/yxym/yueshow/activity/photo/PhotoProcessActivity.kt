@@ -43,6 +43,7 @@ class PhotoProcessActivity : BaseActivity() {
     private var mPics: MutableList<String> = ArrayList<String>()
     private var mBitmapList: MutableList<Bitmap?> = ArrayList<Bitmap?>()
     private var mIndex = 0
+    private var mThumbnail = ""
 
     //选择多图片
     private lateinit var mImageAdapter: SelectedImageAdapter
@@ -143,7 +144,7 @@ class PhotoProcessActivity : BaseActivity() {
             }
             //启动发布界面
             val list: ArrayList<String> = savedFiles
-            PhotoPostActivity.start(mContext!!, list)
+            PhotoPostActivity.start(mContext!!, mThumbnail, list)
             //关闭本窗口
             finish()
         }
@@ -152,6 +153,9 @@ class PhotoProcessActivity : BaseActivity() {
             for ((index, bitmap) in mBitmapList.withIndex()) {
                 if (bitmap != null) {
                     savePic(bitmap, mPics[index])
+                    if (index == 0) {
+                        saveThumbnail(bitmap)
+                    }
                 } else {
                     var sourceFile = mPics[index]
                     if (sourceFile.startsWith("file:", true)) {
@@ -161,6 +165,9 @@ class PhotoProcessActivity : BaseActivity() {
                     val inputStream = FileInputStream(sourceFile)
                     val b = BitmapFactory.decodeStream(inputStream)
                     savePic(b, mPics[index])
+                    if (index == 0) {
+                        saveThumbnail(b)
+                    }
                 }
             }
         }
@@ -176,6 +183,12 @@ class PhotoProcessActivity : BaseActivity() {
             b = BitmapUtils.compressImage(b, 500)
             //保存
             BitmapUtils.saveBitmap(b, saveFile)
+        }
+
+        fun saveThumbnail(bitmap: Bitmap) {
+            val b = ThumbnailUtils.extractThumbnail(bitmap, 400, 300)
+            val mThumbnail = AppConstants.IMAGE_SAVE_PATH + "/" + System.currentTimeMillis() + ".png"
+            BitmapUtils.saveBitmap(b, mThumbnail)
         }
     }
 

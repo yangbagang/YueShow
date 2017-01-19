@@ -36,6 +36,8 @@ class PhotoPostActivity : PostShowActivity() {
     private var mPics: MutableList<String> = ArrayList<String>()
     private var mIndex = 0
     private var mFiles: MutableList<String> = ArrayList<String>()
+    private var mThumbnail = ""
+    private var thumbnailId = ""
 
     override fun setContentViewId(): Int {
         return R.layout.activity_photo_post
@@ -60,6 +62,10 @@ class PhotoPostActivity : PostShowActivity() {
                     }
                 }
                 mImageAdapter.notifyDataSetChanged()
+            }
+            mThumbnail = intent.extras.getString("thumbnail")
+            if (!mThumbnail.startsWith("file:")) {
+                mThumbnail = String.format("file://%s", mThumbnail)
             }
         }
 
@@ -94,8 +100,38 @@ class PhotoPostActivity : PostShowActivity() {
 
     override fun postShow() {
         hideKeyboard()
-        //开始上传图片，图片上传完成后再建美秀。
-        uploadPics()
+        //上传缩略图
+        uploadThumbnail()
+    }
+
+    private fun uploadThumbnail() {
+        SendRequest.uploadFile(mContext!!, "show", File(mThumbnail), object : UploadListener(){
+            override fun onResponse(call: Call?, response: Response?) {
+                response?.let { onSuccess(response) }
+            }
+
+            override fun onFailure(call: Call?, e: IOException?) {
+                e?.let { onFailure(e) }
+            }
+
+            override fun onSuccess(response: Response) {
+                val json = JSONObject(response.body().string())
+                thumbnailId = json.getString("fid")
+                //开始上传图片，图片上传完成后再建美秀。
+                uploadPics()
+            }
+
+            override fun onFailure(e: Exception) {
+                e.printStackTrace()
+                workInLoopThread {
+                    ToastUtil.show("上传图片失败")
+                }
+            }
+
+            override fun onUIProgress(progress: Progress) {
+
+            }
+        })
     }
 
     private fun uploadPics() {
@@ -139,8 +175,7 @@ class PhotoPostActivity : PostShowActivity() {
 
     private fun createShow() {
         val barId = "1"
-        val thumbnail = mFiles.first()
-        SendRequest.createShow(mContext!!, mApplication.token, barId, thumbnail, title, "1",
+        SendRequest.createShow(mContext!!, mApplication.token, barId, thumbnailId, title, "1",
                 object : OkCallback<String>(OkStringParser()) {
 
             override fun onSuccess(code: Int, response: String) {
@@ -192,9 +227,10 @@ class PhotoPostActivity : PostShowActivity() {
 
     companion object {
 
-        fun start(context: Context, pics: ArrayList<String>) {
+        fun start(context: Context, thumbnail: String, pics: ArrayList<String>) {
             val starter = Intent(context, PhotoPostActivity::class.java)
             starter.putStringArrayListExtra(IntentExtra.PICTURE_LIST, pics)
+            starter.putExtra("thumbnail", thumbnail)
             context.startActivity(starter)
         }
     }
