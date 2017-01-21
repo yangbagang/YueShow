@@ -122,6 +122,11 @@ class ShowDetailActivity : BaseActivity() {
                         iv_like.visibility = View.GONE
                         iv_transmit.visibility = View.GONE
                         iv_gift.visibility = View.GONE
+                    } else {
+                        iv_comment.visibility = View.GONE
+                        iv_like.visibility = View.VISIBLE
+                        iv_transmit.visibility = View.VISIBLE
+                        iv_gift.visibility = View.VISIBLE
                     }
                 }
             } else {

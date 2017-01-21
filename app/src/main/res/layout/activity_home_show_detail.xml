@@ -6,62 +6,10 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <LinearLayout
-        android:id="@+id/ll_action_bar"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/px_98"
-        android:gravity="center_vertical"
-        android:background="@color/white"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
-
-        <EditText
-            android:id="@+id/et_comment_content"
-            android:layout_width="@dimen/px_0"
-            android:layout_height="@dimen/px_58"
-            android:layout_weight="1"
-            android:layout_marginLeft="@dimen/px_30"
-            android:background="@drawable/selector_dialog_button"
-            android:textSize="@dimen/px_24"
-            android:padding="@dimen/px_8"
-            android:hint="骚年，评论一发吧！"/>
-
-        <ImageView
-            android:id="@+id/iv_comment"
-            android:layout_width="@dimen/px_38"
-            android:layout_height="@dimen/px_36"
-            android:layout_marginLeft="@dimen/px_30"
-            android:src="@mipmap/ic_show_comment"
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/iv_like"
-            android:layout_width="@dimen/px_38"
-            android:layout_height="@dimen/px_36"
-            android:layout_marginLeft="@dimen/px_30"
-            android:src="@mipmap/ic_show_praise"/>
-        <ImageView
-            android:id="@+id/iv_transmit"
-            android:layout_width="@dimen/px_38"
-            android:layout_height="@dimen/px_36"
-            android:layout_marginLeft="@dimen/px_30"
-            android:src="@mipmap/ic_show_transmit"/>
-        <ImageView
-            android:id="@+id/iv_gift"
-            android:layout_width="@dimen/px_38"
-            android:layout_height="@dimen/px_36"
-            android:layout_marginLeft="@dimen/px_30"
-            android:layout_marginRight="@dimen/px_30"
-            android:src="@mipmap/ic_liwu"/>
-
-    </LinearLayout>
-
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/ll_action_bar"
+        android:layout_above="@+id/ll_action_bar"
         android:fitsSystemWindows="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -164,5 +112,60 @@
             </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>
         </FrameLayout>
     </android.support.design.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_action_bar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_98"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <EditText
+            android:id="@+id/et_comment_content"
+            android:layout_width="@dimen/px_0"
+            android:layout_height="@dimen/px_58"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/px_30"
+            android:background="@drawable/selector_dialog_button"
+            android:textSize="@dimen/px_24"
+            android:padding="@dimen/px_8"
+            android:hint="骚年，评论一发吧！"/>
+
+        <ImageView
+            android:id="@+id/iv_comment"
+            android:layout_width="@dimen/px_38"
+            android:layout_height="@dimen/px_36"
+            android:layout_marginLeft="@dimen/px_30"
+            android:layout_marginRight="@dimen/px_30"
+            android:src="@mipmap/ic_show_comment"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/iv_like"
+            android:layout_width="@dimen/px_38"
+            android:layout_height="@dimen/px_36"
+            android:layout_marginLeft="@dimen/px_30"
+            android:src="@mipmap/ic_show_praise"/>
+        <ImageView
+            android:id="@+id/iv_transmit"
+            android:layout_width="@dimen/px_38"
+            android:layout_height="@dimen/px_36"
+            android:layout_marginLeft="@dimen/px_30"
+            android:src="@mipmap/ic_show_transmit"/>
+        <ImageView
+            android:id="@+id/iv_gift"
+            android:layout_width="@dimen/px_38"
+            android:layout_height="@dimen/px_36"
+            android:layout_marginLeft="@dimen/px_30"
+            android:layout_marginRight="@dimen/px_30"
+            android:src="@mipmap/ic_liwu"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

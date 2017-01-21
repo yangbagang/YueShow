@@ -64,9 +64,9 @@ class PhotoPostActivity : PostShowActivity() {
                 mImageAdapter.notifyDataSetChanged()
             }
             mThumbnail = intent.extras.getString("thumbnail")
-            if (!mThumbnail.startsWith("file:")) {
-                mThumbnail = String.format("file://%s", mThumbnail)
-            }
+//            if (!mThumbnail.startsWith("file:")) {
+//                mThumbnail = String.format("file://%s", mThumbnail)
+//            }
         }
 
         setCustomTitle(getString(R.string.post))
@@ -105,6 +105,7 @@ class PhotoPostActivity : PostShowActivity() {
     }
 
     private fun uploadThumbnail() {
+        println("开始上传缩略图")
         SendRequest.uploadFile(mContext!!, "show", File(mThumbnail), object : UploadListener(){
             override fun onResponse(call: Call?, response: Response?) {
                 response?.let { onSuccess(response) }
@@ -118,11 +119,14 @@ class PhotoPostActivity : PostShowActivity() {
                 val json = JSONObject(response.body().string())
                 thumbnailId = json.getString("fid")
                 //开始上传图片，图片上传完成后再建美秀。
+                println("开始上传缩略图成功")
+                println("thumbnailId=$thumbnailId")
                 uploadPics()
             }
 
             override fun onFailure(e: Exception) {
                 e.printStackTrace()
+                println("开始上传缩略图失败，mThumbnail=$mThumbnail")
                 workInLoopThread {
                     ToastUtil.show("上传图片失败")
                 }
@@ -136,6 +140,7 @@ class PhotoPostActivity : PostShowActivity() {
 
     private fun uploadPics() {
         val file = mPics[mIndex].substring(7)
+        println("开始上传第${mIndex}张图片")
         SendRequest.uploadFile(mContext!!, "show", File(file), object : UploadListener(){
             override fun onFailure(call: Call?, e: IOException?) {
                 e?.let { onFailure(e) }
@@ -148,6 +153,7 @@ class PhotoPostActivity : PostShowActivity() {
             override fun onSuccess(response: Response) {
                 val json = JSONObject(response.body().string())
                 val fileId = json.getString("fid")
+                println("上传第${mIndex}张图片成功")
                 mFiles.add(fileId)
                 mIndex++
                 if (mIndex == mPics.size) {
@@ -159,6 +165,7 @@ class PhotoPostActivity : PostShowActivity() {
 
             override fun onFailure(e: Exception) {
                 e.printStackTrace()
+                println("上传第${mIndex}张图片失败，$file")
                 workInLoopThread {
                     ToastUtil.show("上传图片失败")
                 }

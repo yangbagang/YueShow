@@ -73,7 +73,7 @@ class FriendShowFragment : BaseFragment() {
                 }.type)
             }
 
-            hasMore = list.size < pageSize
+            hasMore = list.size == pageSize
 
             when (msg.what) {
                 0 -> {

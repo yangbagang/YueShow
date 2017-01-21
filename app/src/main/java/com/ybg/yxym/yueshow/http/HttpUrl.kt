@@ -5,7 +5,7 @@ package com.ybg.yxym.yueshow.http
  */
 object HttpUrl {
 
-    private val debug = true
+    private val debug = false
 
     //开发服务器地址
     val API_HOST_DEBUG = "http://192.168.12.99:8080/ma"

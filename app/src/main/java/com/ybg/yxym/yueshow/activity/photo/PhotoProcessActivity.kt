@@ -187,8 +187,9 @@ class PhotoProcessActivity : BaseActivity() {
 
         fun saveThumbnail(bitmap: Bitmap) {
             val b = ThumbnailUtils.extractThumbnail(bitmap, 400, 300)
-            val mThumbnail = AppConstants.IMAGE_SAVE_PATH + "/" + System.currentTimeMillis() + ".png"
-            BitmapUtils.saveBitmap(b, mThumbnail)
+            mThumbnail = AppConstants.IMAGE_SAVE_PATH + "thumbnail/" + System.currentTimeMillis()+ ".png"
+            val saveFile = File(mThumbnail)
+            BitmapUtils.saveBitmap(b, saveFile)
         }
     }
 

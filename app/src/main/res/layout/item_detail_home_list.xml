@@ -24,7 +24,7 @@
             android:layout_marginTop="@dimen/px_20"
             android:textSize="@dimen/px_18"
             android:textColor="#aab1b8"
-            android:text="邓肯"/>
+            android:text=""/>
 
         <TextView
             android:id="@+id/tv_msg"
@@ -34,7 +34,7 @@
             android:textSize="@dimen/px_20"
             android:layout_marginBottom="@dimen/px_20"
             android:textColor="#4d5359"
-            android:text="邓肯"
+            android:text=""
             android:layout_alignLeft="@+id/tv_name"
             android:layout_alignStart="@+id/tv_name" />
 
@@ -55,7 +55,7 @@
             android:layout_marginBottom="@dimen/px_20"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/px_30"
-            android:text="1小时前"/>
+            android:text=""/>
 
     </RelativeLayout>
     <View

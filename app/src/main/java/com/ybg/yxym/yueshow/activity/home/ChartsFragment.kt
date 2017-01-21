@@ -40,7 +40,7 @@ class ChartsFragment : BaseFragment() {
         haoQiBang = mRootView!!.findViewById(R.id.rl_hq_bang) as RelativeLayout
 
         zhongHuaBang.setOnClickListener {
-            //do nothing
+            ShowBang.start(mContext!!, 0)
         }
         meiLiBang.setOnClickListener {
             ShowBang.start(mContext!!, 1)
@@ -52,7 +52,7 @@ class ChartsFragment : BaseFragment() {
             ShowBang.start(mContext!!, 3)
         }
         haoQiBang.setOnClickListener {
-            //do nothing
+            ShowBang.start(mContext!!, 4)
         }
     }
 
@@ -65,7 +65,49 @@ class ChartsFragment : BaseFragment() {
     }
 
     fun loadRuiMeiBang() {
+        SendRequest.getRuiMeiBang(mContext!!, "2016-01-01", "2999-12-31", 1, 3, object :
+                OkCallback<String>(OkStringParser()){
 
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    val list = mGson!!.fromJson<List<BangItem>>(jsonBean.data, object :
+                            TypeToken<List<BangItem>>(){}.type)
+                    if (list != null) {
+                        if (list.isNotEmpty()) {
+                            val first = list.first()
+                            ImageLoaderUtils.instance.loadBitmap(zh_1_pic, HttpUrl.getImageUrl
+                            (first.avatar))
+                        } else {
+                            fl_zh_1.visibility = View.GONE
+                        }
+                        if (list.size > 1) {
+                            val second = list.get(1)
+                            ImageLoaderUtils.instance.loadBitmap(zh_2_pic, HttpUrl.getImageUrl
+                            (second.avatar))
+                        } else {
+                            fl_zh_2.visibility = View.GONE
+                        }
+                        if (list.size > 2) {
+                            val third = list.get(2)
+                            ImageLoaderUtils.instance.loadBitmap(zh_3_pic, HttpUrl.getImageUrl
+                            (third.avatar))
+                        } else {
+                            fl_zh_3.visibility = View.GONE
+                        }
+                    }
+                } else {
+                    jsonBean?.let {
+                        ToastUtil.show(jsonBean.message)
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                ToastUtil.show("获取美力榜失败")
+            }
+
+        })
     }
 
     fun loadMeiLiBang() {
@@ -207,7 +249,49 @@ class ChartsFragment : BaseFragment() {
     }
 
     fun loadHaoQiBang() {
+        SendRequest.getRuiMeiBang(mContext!!, "2016-01-01", "2999-12-31", 1, 3, object :
+                OkCallback<String>(OkStringParser()){
 
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    val list = mGson!!.fromJson<List<BangItem>>(jsonBean.data, object :
+                            TypeToken<List<BangItem>>(){}.type)
+                    if (list != null) {
+                        if (list.isNotEmpty()) {
+                            val first = list.first()
+                            ImageLoaderUtils.instance.loadBitmap(hq_1_pic, HttpUrl.getImageUrl
+                            (first.avatar))
+                        } else {
+                            fl_hq_1.visibility = View.GONE
+                        }
+                        if (list.size > 1) {
+                            val second = list.get(1)
+                            ImageLoaderUtils.instance.loadBitmap(hq_2_pic, HttpUrl.getImageUrl
+                            (second.avatar))
+                        } else {
+                            fl_hq_2.visibility = View.GONE
+                        }
+                        if (list.size > 2) {
+                            val third = list.get(2)
+                            ImageLoaderUtils.instance.loadBitmap(hq_3_pic, HttpUrl.getImageUrl
+                            (third.avatar))
+                        } else {
+                            fl_hq_3.visibility = View.GONE
+                        }
+                    }
+                } else {
+                    jsonBean?.let {
+                        ToastUtil.show(jsonBean.message)
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                ToastUtil.show("获取美力榜失败")
+            }
+
+        })
     }
 
     companion object {

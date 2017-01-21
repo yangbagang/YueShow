@@ -130,7 +130,7 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
             }
 
             override fun onFailure(e: Throwable) {
-                ToastUtil.show("获取用户信息失败。")
+                //ToastUtil.show("获取用户信息失败。")
             }
         })
     }
