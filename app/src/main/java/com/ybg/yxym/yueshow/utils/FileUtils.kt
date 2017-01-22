@@ -478,7 +478,11 @@ object FileUtils {
         if (TextUtils.isEmpty(filePath)) {
             return filePath
         }
-        val extName = getFileExtension(filePath)
+        var extName = getFileExtension(filePath).toLowerCase()
+        val validExtName = arrayOf("jpg", "gif", "png", "jpeg", "bmp")
+        if (extName !in validExtName) {
+            extName = "png"
+        }
         return "${System.currentTimeMillis()}.$extName"
     }
 
