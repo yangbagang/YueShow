@@ -137,8 +137,7 @@ class VideoPostActivity : PostShowActivity(){
     }
 
     private fun createShow() {
-        val barId = "1"
-        SendRequest.createShow(mContext!!, mApplication.token, barId, picId, title, "2",
+        SendRequest.createShow(mContext!!, mApplication.token, picId, title, "2",
                 object : OkCallback<String>(OkStringParser()) {
 
                     override fun onSuccess(code: Int, response: String) {

@@ -181,8 +181,7 @@ class PhotoPostActivity : PostShowActivity() {
     }
 
     private fun createShow() {
-        val barId = "1"
-        SendRequest.createShow(mContext!!, mApplication.token, barId, thumbnailId, title, "1",
+        SendRequest.createShow(mContext!!, mApplication.token, thumbnailId, title, "1",
                 object : OkCallback<String>(OkStringParser()) {
 
             override fun onSuccess(code: Int, response: String) {

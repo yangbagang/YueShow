@@ -232,13 +232,13 @@ object SendRequest {
      * 2.2 新建美秀
      *
      * @param token
-     * @param barId
      * @param thumbnail
      * @param title
+     * @param type 1 图片 2 视频
      */
-    fun createShow(tag: Context, token: String, barId: String, thumbnail: String,
+    fun createShow(tag: Context, token: String, thumbnail: String,
                    title: String, type: String, callback: OkCallback<*>) {
-        val params = mapOf<String, String>("token" to token, "barId" to barId, "thumbnail" to thumbnail,
+        val params = mapOf<String, String>("token" to token, "thumbnail" to thumbnail,
                 "title" to title, "type" to type)
         OkHttpProxy.post(HttpUrl.createLiveUrl, tag, params, callback)
     }
