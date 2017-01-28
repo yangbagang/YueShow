@@ -138,9 +138,6 @@
         <activity
             android:name=".activity.show.VideoPostActivity"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".activity.show.LivingPostActivity"
-            android:screenOrientation="portrait"/>
         <!-- 悦美榜 -->
         <activity
             android:name=".activity.bang.ShowBang"
@@ -157,6 +154,12 @@
         </activity>
         <activity android:name=".activity.live.ShowLiveActivity">
         </activity>
+
+        <receiver android:name=".receiver.PushMsgReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="com.igexin.sdk.action.${GETUI_APP_ID}" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

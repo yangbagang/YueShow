@@ -52,6 +52,7 @@ object HttpUrl {
     private val CREATE_LIVE2 = "/ruiShow/createLive"
     private val CLOSE_LIVE = "/ruiShow/closeLive"
     private val SHOW_LIVE = "/ruiShow/showLive"
+    private val LEAVE_LIVE = "/ruiShow/leaveLive"
     private val APPEND_FILES = "/showFile/addFiles"
     private val APPEND_EVENTS = "/ruiEvent/appendEvent"
     private val LIVE_DETAIL = "/ruiShow/detail"
@@ -61,6 +62,8 @@ object HttpUrl {
     private val ZAN_LIVE = "/ruiShow/zan"
     /*分享*/
     private val SHARE_LIVE = "/ruiShow/share"
+    /*直播中发送消息*/
+    private val SEND_LIVE_MSG = "/ruiShow/sendLiveMsg"
     /*美秀板块*/
     private val CATEGORY_LIST = "/ruiBar/list"
     /*活动主题*/
@@ -193,6 +196,9 @@ object HttpUrl {
     val showLiveUrl: String
         get() = ROOT_URL + SHOW_LIVE
 
+    val leaveLiveUrl: String
+        get() = ROOT_URL + LEAVE_LIVE
+
     val appendFileUrl: String
         get() = ROOT_URL + APPEND_FILES
 
@@ -210,6 +216,9 @@ object HttpUrl {
 
     val pingLiveUrl: String
         get() = ROOT_URL + PING_LIVE
+
+    val sendLiveMsgUrl: String
+        get() = ROOT_URL + SEND_LIVE_MSG
 
     fun getImageUrl(fid: String): String {
         if (fid.startsWith("http:", true) || fid.startsWith("https:", true)) {

@@ -9,9 +9,13 @@ import com.pili.pldroid.player.widget.PLVideoView
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
+import com.ybg.yxym.yueshow.http.SendRequest
+import com.ybg.yxym.yueshow.http.callback.OkCallback
+import com.ybg.yxym.yueshow.http.parser.OkStringParser
+import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.MediaController
 
-class ShowLiveActivity : BaseActivity() {
+class ShowLiveActivity : LivingBaseActivity() {
 
     private var show: YueShow? = null
     private var url: String? = null
@@ -25,6 +29,7 @@ class ShowLiveActivity : BaseActivity() {
     }
 
     override fun setUpView() {
+        instance = this
         mVideoView = findViewById(R.id.PLVideoView) as PLVideoView
         mCoverView = findViewById(R.id.CoverView) as ImageView
 
@@ -39,6 +44,8 @@ class ShowLiveActivity : BaseActivity() {
         mVideoView.setMediaController(mMediaController)
         mVideoView.displayAspectRatio = PLVideoView.ASPECT_RATIO_FIT_PARENT
         mVideoView.setVideoPath(url)
+
+        initLiveBase()
     }
 
     override fun init() {
@@ -61,6 +68,22 @@ class ShowLiveActivity : BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mVideoView.stopPlayback()
+
+        leaveLiveShow()
+        instance = null
+    }
+
+    override fun sendLiveMsg(msg: String, flag: Int, call: () -> Unit) {
+        SendRequest.sendLiveMsg(mContext!!, mApplication.token, "${show?.id}", "$flag", msg,
+                object : OkCallback<String>(OkStringParser()){
+                    override fun onSuccess(code: Int, response: String) {
+                        call()
+                    }
+
+                    override fun onFailure(e: Throwable) {
+                        ToastUtil.show("发送失败，请稍候再试。")
+                    }
+                })
     }
 
     private fun setOptions(codecType: Int) {
@@ -85,12 +108,31 @@ class ShowLiveActivity : BaseActivity() {
         mVideoView.setAVOptions(options)
     }
 
+    private fun leaveLiveShow() {
+        if (show == null) {
+            return
+        }
+        SendRequest.leaveLive(mContext!!, mApplication.token, "${show!!.id}", object : OkCallback<String>(OkStringParser()){
+            override fun onSuccess(code: Int, response: String) {
+                //nothing
+            }
+
+            override fun onFailure(e: Throwable) {
+                //nothing
+            }
+        })
+    }
+
     companion object {
+
+        var instance: ShowLiveActivity? = null
+
         fun start(context: Context, show: YueShow, url: String) {
             val starter = Intent(context, ShowLiveActivity::class.java)
             starter.putExtra("show", show)
             starter.putExtra("url", url)
             context.startActivity(starter)
         }
+
     }
 }

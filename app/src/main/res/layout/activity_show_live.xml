@@ -7,12 +7,14 @@
     android:layout_height="match_parent"
     tools:context="com.ybg.yxym.yueshow.activity.live.ShowLiveActivity">
 
+    <!--视频流-->
     <com.pili.pldroid.player.widget.PLVideoView
         android:id="@+id/PLVideoView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"/>
 
+    <!--视频流封面-->
     <ImageView
         android:id="@+id/CoverView"
         android:layout_width="match_parent"
@@ -21,6 +23,7 @@
         android:scaleType="fitXY"
         android:src="@mipmap/ic_start_live_bg" />
 
+    <!--视频流加载提示-->
     <LinearLayout
         android:id="@+id/LoadingView"
         android:layout_width="match_parent"
@@ -43,4 +46,94 @@
             android:textSize="20sp" />
     </LinearLayout>
 
+    <!--消息窗口-->
+    <ListView
+        android:id="@+id/chatList"
+        android:layout_width="@dimen/px_502"
+        android:layout_height="@dimen/px_500"
+        android:layout_marginLeft="@dimen/px_52"
+        android:layout_marginBottom="@dimen/px_48"
+        android:stackFromBottom="true"
+        android:layout_above="@+id/userRecycleList">
+
+    </ListView>
+
+    <!--观看用户-->
+    <android.support.v7.app.AlertController.RecycleListView
+        android:id="@+id/userRecycleList"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_86"
+        android:layout_above="@+id/liveBottomBar">
+
+    </android.support.v7.app.AlertController.RecycleListView>
+
+    <FrameLayout
+        android:id="@+id/liveBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
+        <!--底部工具栏-->
+        <RelativeLayout
+            android:id="@+id/liveToolBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px_44"
+            android:layout_marginRight="@dimen/px_44">
+            <ImageView
+                android:id="@+id/chatImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:src="@mipmap/ic_show_comment"/>
+
+            <ImageView
+                android:id="@+id/shareImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_show_transmit"
+                android:layout_toLeftOf="@+id/giftImage"/>
+
+            <ImageView
+                android:id="@+id/giftImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_liwu"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+
+        <!--底部消息控制窗口-->
+        <LinearLayout
+            android:id="@+id/liveMsgTool"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:visibility="gone">
+            <EditText
+                android:id="@+id/msgText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/px_44"
+                android:hint="说点啥"/>
+            <Button
+                android:id="@+id/sendMsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/px_44"
+                android:layout_marginRight="@dimen/px_44"
+                android:layout_marginTop="@dimen/px_22"
+                android:layout_marginBottom="@dimen/px_22"
+                android:background="@drawable/msg_send"
+                android:text="发送"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <com.ybg.yxym.yueshow.view.live.HeartLayout
+        android:layout_width="84dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"/>
 </RelativeLayout>

@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_living.*
 import org.json.JSONException
 import org.json.JSONObject
 
-class LivingActivity : BaseActivity(), StreamingStateChangedListener {
+class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
 
     private var show: YueShow? = null
     private var url: String? = null
@@ -39,7 +39,10 @@ class LivingActivity : BaseActivity(), StreamingStateChangedListener {
     }
 
     override fun setUpView() {
+        instance = this
         setCustomTitle("正在直播")
+
+        initLiveBase()
     }
 
     override fun onResume() {
@@ -60,11 +63,26 @@ class LivingActivity : BaseActivity(), StreamingStateChangedListener {
             timeHandler = null
         }
         time = 0
+        instance = null
+    }
+
+    override fun sendLiveMsg(msg: String, flag: Int, call: () -> Unit) {
+        SendRequest.sendLiveMsg(mContext!!, mApplication.token, "${show?.id}", "$flag", msg,
+                object : OkCallback<String>(OkStringParser()){
+                    override fun onSuccess(code: Int, response: String) {
+                        call()
+                    }
+
+                    override fun onFailure(e: Throwable) {
+                        ToastUtil.show("发送失败，请稍候再试。")
+                    }
+                })
     }
 
     override fun onStateChanged(streamingState: StreamingState, extra: Any) {
         when (streamingState) {
             StreamingState.PREPARING -> {
+
             }
             StreamingState.READY -> {
                 if (time == 0) {
@@ -77,16 +95,25 @@ class LivingActivity : BaseActivity(), StreamingStateChangedListener {
                 }
             }
             StreamingState.CONNECTING -> {
+
             }
             StreamingState.STREAMING -> {
+
             }
             StreamingState.SHUTDOWN -> {
+
             }
             StreamingState.IOERROR -> {
+
             }
             StreamingState.OPEN_CAMERA_FAIL -> {
+
             }
             StreamingState.DISCONNECTED -> {
+
+            }
+            else -> {
+
             }
         }
     }
@@ -200,12 +227,16 @@ class LivingActivity : BaseActivity(), StreamingStateChangedListener {
     }
 
     companion object {
+
+        var instance: LivingActivity? = null
+
         fun start(context: Context, show: YueShow, url: String) {
             val starter = Intent(context, LivingActivity::class.java)
             starter.putExtra("show", show)
             starter.putExtra("url", url)
             context.startActivity(starter)
         }
+
     }
 
 }

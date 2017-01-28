@@ -27,9 +27,16 @@ android {
         applicationId "com.ybg.yxym.yueshow"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 3
-        versionName "0.3"
+        versionCode 4
+        versionName "0.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //个推推送配置
+        manifestPlaceholders = [
+                GETUI_APP_ID    : "4JCYuVTzz37viY08wQyu81",
+                GETUI_APP_KEY   : "dYYkFFqDmc9cAStDjaopc",
+                GETUI_APP_SECRET: "FdN8HjlrvH8oyCfIfODfp8",
+                PACKAGE_NAME    : applicationId
+        ]
     }
     buildTypes {
         release {
@@ -57,18 +64,12 @@ dependencies {
     compile 'com.github.danylovolokh:video-player-manager:0.2.0'
     compile 'com.github.danylovolokh:list-visibility-utils:0.2.0'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
-//    compile files('libs/SocialSDK_QQZone_3.jar')
-//    compile files('libs/SocialSDK_umengqq.jar')
-//    compile files('libs/SocialSDK_umengsina.jar')
-//    compile files('libs/SocialSDK_umengwx.jar')
-//    //compile files('libs/SocialSDK_WeiXin_2.jar')
-//    compile files('libs/umeng_social_api.jar')
-//    compile files('libs/umeng_social_net.jar')
-//    compile files('libs/umeng_social_view.jar')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'com.bartoszlipinski:recyclerviewheader2:2.0.1'
     compile 'com.qiniu:happy-dns:0.2.7'
     compile 'com.qiniu.pili:pili-android-qos:0.8.18'
+    compile 'com.getui:sdk:2.7.0.0'
+    compile 'com.getui:ext:2.0.3'
 }
 repositories {
     mavenCentral()

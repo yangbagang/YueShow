@@ -3,7 +3,7 @@
     android:id="@+id/rl_start_live"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/ic_start_live_bg">
+    android:background="@mipmap/ic_end_live_bg">
 
     <RelativeLayout
         android:id="@+id/rc_above"

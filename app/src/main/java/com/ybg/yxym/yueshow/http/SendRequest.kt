@@ -468,4 +468,19 @@ object SendRequest {
         OkHttpProxy.post(HttpUrl.showLiveUrl, tag, params, callback)
     }
 
+    /**
+     * 3.4 离开直播
+     */
+    fun leaveLive(tag: Context, token: String, showId: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "showId" to showId)
+        OkHttpProxy.post(HttpUrl.leaveLiveUrl, tag, params, callback)
+    }
+
+    /**
+     * 3.5 发送直播消息
+     */
+    fun sendLiveMsg(tag: Context, token: String, showId: String, flag: String, content: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "showId" to showId, "flag" to flag, "content" to content)
+        OkHttpProxy.post(HttpUrl.sendLiveMsgUrl, tag, params, callback)
+    }
 }
