@@ -69,9 +69,11 @@ class BannerFrame @JvmOverloads constructor(context: Context, attrs: AttributeSe
                     ImageLoadingListener{
                 override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
                     val p = imageView.layoutParams
-                    p.width = loadedImage?.width ?: w
-                    p.height = loadedImage?.height ?: (w*0.75).toInt()
-                    imageView.layoutParams = p
+                    if (p != null) {
+                        p.width = loadedImage?.width ?: w
+                        p.height = loadedImage?.height ?: (w * 0.75).toInt()
+                        imageView.layoutParams = p
+                    }
                 }
 
                 override fun onLoadingCancelled(imageUri: String?, view: View?) {

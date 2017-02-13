@@ -32,9 +32,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //个推推送配置
         manifestPlaceholders = [
-                GETUI_APP_ID    : "4JCYuVTzz37viY08wQyu81",
-                GETUI_APP_KEY   : "dYYkFFqDmc9cAStDjaopc",
-                GETUI_APP_SECRET: "FdN8HjlrvH8oyCfIfODfp8",
+                GETUI_APP_ID    : "JC6lFCLrQu8LQypvoFjDk8",
+                GETUI_APP_KEY   : "GbUEoxOnCI7cdeLa3jxjI",
+                GETUI_APP_SECRET: "xiyCyCdQ8s5eYyzyS78Dc9",
                 PACKAGE_NAME    : applicationId
         ]
     }
