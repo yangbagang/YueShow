@@ -43,7 +43,6 @@ class ShowLiveActivity : LivingBaseActivity() {
         val mMediaController = MediaController(this)
         mVideoView.setMediaController(mMediaController)
         mVideoView.displayAspectRatio = PLVideoView.ASPECT_RATIO_FIT_PARENT
-        mVideoView.setVideoPath(url)
 
         initLiveBase()
     }
@@ -52,6 +51,8 @@ class ShowLiveActivity : LivingBaseActivity() {
         if (intent != null) {
             show = intent.extras.getSerializable("show") as YueShow
             url = intent.extras.getString("url")
+            mVideoView.setVideoPath(url)
+            mVideoView.start()
         }
     }
 
