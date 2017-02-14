@@ -15,13 +15,11 @@ import com.qiniu.pili.droid.streaming.widget.AspectFrameLayout
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yueshow.R
-import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_living.*
-import org.json.JSONException
 import org.json.JSONObject
 
 class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
@@ -58,6 +56,7 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        stopLiveStream()
         if (timeHandler != null) {
             timeHandler?.removeCallbacks(null)
             timeHandler = null
@@ -68,7 +67,7 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
 
     override fun sendLiveMsg(msg: String, flag: Int, call: () -> Unit) {
         SendRequest.sendLiveMsg(mContext!!, mApplication.token, "${show?.id}", "$flag", msg,
-                object : OkCallback<String>(OkStringParser()){
+                object : OkCallback<String>(OkStringParser()) {
                     override fun onSuccess(code: Int, response: String) {
                         call()
                     }
@@ -79,7 +78,7 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
                 })
     }
 
-    override fun onStateChanged(streamingState: StreamingState, extra: Any) {
+    override fun onStateChanged(streamingState: StreamingState, extra: Any?) {
         when (streamingState) {
             StreamingState.PREPARING -> {
 
@@ -87,11 +86,7 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
             StreamingState.READY -> {
                 if (time == 0) {
                     // start streaming when READY
-                    Thread(Runnable {
-                        if (mMediaStreamingManager != null) {
-                            mMediaStreamingManager?.startStreaming()
-                        }
-                    }).start()
+                    startLiveStream()
                 }
             }
             StreamingState.CONNECTING -> {
@@ -122,6 +117,7 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
         if (intent != null) {
             show = intent.extras.getSerializable("show") as YueShow
             url = intent.extras.getString("url")
+            //url=rtmp://pili-publish.5yxym.com/yuemei2017/live15?e=1486971173801&token=Qk5HOCRkT3g6oSUkycE18-DpuNR1DkuZ3GfArQRb:jXHZ8J08lVjGz2w9pxn4xOhf04U=
         }
         val afl = findViewById(R.id.cameraPreview_afl) as AspectFrameLayout
 
@@ -130,17 +126,15 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
         val glSurfaceView = findViewById(R.id.cameraPreview_surfaceView) as GLSurfaceView
 
         try {
-            val mJSONObject = JSONObject(url)
-            val stream = StreamingProfile.Stream(mJSONObject)
             mProfile = StreamingProfile()
             mProfile!!.setVideoQuality(StreamingProfile.VIDEO_QUALITY_HIGH1)
                     .setAudioQuality(StreamingProfile.AUDIO_QUALITY_MEDIUM2)
                     .setEncodingSizeLevel(StreamingProfile.VIDEO_ENCODING_HEIGHT_480)
-                    .setEncoderRCMode(StreamingProfile.EncoderRCModes.QUALITY_PRIORITY).stream = stream
-            // You can invoke this before startStreaming, but not in initialization phase.
+                    .setEncoderRCMode(StreamingProfile.EncoderRCModes.QUALITY_PRIORITY)
+                    .publishUrl = url
 
             val setting = CameraStreamingSetting()
-            setting.setCameraId(Camera.CameraInfo.CAMERA_FACING_BACK)
+            setting.setCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT)
                     .setContinuousFocusModeEnabled(true)
                     .setCameraPrvSizeLevel(CameraStreamingSetting.PREVIEW_SIZE_LEVEL.MEDIUM)
                     .setCameraPrvSizeRatio(CameraStreamingSetting.PREVIEW_SIZE_RATIO.RATIO_16_9)
@@ -150,7 +144,7 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
 
             mMediaStreamingManager?.prepare(setting, mProfile)
             mMediaStreamingManager?.setStreamingStateListener(this@LivingActivity)
-        } catch (e: JSONException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         timeHandler?.postDelayed(runnable, 1000)
@@ -172,16 +166,42 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun startLiveStream() {
+        try {
+            Thread(Runnable {
+                if (mMediaStreamingManager != null) {
+                    mMediaStreamingManager?.startStreaming()
+                }
+            }).start()
+        } catch (e: Exception) {
+            println(e.message)
+            e.printStackTrace()
+        }
+    }
+
+    private fun stopLiveStream() {
+         try {
+             Thread(Runnable {
+                 if (mMediaStreamingManager != null) {
+                     mMediaStreamingManager?.stopStreaming()
+                 }
+             }).start()
+         } catch (e: Exception) {
+             println(e.message)
+             e.printStackTrace()
+         }
+    }
+
     private fun closeLive() {
         SendRequest.closeLive(mContext!!, mApplication.token, "${show?.id}", object :
-                OkCallback<String>(OkStringParser()){
+                OkCallback<String>(OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
                     val json = JSONObject(jsonBean.data)
                     val num = json.getInt("num")
                     val show = mGson!!.fromJson<YueShow>(json.getString("show"), object
-                        : TypeToken<YueShow>(){}.type)
+                        : TypeToken<YueShow>() {}.type)
                     EndingLiveActivity.start(mContext!!, show, num)
                     finish()
                 } else {
@@ -204,12 +224,9 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
             if (time == 0) {
                 // 关闭倒计时
                 timeCover.visibility = View.GONE
+                liveBottomBar.visibility = View.VISIBLE
                 // start streaming when READY
-                Thread(Runnable {
-                    if (mMediaStreamingManager != null) {
-                        mMediaStreamingManager?.startStreaming()
-                    }
-                }).start()
+                startLiveStream()
             } else {
                 timeHandler?.sendEmptyMessage(158)
             }

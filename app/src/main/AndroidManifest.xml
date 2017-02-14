@@ -146,14 +146,15 @@
         <activity
             android:name=".activity.show.ShowDetailActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.video.VideoProcessActivity">
-        </activity>
-        <activity android:name=".activity.video.VideoShotActivity">
-        </activity>
-        <activity android:name=".activity.live.LivingActivity">
-        </activity>
-        <activity android:name=".activity.live.ShowLiveActivity">
-        </activity>
+        <activity android:name=".activity.video.VideoProcessActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.video.VideoShotActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.live.LivingActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.live.ShowLiveActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.live.StartLiveActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.live.EndingLiveActivity"
+                  android:screenOrientation="portrait"/>
 
         <receiver android:name=".receiver.PushMsgReceiver" android:exported="false">
             <intent-filter>

@@ -59,13 +59,13 @@
     </ListView>
 
     <!--观看用户-->
-    <android.support.v7.app.AlertController.RecycleListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/userRecycleList"
         android:layout_width="match_parent"
         android:layout_height="@dimen/px_86"
         android:layout_above="@+id/liveBottomBar">
 
-    </android.support.v7.app.AlertController.RecycleListView>
+    </android.support.v7.widget.RecyclerView>
 
     <FrameLayout
         android:id="@+id/liveBottomBar"

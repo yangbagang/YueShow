@@ -13,7 +13,6 @@ import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.adapter.LiveMsgAdapter
 import com.ybg.yxym.yueshow.adapter.UserAvatarAdapter
 import com.ybg.yxym.yueshow.decoration.SpaceItemDecoration
-import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import java.util.*
 
