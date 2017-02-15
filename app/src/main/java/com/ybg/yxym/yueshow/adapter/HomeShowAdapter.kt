@@ -305,7 +305,9 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
                     val url = json.getString("url")
                     val yueShow = mGson.fromJson<YueShow>(json.getString("show"), object
                         : TypeToken<YueShow>() {}.type)
-                    ShowLiveActivity.start(mContext, yueShow, url)
+                    val userList = mGson.fromJson<List<UserBase>>(json.getString("userList"),
+                            object : TypeToken<List<UserBase>>(){}.type)
+                    ShowLiveActivity.start(mContext, yueShow, userList, url)
                 } else {
                     jsonBean?.let {
                         ToastUtil.show(jsonBean.message)

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import com.pili.pldroid.player.AVOptions
 import com.pili.pldroid.player.widget.PLVideoView
+import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
@@ -14,6 +15,7 @@ import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.MediaController
+import java.io.Serializable
 
 class ShowLiveActivity : LivingBaseActivity() {
 
@@ -51,8 +53,12 @@ class ShowLiveActivity : LivingBaseActivity() {
         if (intent != null) {
             show = intent.extras.getSerializable("show") as YueShow
             url = intent.extras.getString("url")
+            val users = intent.extras.getSerializable("userList") as List<UserBase>
             mVideoView.setVideoPath(url)
             mVideoView.start()
+            userList.addAll(users)
+            userAvatarAdapter.setDataList(userList)
+            userAvatarAdapter.notifyDataSetChanged()
         }
     }
 
@@ -128,10 +134,11 @@ class ShowLiveActivity : LivingBaseActivity() {
 
         var instance: ShowLiveActivity? = null
 
-        fun start(context: Context, show: YueShow, url: String) {
+        fun start(context: Context, show: YueShow, userList: List<UserBase>, url: String) {
             val starter = Intent(context, ShowLiveActivity::class.java)
             starter.putExtra("show", show)
             starter.putExtra("url", url)
+            starter.putExtra("userList", userList as Serializable)
             context.startActivity(starter)
         }
 

@@ -104,7 +104,7 @@ class LoginActivity : BaseActivity() {
                     //登录成功
                     mApplication.token = resultBean.data
                     MainActivity.instance?.loadUserInfo()
-
+                    MainActivity.instance?.updateClientId()
                     finish()
                 } else {
                     //登录失败

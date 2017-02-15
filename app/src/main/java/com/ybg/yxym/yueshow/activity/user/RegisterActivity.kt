@@ -136,6 +136,7 @@ class RegisterActivity : BaseActivity() {
                     mApplication.token = resultBean.data
                     println("token=${mApplication.token}")
                     MainActivity.instance?.loadUserInfo()
+                    MainActivity.instance?.updateClientId()
                     CompleteDataActivity.start(mContext!!)
                     finish()
                 } else {

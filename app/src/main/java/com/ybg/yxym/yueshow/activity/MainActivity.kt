@@ -20,6 +20,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.gson.GsonBuilder
+import com.igexin.sdk.PushManager
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yb.utils.LogUtil
@@ -157,6 +158,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (showApplication.hasLogin()) {
             loadUserInfo()
+            updateClientId()
         }
         headView.setOnClickListener {
             //首先关闭左侧菜单
@@ -270,6 +272,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             override fun onFailure(e: Throwable) {
 
+            }
+        })
+    }
+
+    fun updateClientId() {
+        val userToken = showApplication.token
+        val appToken = PushManager.getInstance().getClientid(this@MainActivity)
+        SendRequest.updateAppToken(this@MainActivity, userToken, appToken, object :
+                OkCallback<String>(OkStringParser()){
+            override fun onSuccess(code: Int, response: String) {
+                //nothing
+            }
+
+            override fun onFailure(e: Throwable) {
+                //nothing
             }
         })
     }
