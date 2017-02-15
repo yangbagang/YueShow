@@ -279,6 +279,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun updateClientId() {
         val userToken = showApplication.token
         val appToken = PushManager.getInstance().getClientid(this@MainActivity)
+        if (appToken == null) {
+            println("appToken is null")
+            return
+        }
         SendRequest.updateAppToken(this@MainActivity, userToken, appToken, object :
                 OkCallback<String>(OkStringParser()){
             override fun onSuccess(code: Int, response: String) {

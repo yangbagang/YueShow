@@ -178,7 +178,7 @@ object SendRequest {
 
     fun updateAppToken(tag: Context, userToken: String, appToken: String, callback: OkCallback<*>) {
         val params = mapOf<String, String>("userToken" to userToken, "appToken" to appToken)
-        OkHttpProxy.post(HttpUrl.updateUserLabelUrl, tag, params, callback)
+        OkHttpProxy.post(HttpUrl.updateClientIdUrl, tag, params, callback)
     }
 
     /**

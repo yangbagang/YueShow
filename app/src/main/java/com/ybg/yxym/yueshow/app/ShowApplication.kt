@@ -1,6 +1,7 @@
 package com.ybg.yxym.yueshow.app
 
 import android.content.Context
+import com.igexin.sdk.PushManager
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
@@ -29,6 +30,8 @@ class ShowApplication : YbgAPP() {
         //初始化picasso
         val picasso = Picasso.Builder(applicationContext).downloader(OkHttp3Downloader(File(AppConstants.IMAGE_CACHE_PATH))).build()
         Picasso.setSingletonInstance(picasso)
+
+        PushManager.getInstance().initialize(applicationContext)
     }
 
     fun initImageLoader(context: Context) {

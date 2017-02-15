@@ -113,15 +113,26 @@ abstract class LivingBaseActivity : BaseActivity() {
     }
 
     fun userEnter(userBase: UserBase) {
+        removeUser(userBase)
         userList.add(userBase)
         userAvatarAdapter.setDataList(userList)
         userAvatarAdapter.notifyDataSetChanged()
     }
 
     fun userLeave(userBase: UserBase) {
-        userList.remove(userBase)
+        removeUser(userBase)
         userAvatarAdapter.setDataList(userList)
         userAvatarAdapter.notifyDataSetChanged()
+    }
+
+    private fun removeUser(userBase: UserBase) {
+        val iterator = userList.iterator()
+        while (iterator.hasNext()) {
+            val user = iterator.next()
+            if (user.id == userBase.id) {
+                iterator.remove()
+            }
+        }
     }
 
     abstract fun sendLiveMsg(msg: String, flag: Int, call: () -> Unit)

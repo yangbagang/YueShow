@@ -40,6 +40,7 @@ object HttpUrl {
     private val UPDATE_USER_LABEL = "/userLabel/update"
     //第三方用户登录
     private val UM_USER_LOGIN = "/userBase/umLogin"
+    private val UPDATE_CLIENT_ID = "/userBase/updateAppToken"
     /*美秀列表*/
     private val LIVE_LIST = "/ruiShow/list"
     private val AUTHOR_INFO = "/userBase/getAuthorInfoByShowId"
@@ -121,6 +122,9 @@ object HttpUrl {
 
     val umLoginUrl: String
         get() = ROOT_URL + UM_USER_LOGIN
+
+    val updateClientIdUrl: String
+        get() = ROOT_URL + UPDATE_CLIENT_ID
 
     val liveListUrl: String
         get() = ROOT_URL + LIVE_LIST

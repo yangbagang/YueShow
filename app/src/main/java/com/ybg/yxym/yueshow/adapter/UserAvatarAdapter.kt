@@ -18,7 +18,7 @@ class UserAvatarAdapter : RecyclerBaseAdapter<UserBase> {
     }
 
     override val rootResource: Int
-        get() = R.layout.item_bottom_filter
+        get() = R.layout.list_item_user_avatar
 
     override fun getView(viewHolder: RecyclerBaseAdapter<UserBase>.BaseViewHolder, item: UserBase?, position: Int) {
         userAvatar = viewHolder.getView(R.id.userAvatar)
