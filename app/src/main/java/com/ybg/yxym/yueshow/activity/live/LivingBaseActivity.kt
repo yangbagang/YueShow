@@ -1,25 +1,32 @@
 package com.ybg.yxym.yueshow.activity.live
 
+import android.app.Activity
+import android.os.Bundle
+import android.os.Handler
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.View
 import android.widget.*
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.ybg.yxym.yb.bean.LiveMsg
 import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.adapter.LiveMsgAdapter
 import com.ybg.yxym.yueshow.adapter.UserAvatarAdapter
+import com.ybg.yxym.yueshow.app.ShowApplication
 import com.ybg.yxym.yueshow.decoration.SpaceItemDecoration
 import com.ybg.yxym.yueshow.utils.ToastUtil
+import org.greenrobot.eventbus.EventBus
 import java.util.*
 
 /**
  * Created by yangbagang on 2017/1/26.
  */
-abstract class LivingBaseActivity : BaseActivity() {
+abstract class LivingBaseActivity : Activity() {
 
     lateinit var chatList: ListView
     var msgList: MutableList<LiveMsg> = ArrayList<LiveMsg>()
@@ -36,6 +43,29 @@ abstract class LivingBaseActivity : BaseActivity() {
     lateinit var liveMsgTool: LinearLayout
     lateinit var msgText: EditText
     lateinit var sendMsg: Button
+
+    protected var mApplication: ShowApplication = ShowApplication.instance!!
+    protected var mContext: Activity? = null
+    protected var mGson: Gson? = null
+
+    protected abstract fun setContentViewId(): Int
+
+    protected abstract fun setUpView()
+
+    protected abstract fun init()
+
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(setContentViewId())
+        mContext = this
+        mGson = GsonBuilder().serializeNulls().create()
+        setContent()
+    }
+
+    private fun setContent() {
+        setUpView()
+        init()
+    }
 
     fun initLiveBase() {
         initMsgList()

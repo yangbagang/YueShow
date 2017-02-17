@@ -38,7 +38,7 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
 
     override fun setUpView() {
         instance = this
-        setCustomTitle("正在直播")
+        //setCustomTitle("正在直播")
 
         initLiveBase()
     }
@@ -148,23 +148,27 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
             e.printStackTrace()
         }
         timeHandler?.postDelayed(runnable, 1000)
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.complete, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-
-        if (id == R.id.action_finish) {
+        finishLiveBtn.setOnClickListener {
             closeLive()
-            return true
         }
-
-        return super.onOptionsItemSelected(item)
     }
+
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        menuInflater.inflate(R.menu.complete, menu)
+//        return true
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        val id = item.itemId
+//
+//        if (id == R.id.action_finish) {
+//            closeLive()
+//            return true
+//        }
+//
+//        return super.onOptionsItemSelected(item)
+//    }
 
     private fun startLiveStream() {
         try {

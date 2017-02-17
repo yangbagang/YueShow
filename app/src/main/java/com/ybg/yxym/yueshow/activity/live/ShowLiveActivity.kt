@@ -32,7 +32,7 @@ class ShowLiveActivity : LivingBaseActivity() {
 
     override fun setUpView() {
         instance = this
-        setCustomTitle("观看直播")
+        //setCustomTitle("观看直播")
 
         mVideoView = findViewById(R.id.PLVideoView) as PLVideoView
         mCoverView = findViewById(R.id.CoverView) as ImageView
