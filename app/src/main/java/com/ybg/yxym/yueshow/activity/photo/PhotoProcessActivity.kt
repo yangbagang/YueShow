@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.ThumbnailUtils
 import android.os.AsyncTask
+import android.os.SystemClock
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
@@ -24,12 +25,12 @@ import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.constant.IntentExtra
 import com.ybg.yxym.yueshow.gpuimage.GPUImage
 import com.ybg.yxym.yueshow.gpuimage.util.GPUImageFilterTools
+import com.ybg.yxym.yueshow.utils.AsyncTaskUtil
 import com.ybg.yxym.yueshow.utils.BitmapUtils
 import com.ybg.yxym.yueshow.utils.FileUtils
 import kotlinx.android.synthetic.main.activity_photo_process.*
 import java.io.File
 import java.io.FileInputStream
-import java.io.InputStream
 import java.util.*
 
 /**
@@ -152,7 +153,9 @@ class PhotoProcessActivity : BaseActivity() {
         override fun doInBackground(vararg p0: Unit?) {
             for ((index, bitmap) in mBitmapList.withIndex()) {
                 if (bitmap != null) {
-                    savePic(bitmap, mPics[index])
+                    savePic(bitmap, mPics[index], {
+                        println("${mPics[index]} has been saved.")
+                    })
                     if (index == 0) {
                         saveThumbnail(bitmap)
                     }
@@ -164,25 +167,32 @@ class PhotoProcessActivity : BaseActivity() {
                     }
                     val inputStream = FileInputStream(sourceFile)
                     val b = BitmapFactory.decodeStream(inputStream)
-                    savePic(b, mPics[index])
+                    savePic(b, mPics[index], {
+                        println("${mPics[index]} has been saved.")
+                    })
                     if (index == 0) {
                         saveThumbnail(b)
                     }
                 }
             }
+            while (savedFiles.size < mBitmapList.size) {
+                SystemClock.sleep(100)
+            }
         }
 
-        fun savePic(bitmap: Bitmap, sourceFile: String) {
-            val file = AppConstants.IMAGE_SAVE_PATH + "/" + System.currentTimeMillis() +
-                    "/" + FileUtils.getFileName(sourceFile)
-            savedFiles.add(file)
-            val saveFile = File(file)
-            //缩放尺寸
-            var b = BitmapUtils.resizeImage(bitmap, 1024, 768)
-            //压缩大小
-            b = BitmapUtils.compressImage(b, 500)
-            //保存
-            BitmapUtils.saveBitmap(b, saveFile)
+        fun savePic(bitmap: Bitmap, sourceFile: String, call: ()-> Unit) {
+            AsyncTaskUtil.startTask({
+                val file = AppConstants.IMAGE_SAVE_PATH + "/" + System.currentTimeMillis() +
+                        "/" + FileUtils.getFileName(sourceFile)
+                savedFiles.add(file)
+                val saveFile = File(file)
+                //缩放尺寸
+                val b = BitmapUtils.resizeImage(bitmap, 1024, 768)
+                //压缩大小
+                //b = BitmapUtils.compressImage(b, 500)
+                //保存
+                BitmapUtils.saveBitmap(b, saveFile)
+            }, call)
         }
 
         fun saveThumbnail(bitmap: Bitmap) {

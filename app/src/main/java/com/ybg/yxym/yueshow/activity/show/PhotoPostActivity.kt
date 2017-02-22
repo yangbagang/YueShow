@@ -2,11 +2,10 @@ package com.ybg.yxym.yueshow.activity.show
 
 import android.content.Context
 import android.content.Intent
+import android.os.SystemClock
 import android.support.v7.widget.LinearLayoutManager
-import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yueshow.R
@@ -34,7 +33,6 @@ class PhotoPostActivity : PostShowActivity() {
 
     private lateinit var mImageAdapter: SelectedImageAdapter
     private var mPics: MutableList<String> = ArrayList<String>()
-    private var mIndex = 0
     private var mFiles: MutableList<String> = ArrayList<String>()
     private var mThumbnail = ""
     private var thumbnailId = ""
@@ -101,6 +99,7 @@ class PhotoPostActivity : PostShowActivity() {
     override fun postShow() {
         hideKeyboard()
         //上传缩略图
+        btn_post_show.text = "开始上传图片"
         uploadThumbnail()
     }
 
@@ -139,8 +138,18 @@ class PhotoPostActivity : PostShowActivity() {
     }
 
     private fun uploadPics() {
-        val file = mPics[mIndex].substring(7)
-        println("开始上传第${mIndex}张图片")
+        for (pic in mPics) {
+            uploadPic(pic)
+        }
+        while (mFiles.size < mPics.size) {
+            SystemClock.sleep(100)
+        }
+        createShow()
+    }
+
+    private fun uploadPic(pic: String) {
+        val file = pic.substring(7)
+        //println("开始上传第${picIndex}张图片")
         SendRequest.uploadFile(mContext!!, "show", File(file), object : UploadListener(){
             override fun onFailure(call: Call?, e: IOException?) {
                 e?.let { onFailure(e) }
@@ -153,34 +162,31 @@ class PhotoPostActivity : PostShowActivity() {
             override fun onSuccess(response: Response) {
                 val json = JSONObject(response.body().string())
                 val fileId = json.getString("fid")
-                println("上传第${mIndex}张图片成功")
+                //println("上传第${picIndex}张图片成功")
                 mFiles.add(fileId)
-                mIndex++
-                if (mIndex == mPics.size) {
-                    createShow()
-                } else {
-                    uploadPics()
-                }
             }
 
             override fun onFailure(e: Exception) {
                 e.printStackTrace()
-                println("上传第${mIndex}张图片失败，$file")
+                //println("上传第${picIndex}张图片失败，$file")
                 workInLoopThread {
                     ToastUtil.show("上传图片失败")
                 }
             }
 
             override fun onUIProgress(progress: Progress) {
-                runOnUiThread {
-                    val progressInt: Int = (progress.currentBytes * 100 / progress.totalBytes).toInt()
-                    btn_post_show.text = "上传第${mIndex + 1}张(${progressInt}%)"
-                }
+//                runOnUiThread {
+//                    val progressInt: Int = (progress.currentBytes * 100 / progress.totalBytes).toInt()
+//                    btn_post_show.text = "上传第${picIndex + 1}张(${progressInt}%)"
+//                }
             }
         })
     }
 
     private fun createShow() {
+        runOnUiThread {
+            btn_post_show.text = "开始创建美秀"
+        }
         SendRequest.createShow(mContext!!, mApplication.token, thumbnailId, title, "1",
                 object : OkCallback<String>(OkStringParser()) {
 
