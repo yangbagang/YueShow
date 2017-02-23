@@ -123,6 +123,10 @@
         <activity
             android:name=".activity.user.UserCenterActivity"
             android:screenOrientation="portrait"/>
+        <!-- 个人中心。 -->
+        <activity
+            android:name=".activity.user.PersonCenterActivity"
+            android:screenOrientation="portrait"/>
         <!-- 设置界面。 -->
         <activity
             android:name=".activity.user.UserSettingActivity"

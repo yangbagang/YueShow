@@ -18,6 +18,8 @@ package com.ybg.yxym.yueshow.picasso;
 import android.content.Context;
 import android.net.Uri;
 
+import com.ybg.yxym.yueshow.http.OkHttpProxy;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -69,7 +71,8 @@ public final class OkHttp3Downloader implements Downloader {
    * @param maxSize The size limit for the cache.
    */
   public OkHttp3Downloader(final File cacheDir, final long maxSize) {
-    this(new OkHttpClient.Builder().cache(new Cache(cacheDir, maxSize)).build());
+      //this(new OkHttpClient.Builder().cache(new Cache(cacheDir, maxSize)).build());
+      this(OkHttpProxy.INSTANCE.getOkHttpClient());
   }
 
   /**

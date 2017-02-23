@@ -46,9 +46,9 @@ import kotlinx.android.synthetic.main.activity_user_center_listview.*
 import java.util.ArrayList
 
 /**
- * 类描述：用户中心
+ * 类描述：个人中心
  */
-class UserCenterActivity : BaseActivity(), View.OnClickListener {
+class PersonCenterActivity : BaseActivity(), View.OnClickListener {
 
     private var vDynamic_float: View? = null
     private var tvDynamic_float: TextView? = null
@@ -79,7 +79,7 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
     private var tv_go_aimi: TextView? = null//跳转到密爱页面
     private var rl_user_level: RelativeLayout? = null//等级页面
 
-    private var userBase: UserBase? = null
+    private var user: UserBase? = null
 
     private val TV_COLOR_SELECT = 0xFF545866.toInt()
     private val TV_COLOR_NORMAL = 0xFFAFB6BC.toInt()
@@ -97,7 +97,7 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
     private var userShowList: MutableList<YueShow> = ArrayList()
 
     override fun setContentViewId(): Int {
-        return R.layout.activity_user_center_listview
+        return R.layout.activity_person_center_listview
     }
 
     override fun setUpView() {
@@ -111,7 +111,7 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
         tvAchievement_float = findViewById(R.id.tv_achievement) as TextView
         tvAchievementNum_float = findViewById(R.id.tv_achievement_num) as TextView
 
-        mContext = this@UserCenterActivity
+        mContext = this@PersonCenterActivity
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val headerView = inflater.inflate(R.layout.item_user_list_head, null)
         val floatView = inflater.inflate(R.layout.item_list_user_floating_bar, null)
@@ -127,11 +127,7 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun init() {
-        setCustomTitle("用户中心")
-
-        if (intent != null) {
-            userBase = intent.extras.getSerializable("userBase") as UserBase
-        }
+        setCustomTitle("个人中心")
 
         mAdapter = HomeShowAdapter(mContext!!)
         mAdapter.setDataList(userShowList)
@@ -166,12 +162,13 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
 
     override fun onStart() {
         super.onStart()
-        userBase?.let {
-            setUserInfo(userBase!!)
+        loadUserBase { userBase ->
+            setUserInfo(userBase)
         }
     }
 
     private fun setUserInfo(userBase: UserBase) {
+        user = userBase
         //头像
         val utils = ImageLoaderUtils.instance
         if (TextUtils.isEmpty(userBase.avatar)) {
@@ -206,6 +203,32 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
         rl_fresh_layout.beginRefreshing()
         //加载动态数量
         getUserShowNum()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.user_center, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+
+        if (id == R.id.action_settings) {
+            //跳转到设置页面
+            UserSettingActivity.start(mContext!!)
+            return true
+        } else if (id == R.id.action_exit) {
+            mApplication.token = ""
+            MainActivity.instance?.removeUserInfo()
+            finish()
+            return true
+        } else if (id == R.id.action_me) {
+            //跳转到用户资料
+            MyInformationActivity.start(mContext!!)
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private var vDynamic: View? = null
@@ -258,8 +281,8 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.rl_user_level -> LevelActivity.start(mContext!!)
             R.id.tv_go_mi_ai -> {
-                if (userBase != null) {
-                    MiAiActivity.start(mContext!!, userBase!!.id, userBase!!.nickName)
+                if (user != null) {
+                    MiAiActivity.start(mContext!!, user!!.id, user!!.nickName)
                 }
             }
         }
@@ -466,10 +489,10 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun getUserShowList() {
-        if (userBase == null) {
+        if (user == null) {
             return
         }
-        SendRequest.getUserShowList(mContext!!, userBase!!.id.toInt(), pageNum, pageSize,object : OkCallback<String>
+        SendRequest.getUserShowList(mContext!!, user!!.id.toInt(), pageNum, pageSize,object : OkCallback<String>
         (OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 if (pageNum == 1) {
@@ -492,10 +515,10 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun getUserShowNum() {
-        if (userBase == null) {
+        if (user == null) {
             return
         }
-        SendRequest.getUserShowNum(mContext!!, userBase!!.id, object : OkCallback<String> (OkStringParser()) {
+        SendRequest.getUserShowNum(mContext!!, user!!.id, object : OkCallback<String> (OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
@@ -516,9 +539,8 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
         /**
          * @param context 跳转到本页面
          */
-        fun start(context: Context, userBase: UserBase) {
+        fun start(context: Context) {
             val starter = Intent(context, UserCenterActivity::class.java)
-            starter.putExtra("userBase", userBase)
             context.startActivity(starter)
         }
     }

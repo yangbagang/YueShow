@@ -8,6 +8,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.ScaleAnimation
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -16,6 +19,7 @@ import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.pili.pldroid.player.AVOptions
+import com.pili.pldroid.player.PLMediaPlayer
 import com.pili.pldroid.player.widget.PLVideoView
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage
@@ -25,6 +29,7 @@ import com.ybg.yxym.yb.bean.*
 import com.ybg.yxym.yb.utils.DateUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
+import com.ybg.yxym.yueshow.activity.user.UserCenterActivity
 import com.ybg.yxym.yueshow.adapter.PingItemAdapter
 import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.decoration.SpaceItemDecoration
@@ -68,10 +73,15 @@ class ShowDetailActivity : BaseActivity() {
     private lateinit var pingHeaderView: RecyclerViewHeader
 
     private var w = 0
+    private var h = 0
+    private var videoW = 0
+    private var videoH = 0
 
     //视频播放相关
     private val mIsLiveStreaming = 0
     private var hasVideo = false
+
+    private var user: UserBase? = null
 
     override fun setContentViewId(): Int {
         return R.layout.activity_home_show_detail
@@ -92,6 +102,7 @@ class ShowDetailActivity : BaseActivity() {
         pingHeaderView = findViewById(R.id.header) as RecyclerViewHeader
 
         w = ScreenUtils.getScreenWidth(mContext!!)
+        h = ScreenUtils.getScreenHeight(mContext!!)
 
         setCustomTitle("查看悦秀")
     }
@@ -195,6 +206,7 @@ class ShowDetailActivity : BaseActivity() {
                 if (jsonBean != null && jsonBean.isSuccess) {
                     //成功
                     val userBase = mGson.fromJson(jsonBean.data, UserBase::class.java)
+                    user = userBase
                     loadInfo(userBase)
                 } else {
                     jsonBean?.let {
@@ -249,6 +261,8 @@ class ShowDetailActivity : BaseActivity() {
         val mMediaController = MediaController(this)
         v_player.setMediaController(mMediaController)
         v_player.displayAspectRatio = PLVideoView.ASPECT_RATIO_FIT_PARENT
+        v_player.setOnPreparedListener(VideoPreparedListener())
+        v_player.setOnCompletionListener(VideoCompletionListener())
     }
 
     private fun loadShowFiles() {
@@ -393,7 +407,7 @@ class ShowDetailActivity : BaseActivity() {
     /**
      * 评论点击事件
      */
-    private inner class BtnCommentOnClickListener() : View.OnClickListener {
+    private inner class BtnCommentOnClickListener : View.OnClickListener {
 
         override fun onClick(v: View) {
             if (!mApplication.hasLogin()) {
@@ -433,7 +447,7 @@ class ShowDetailActivity : BaseActivity() {
         }
     }
 
-    private inner class BtnZanOnClickListener() : View.OnClickListener {
+    private inner class BtnZanOnClickListener : View.OnClickListener {
 
         override fun onClick(v: View) {
             if (!mApplication.hasLogin()) {
@@ -464,21 +478,62 @@ class ShowDetailActivity : BaseActivity() {
     /**
      * 转发点击事件
      */
-    private inner class BtnTransOnClickListener() : View.OnClickListener {
+    private inner class BtnTransOnClickListener : View.OnClickListener {
 
         override fun onClick(v: View) {
-            ToastUtil.show("转发 :")
+            //ToastUtil.show("转发 :")
         }
     }
 
     /**
      * 头像点击事件
      */
-    private inner class BtnPhotoOnClickListener() : View.OnClickListener {
+    private inner class BtnPhotoOnClickListener : View.OnClickListener {
 
         override fun onClick(v: View) {
-            ToastUtil.show("头像 :")
+            if (user != null) {
+                UserCenterActivity.start(mContext!!, user!!)
+            }
         }
+    }
+
+    private inner class VideoPreparedListener : PLMediaPlayer.OnPreparedListener {
+
+        override fun onPrepared(p0: PLMediaPlayer?) {
+            videoW = rl_video.width
+            videoH = rl_video.height
+
+            val layoutParams = rl_video.layoutParams
+            layoutParams.height = h
+            layoutParams.width = w
+            rl_video.layoutParams = layoutParams
+
+            val animationSet = AnimationSet(true)
+            val animation = ScaleAnimation(videoW.toFloat(), w.toFloat(), videoH.toFloat(),
+                    h.toFloat(), Animation.RELATIVE_TO_SELF.toFloat(), 0.5f)
+            animation.duration = 1000
+            animationSet.addAnimation(animation)
+            v_player.startAnimation(animationSet)
+        }
+
+    }
+
+    private inner class VideoCompletionListener : PLMediaPlayer.OnCompletionListener {
+
+        override fun onCompletion(p0: PLMediaPlayer?) {
+            val layoutParams = rl_video.layoutParams
+            layoutParams.height = videoH
+            layoutParams.width = videoW
+            rl_video.layoutParams = layoutParams
+
+            val animationSet = AnimationSet(true)
+            val animation = ScaleAnimation(w.toFloat(), videoW.toFloat(), h.toFloat(),
+                    videoH.toFloat(), Animation.RELATIVE_TO_SELF.toFloat(), 0.5f)
+            animation.duration = 1000
+            animationSet.addAnimation(animation)
+            v_player.startAnimation(animation)
+        }
+
     }
 
     /**

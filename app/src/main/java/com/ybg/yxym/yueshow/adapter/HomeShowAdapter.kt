@@ -180,7 +180,7 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         viewHolder.rl_video = convertView.findViewById(R.id.rl_video) as RelativeLayout
         viewHolder.iv_video_cover = convertView.findViewById(R.id.iv_video_cover) as ImageView
         viewHolder.iv_video_paly = convertView.findViewById(R.id.iv_video_play) as ImageView
-        viewHolder.videoPlayerView = convertView.findViewById(R.id.v_player) as VideoPlayerView
+        //viewHolder.videoPlayerView = convertView.findViewById(R.id.v_player) as VideoPlayerView
         viewHolder.rl_live = convertView.findViewById(R.id.rl_live) as RelativeLayout
         viewHolder.iv_live_cover = convertView.findViewById(R.id.iv_live_cover) as ImageView
         viewHolder.iv_live_play = convertView.findViewById(R.id.iv_video_play) as ImageView
@@ -217,7 +217,7 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         viewHolder.ll_photo_live_flag!!.setBackgroundResource(R.drawable.shape_red_bg)
         viewHolder.iv_photo_live_flag!!.setImageResource(R.mipmap.ic_entry_live_logo)
         viewHolder.tv_photo_live_flag!!.text = "直播"
-        viewHolder.iv_live_cover!!.layoutParams = relativeLayoutParms
+        //viewHolder.iv_live_cover!!.layoutParams = relativeLayoutParms
         //设置默认图片
         viewHolder.iv_live_cover!!.setImageResource(R.mipmap.ic_default_cover)
         if (mList!![position].thumbnail != "") {
@@ -239,7 +239,6 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         viewHolder.rl_video!!.visibility = View.GONE
         viewHolder.iv_picture!!.visibility = View.VISIBLE
         viewHolder.ll_photo_live_flag!!.visibility = View.VISIBLE
-        /**冠军 */
         viewHolder.ll_photo_live_flag!!.setBackgroundResource(R.drawable.shape_gray_bg)
         viewHolder.iv_photo_live_flag!!.setImageResource(R.mipmap.ic_entry_photo_logo)
         if (mList!![position].thumbnail != "") {
@@ -266,8 +265,7 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         viewHolder.rl_video!!.visibility = View.VISIBLE
         viewHolder.iv_picture!!.visibility = View.GONE
         viewHolder.ll_photo_live_flag!!.visibility = View.GONE
-        /**冠军 */
-        viewHolder.iv_video_cover!!.layoutParams = relativeLayoutParms
+        //viewHolder.iv_video_cover!!.layoutParams = relativeLayoutParms
         viewHolder.iv_video_cover!!.setImageResource(R.mipmap.ic_default_cover)
         if (mList!![position].thumbnail != "") {
             /**设置 tag 防止图片错位 */
@@ -329,7 +327,7 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         internal var rl_video: RelativeLayout? = null//视频播放布局
         internal var iv_video_cover: ImageView? = null//视频封面
         internal var iv_video_paly: ImageView? = null//视频播放按键
-        internal var videoPlayerView: VideoPlayerView? = null//视频播放
+        //internal var videoPlayerView: VideoPlayerView? = null//视频播放
         internal var rl_live: RelativeLayout? = null//直播布局
         internal var iv_live_cover: ImageView? = null//直播封面
         internal var iv_live_play: ImageView? = null//播放按键

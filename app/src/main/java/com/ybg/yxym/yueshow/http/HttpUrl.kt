@@ -43,6 +43,8 @@ object HttpUrl {
     private val UPDATE_CLIENT_ID = "/userBase/updateAppToken"
     /*美秀列表*/
     private val LIVE_LIST = "/ruiShow/list"
+    private val USER_LIVE_LIST = "/ruiShow/listByUserId"
+    private val USER_LIVE_NUM = "/ruiShow/getShowNumByUserId"
     private val AUTHOR_INFO = "/userBase/getAuthorInfoByShowId"
     private val SHOW_FIELS = "/showFile/list"
     private val SHOW_PING_LIST = "/showPing/list"
@@ -128,6 +130,12 @@ object HttpUrl {
 
     val liveListUrl: String
         get() = ROOT_URL + LIVE_LIST
+
+    val userLiveListUrl: String
+        get() = ROOT_URL + USER_LIVE_LIST
+
+    val userLiveNumUrl: String
+        get() = ROOT_URL + USER_LIVE_NUM
 
     val showDetailUrl: String
         get() = ROOT_URL + LIVE_DETAIL

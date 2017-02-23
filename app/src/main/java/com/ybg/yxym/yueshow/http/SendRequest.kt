@@ -193,6 +193,16 @@ object SendRequest {
         OkHttpProxy.post(HttpUrl.liveListUrl, tag, params, callback)
     }
 
+    fun getUserShowList(tag: Context, userId: Int, pageNum: Int, pageSize: Int, callback: OkCallback<*>) {
+        val params = mapOf<String, Int>("pageNum" to pageNum, "pageSize" to pageSize, "userId" to userId)
+        OkHttpProxy.post(HttpUrl.userLiveListUrl, tag, params, callback)
+    }
+
+    fun getUserShowNum(tag: Context, userId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, Long>("userId" to userId)
+        OkHttpProxy.post(HttpUrl.userLiveNumUrl, tag, params, callback)
+    }
+
     /**
      * 获取发布者信息
      */

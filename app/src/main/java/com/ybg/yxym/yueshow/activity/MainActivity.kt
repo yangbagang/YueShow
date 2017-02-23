@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
             drawer.closeDrawer(GravityCompat.START)
             if (showApplication.hasLogin()) {
-                UserCenterActivity.start(this@MainActivity)
+                PersonCenterActivity.start(this@MainActivity)
             } else {
                 LoginActivity.start(this@MainActivity)
             }
