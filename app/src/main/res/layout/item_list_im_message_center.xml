@@ -11,7 +11,7 @@
         android:layout_marginBottom="@dimen/px_18"
         android:layout_marginLeft="@dimen/px_26"
         android:layout_marginTop="@dimen/px_18"
-        android:src="@mipmap/ic_default_girl"/>
+        android:src="@mipmap/default_avatar"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

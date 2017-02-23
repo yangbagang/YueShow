@@ -12,7 +12,7 @@
         android:layout_marginBottom="@dimen/px_14"
         android:layout_marginLeft="@dimen/px_26"
         android:layout_marginTop="@dimen/px_14"
-        android:src="@mipmap/ic_default_aimi_1"/>
+        android:src="@mipmap/default_avatar"/>
 
     <TextView
         android:id="@+id/tv_name"

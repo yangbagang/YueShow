@@ -70,6 +70,7 @@ dependencies {
     compile 'com.qiniu.pili:pili-android-qos:0.8.18'
     compile 'com.getui:sdk:2.7.0.0'
     compile 'com.getui:ext:2.0.3'
+    compile 'com.pgyersdk:sdk:2.5.0'
 }
 repositories {
     mavenCentral()

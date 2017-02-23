@@ -561,7 +561,7 @@ class ShowDetailActivity : BaseActivity() {
         val msg = WXMediaMessage(webpage)
         msg.title = "！"
         msg.description = ""
-        val thumb = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
+        val thumb = BitmapFactory.decodeResource(resources, R.mipmap.logo)
         msg.setThumbImage(thumb)
 
         val req = SendMessageToWX.Req()

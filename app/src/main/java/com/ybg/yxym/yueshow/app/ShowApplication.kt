@@ -6,6 +6,7 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType
+import com.pgyersdk.crash.PgyCrashManager
 import com.qiniu.pili.droid.streaming.StreamingEnv
 import com.ybg.yxym.yb.app.YbgAPP
 import com.ybg.yxym.yueshow.constant.AppConstants
@@ -32,6 +33,7 @@ class ShowApplication : YbgAPP() {
         Picasso.setSingletonInstance(picasso)
 
         PushManager.getInstance().initialize(applicationContext)
+        PgyCrashManager.register(this)
     }
 
     fun initImageLoader(context: Context) {

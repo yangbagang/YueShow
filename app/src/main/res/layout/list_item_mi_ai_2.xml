@@ -23,7 +23,7 @@
         android:layout_toRightOf="@id/tv_mi_ai_pm"
         android:layout_marginTop="@dimen/px_20"
         android:layout_gravity="center"
-        android:src="@mipmap/ic_default_girl" />
+        android:src="@mipmap/default_avatar" />
 
     <LinearLayout
         android:layout_width="wrap_content"

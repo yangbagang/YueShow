@@ -54,6 +54,9 @@
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="56fbb4b567e58e5cb3002e02"/>
+        <meta-data
+            android:name="PGYER_APPID"
+            android:value="3ed46f14f461bd904ec7b65d0741ca14" />
 
         <activity
             android:name=".activity.MainActivity"
@@ -159,6 +162,8 @@
                   android:screenOrientation="portrait"/>
         <activity android:name=".activity.live.EndingLiveActivity"
                   android:screenOrientation="portrait"/>
+
+        <activity android:name="com.pgyersdk.activity.FeedbackActivity"/>
 
         <receiver android:name=".receiver.PushMsgReceiver" android:exported="false">
             <intent-filter>

@@ -26,7 +26,7 @@
         android:id="@+id/ci_pm"
         android:layout_width="@dimen/px_80"
         android:layout_height="@dimen/px_80"
-        android:src="@mipmap/ic_default_girl"
+        android:src="@mipmap/default_avatar"
         android:layout_marginLeft="@dimen/px_30"/>
 
     <LinearLayout
@@ -85,21 +85,21 @@
                 android:id="@+id/iv_mi_0"
                 android:layout_width="@dimen/px_44"
                 android:layout_height="@dimen/px_44"
-                android:src="@mipmap/ic_default_girl"
+                android:src="@mipmap/default_avatar"
                 android:scaleType="fitXY"/>
             <ImageView
                 android:id="@+id/iv_mi_1"
                 android:layout_width="@dimen/px_44"
                 android:layout_height="@dimen/px_44"
                 android:layout_marginLeft="@dimen/px_10"
-                android:src="@mipmap/ic_default_girl"
+                android:src="@mipmap/default_avatar"
                 android:scaleType="fitXY"/>
             <ImageView
                 android:id="@+id/iv_mi_2"
                 android:layout_width="@dimen/px_44"
                 android:layout_height="@dimen/px_44"
                 android:layout_marginLeft="@dimen/px_10"
-                android:src="@mipmap/ic_default_girl"
+                android:src="@mipmap/default_avatar"
                 android:scaleType="fitXY"/>
         </LinearLayout>
     </LinearLayout>

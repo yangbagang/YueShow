@@ -219,7 +219,7 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         viewHolder.tv_photo_live_flag!!.text = "直播"
         //viewHolder.iv_live_cover!!.layoutParams = relativeLayoutParms
         //设置默认图片
-        viewHolder.iv_live_cover!!.setImageResource(R.mipmap.ic_default_cover)
+        viewHolder.iv_live_cover!!.setImageResource(R.mipmap.logo)
         if (mList!![position].thumbnail != "") {
             /**设置 tag 防止图片错位 */
             val img_url_live = HttpUrl.getImageUrl(mList!![position].thumbnail)
@@ -266,7 +266,7 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         viewHolder.iv_picture!!.visibility = View.GONE
         viewHolder.ll_photo_live_flag!!.visibility = View.GONE
         //viewHolder.iv_video_cover!!.layoutParams = relativeLayoutParms
-        viewHolder.iv_video_cover!!.setImageResource(R.mipmap.ic_default_cover)
+        viewHolder.iv_video_cover!!.setImageResource(R.mipmap.logo)
         if (mList!![position].thumbnail != "") {
             /**设置 tag 防止图片错位 */
             val img_url_0 = HttpUrl.getImageUrl(mList!![position].thumbnail)

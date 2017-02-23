@@ -37,7 +37,7 @@
                 android:layout_width="@dimen/px_120"
                 android:layout_height="@dimen/px_120"
                 android:layout_gravity="center"
-                android:src="@mipmap/ic_default_girl" />
+                android:src="@mipmap/default_avatar" />
         </FrameLayout>
 
         <TextView

@@ -8,6 +8,6 @@
         android:id="@+id/userAvatar"
         android:layout_width="@dimen/px_86"
         android:layout_height="@dimen/px_86"
-        android:src="@mipmap/ic_default_girl" />
+        android:src="@mipmap/default_avatar" />
 
 </LinearLayout>

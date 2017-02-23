@@ -20,7 +20,7 @@
             android:id="@+id/iv_user_logo"
             android:layout_width="@dimen/px_284"
             android:layout_height="@dimen/px_284"
-            android:src="@mipmap/ic_circle_photo"
+            android:src="@mipmap/default_avatar"
             app:civ_border_color="@color/white"
             app:civ_border_width="@dimen/px_8"/>
 

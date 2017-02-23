@@ -16,7 +16,7 @@
             android:layout_height="@dimen/px_48"
             android:layout_marginLeft="@dimen/px_30"
             android:layout_marginRight="@dimen/px_30"
-            android:src="@mipmap/ic_default_girl"/>
+            android:src="@mipmap/default_avatar"/>
 
         <LinearLayout
             android:layout_width="0dp"

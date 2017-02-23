@@ -17,7 +17,7 @@
             android:layout_height="@dimen/px_180"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/px_78"
-            android:src="@mipmap/ic_default_girl"
+            android:src="@mipmap/default_avatar"
             app:civ_border_color="@color/white"
             app:civ_border_width="@dimen/px_4" />
 
@@ -180,7 +180,7 @@
                 android:layout_width="@dimen/px_72"
                 android:layout_height="@dimen/px_72"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/ic_default_girl" />
+                android:src="@mipmap/default_avatar" />
 
             <ImageView
                 android:layout_width="@dimen/px_74"
@@ -202,7 +202,7 @@
                 android:layout_width="@dimen/px_72"
                 android:layout_height="@dimen/px_72"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/ic_default_girl" />
+                android:src="@mipmap/default_avatar" />
 
             <ImageView
                 android:layout_width="@dimen/px_74"
@@ -224,7 +224,7 @@
                 android:layout_width="@dimen/px_72"
                 android:layout_height="@dimen/px_72"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/ic_default_girl" />
+                android:src="@mipmap/default_avatar" />
 
             <ImageView
                 android:layout_width="@dimen/px_74"

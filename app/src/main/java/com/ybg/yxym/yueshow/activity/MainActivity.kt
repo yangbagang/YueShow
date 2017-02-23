@@ -21,6 +21,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.gson.GsonBuilder
 import com.igexin.sdk.PushManager
+import com.pgyersdk.crash.PgyCrashManager
+import com.pgyersdk.update.PgyUpdateManager
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yb.utils.LogUtil
@@ -77,6 +79,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         setUpView()
         init()
+
+        PgyCrashManager.register(this)
+        PgyUpdateManager.register(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -225,7 +230,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun setUserInfo(userBase: UserBase) {
         val utils = ImageLoaderUtils.instance
         if (TextUtils.isEmpty(userBase.avatar)) {
-            utils.loadBitmap(userImage, R.mipmap.ic_default_girl);
+            utils.loadBitmap(userImage, R.mipmap.default_avatar);
         } else {
             utils.loadBitmap(userImage, HttpUrl.getImageUrl(userBase.avatar))
         }
@@ -241,7 +246,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun removeUserInfo() {
         val utils = ImageLoaderUtils.instance
-        utils.loadBitmap(userImage, R.mipmap.ic_default_girl);
+        utils.loadBitmap(userImage, R.mipmap.default_avatar);
 
         userName.text = "游客"
         userLevel.text = "悦美御秀"

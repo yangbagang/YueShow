@@ -82,8 +82,8 @@ class ImageLoaderUtils(private val mContext: Context) {
         }
 
     companion object {
-        private val RES_ID_ERROR = R.mipmap.ic_launcher//加载出错时出现的图片
-        private val RES_ID_PLACEHOLDER = R.mipmap.ic_launcher//加载时出现的缓存图片
+        private val RES_ID_ERROR = R.mipmap.logo//加载出错时出现的图片
+        private val RES_ID_PLACEHOLDER = R.mipmap.logo//加载时出现的缓存图片
         private var mImageLoaderUtil: ImageLoaderUtils? = null
 
         val instance: ImageLoaderUtils

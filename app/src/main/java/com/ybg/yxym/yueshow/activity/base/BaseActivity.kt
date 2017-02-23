@@ -22,6 +22,7 @@ import android.widget.TextView
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.pgyersdk.crash.PgyCrashManager
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yb.bean.UserInfo
@@ -77,6 +78,8 @@ abstract class BaseActivity : AppCompatActivity() {
         mHandler = Handler()
         mGson = GsonBuilder().serializeNulls().create()
         setContent()
+
+        PgyCrashManager.register(this)
     }
 
     override fun onDestroy() {

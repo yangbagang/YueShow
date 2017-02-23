@@ -12,7 +12,7 @@
         android:layout_height="@dimen/px_450"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/px_90"
-        android:src="@mipmap/ic_default_girl" />
+        android:src="@mipmap/default_avatar" />
 
     <Button
         android:id="@+id/btn_edit_cover"
