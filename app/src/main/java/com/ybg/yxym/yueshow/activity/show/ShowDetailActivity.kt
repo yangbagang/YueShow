@@ -499,13 +499,15 @@ class ShowDetailActivity : BaseActivity() {
 
     private inner class VideoPreparedListener : PLMediaPlayer.OnPreparedListener {
 
-        override fun onPrepared(p0: PLMediaPlayer?) {
-            h = ScreenUtils.getDrawableHeight(this@ShowDetailActivity)
-            println("ScreenUtils.getDrawingHeight=${h}")
-            println("ScreenUtils.getScreenHeight=${ScreenUtils.getScreenHeight(this@ShowDetailActivity)}")
-            println("ScreenUtils.getStatusHeight=${ScreenUtils.getStatusHeight(this@ShowDetailActivity)}")
-            println("ScreenUtils.getToolBarHeight=${ScreenUtils.getToolBarHeight(this@ShowDetailActivity)}")
+        private fun getMaxHeight(): Int {
+            val windowHeight = ScreenUtils.getScreenHeight(this@ShowDetailActivity)
+            val statusHeight = ScreenUtils.getStatusHeight(this@ShowDetailActivity)
+            val toolBarHeight = supportActionBar?.height ?: 0
+            return windowHeight - statusHeight - toolBarHeight
+        }
 
+        override fun onPrepared(p0: PLMediaPlayer?) {
+            h = getMaxHeight()
             //进入全屏显示
             videoW = rl_video.width
             videoH = rl_video.height
