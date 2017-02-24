@@ -152,9 +152,10 @@ object BitmapUtils {
 
         val scaleWidth = newWidth.toFloat() / width
         val scaleHeight = newHeight.toFloat() / height
+        val scale = Math.min(scaleWidth, scaleHeight)
 
         val matrix = Matrix()
-        matrix.postScale(scaleWidth, scaleHeight)
+        matrix.postScale(scale, scale)
         return Bitmap.createBitmap(bitmapOrg, 0, 0, width,
                 height, matrix, true)
     }

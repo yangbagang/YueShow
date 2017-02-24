@@ -8,14 +8,9 @@ import android.os.AsyncTask
 object AsyncTaskUtil {
 
     fun startTask(task: () -> Unit, callback: () -> Unit) {
-        object : AsyncTask<Unit, Unit, Unit>() {
-            override fun doInBackground(vararg params: Unit?) {
-                task()
-            }
-
-            override fun onPostExecute(result: Unit?) {
-                callback()
-            }
-        }.execute()
+        Thread {
+            task()
+            callback()
+        }.start()
     }
 }

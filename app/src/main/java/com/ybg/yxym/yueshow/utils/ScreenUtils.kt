@@ -6,9 +6,13 @@ import android.graphics.Bitmap
 import android.graphics.Rect
 import android.util.DisplayMetrics
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 
 import com.ybg.yxym.yueshow.app.ShowApplication
+import android.view.Window.ID_ANDROID_CONTENT
+
+
 
 /**
  * 获得屏幕相关的辅助类
@@ -65,6 +69,23 @@ object ScreenUtils {
         }
 
         return statusHeight
+    }
+
+    fun getDrawingHeight(activity: Activity): Int {
+        val outRect = Rect()
+        activity.window.findViewById(Window.ID_ANDROID_CONTENT).getDrawingRect(outRect)
+        return outRect.height()
+    }
+
+    fun getToolBarHeight(activity: Activity): Int {
+        val outRect = Rect()
+        activity.window.decorView.getWindowVisibleDisplayFrame(outRect)
+        val viewTop = activity.window.findViewById(Window.ID_ANDROID_CONTENT).top
+        return Math.abs(viewTop - outRect.top)
+    }
+
+    fun getDrawableHeight(activity: Activity): Int {
+        return getScreenHeight(activity) - getStatusHeight(activity) - getToolBarHeight(activity)
     }
 
     /**

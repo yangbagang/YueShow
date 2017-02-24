@@ -131,7 +131,6 @@ class PhotoProcessActivity : BaseActivity() {
     private inner class SaveImageFile : AsyncTask<Unit, Unit, Unit>() {
 
         private val progress = AppUtil.getProgressDialog(mContext!!, "正在保存...")
-        private var savedFiles: ArrayList<String> = ArrayList<String>()
 
         override fun onPreExecute() {
             super.onPreExecute()
@@ -144,55 +143,26 @@ class PhotoProcessActivity : BaseActivity() {
                 progress.dismiss()
             }
             //启动发布界面
-            val list: ArrayList<String> = savedFiles
-            PhotoPostActivity.start(mContext!!, mThumbnail, list)
+            mApplication.storeData("bitmapList", mBitmapList)
+            PhotoPostActivity.start(mContext!!, mThumbnail, mPics)
             //关闭本窗口
             finish()
         }
 
         override fun doInBackground(vararg p0: Unit?) {
-            for ((index, bitmap) in mBitmapList.withIndex()) {
-                if (bitmap != null) {
-                    savePic(bitmap, mPics[index], {
-                        println("${mPics[index]} has been saved.")
-                    })
-                    if (index == 0) {
-                        saveThumbnail(bitmap)
-                    }
-                } else {
-                    var sourceFile = mPics[index]
-                    if (sourceFile.startsWith("file:", true)) {
-                        sourceFile = sourceFile.substring(5)
-                        println("sourceFile=$sourceFile")
-                    }
-                    val inputStream = FileInputStream(sourceFile)
-                    val b = BitmapFactory.decodeStream(inputStream)
-                    savePic(b, mPics[index], {
-                        println("${mPics[index]} has been saved.")
-                    })
-                    if (index == 0) {
-                        saveThumbnail(b)
-                    }
+            var bitmap = mBitmapList.first()
+            if (bitmap == null) {
+                var sourceFile = mPics.first()
+                if (sourceFile.startsWith("file:", true)) {
+                    sourceFile = sourceFile.substring(5)
+                    println("sourceFile=$sourceFile")
                 }
+                val inputStream = FileInputStream(sourceFile)
+                bitmap = BitmapFactory.decodeStream(inputStream)
             }
-            while (savedFiles.size < mBitmapList.size) {
-                SystemClock.sleep(100)
+            bitmap?.let {
+                saveThumbnail(bitmap!!)
             }
-        }
-
-        fun savePic(bitmap: Bitmap, sourceFile: String, call: ()-> Unit) {
-            AsyncTaskUtil.startTask({
-                val file = AppConstants.IMAGE_SAVE_PATH + "/" + System.currentTimeMillis() +
-                        "/" + FileUtils.getFileName(sourceFile)
-                savedFiles.add(file)
-                val saveFile = File(file)
-                //缩放尺寸
-                val b = BitmapUtils.resizeImage(bitmap, 1024, 768)
-                //压缩大小
-                //b = BitmapUtils.compressImage(b, 500)
-                //保存
-                BitmapUtils.saveBitmap(b, saveFile)
-            }, call)
         }
 
         fun saveThumbnail(bitmap: Bitmap) {
@@ -250,7 +220,7 @@ class PhotoProcessActivity : BaseActivity() {
             override fun onItemClick(position: Int) {
                 val filter = GPUImageFilterTools.createFilterForType(mContext, mFilterList!![position].type)
                 val gpuImage = GPUImage(this@PhotoProcessActivity)
-                gpuImage.setImage(mBitmapList[mIndex])
+                gpuImage.setImage(BitmapFactory.decodeFile(mPics[mIndex]))
                 gpuImage.setFilter(filter)
                 //应用过滤效果
                 mBitmapList[mIndex] = gpuImage.bitmapWithFilterApplied

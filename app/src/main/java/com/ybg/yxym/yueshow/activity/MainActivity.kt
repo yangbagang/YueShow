@@ -32,6 +32,7 @@ import com.ybg.yxym.yueshow.activity.home.HallFragment
 import com.ybg.yxym.yueshow.activity.user.*
 import com.ybg.yxym.yueshow.adapter.ViewPagerAdapter
 import com.ybg.yxym.yueshow.app.ShowApplication
+import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.http.HttpUrl
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
@@ -80,8 +81,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setUpView()
         init()
 
-        PgyCrashManager.register(this)
-        PgyUpdateManager.register(this)
+        if (!AppConstants.DEBUG) {
+            PgyCrashManager.register(this)
+            PgyUpdateManager.register(this)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!AppConstants.DEBUG) {
+            PgyUpdateManager.unregister()
+            PgyCrashManager.unregister()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -115,19 +126,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         val id = item.itemId
 
-//        if (id == R.id.nav_camera) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
+        if (id == R.id.nav_about) {
+            AboutActivity.start(this@MainActivity)
+        }
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)

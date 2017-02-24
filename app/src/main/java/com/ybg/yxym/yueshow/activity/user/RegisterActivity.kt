@@ -91,8 +91,8 @@ class RegisterActivity : BaseActivity() {
     private fun getCaptcha() {
         SendRequest.getCaptcha(mContext!!, mMobile, object : OkCallback<String>(OkStringParser
         ()) {
-            override fun onSuccess(code: Int, s: String) {
-                LogUtil.d(TAG + ":get message success " + s)
+            override fun onSuccess(code: Int, response: String) {
+                LogUtil.d(TAG + ":get message success " + response)
                 ToastUtil.show("验证码已发送到您手机")
             }
 

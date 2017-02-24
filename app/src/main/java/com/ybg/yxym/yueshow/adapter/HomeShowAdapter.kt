@@ -197,7 +197,6 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         viewHolder.btn_care = convertView.findViewById(R.id.btn_care) as Button
         //用户发布文字
         viewHolder.tv_content = convertView.findViewById(R.id.tv_show_user_feel) as TextView
-        viewHolder.tv_detail = convertView.findViewById(R.id.tv_show_more) as TextView
         //用户操作
         viewHolder.tv_comment = convertView.findViewById(R.id.tv_show_comment) as TextView
         viewHolder.tv_parise = convertView.findViewById(R.id.tv_show_praise) as TextView
@@ -342,7 +341,6 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         internal var tv_time: TextView? = null//用户发布时间
         internal var btn_care: Button? = null//关注
         internal var tv_content: TextView? = null//发布文字内容
-        internal var tv_detail: TextView? = null//显示更多
         internal var tv_comment: TextView? = null//评论数
         internal var tv_parise: TextView? = null//点赞数
         internal var tv_transmit: TextView? = null//转发数

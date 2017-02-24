@@ -7,14 +7,9 @@ import android.os.Handler
 import android.os.Message
 import android.text.TextUtils
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.AbsListView
-import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ListView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.google.gson.Gson
@@ -25,11 +20,8 @@ import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yb.utils.GsonUtil
 import com.ybg.yxym.yb.utils.MeiLiUtil
-
 import com.ybg.yxym.yueshow.R
-import com.ybg.yxym.yueshow.activity.MainActivity
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
-import com.ybg.yxym.yueshow.adapter.BangAdapter
 import com.ybg.yxym.yueshow.adapter.HomeShowAdapter
 import com.ybg.yxym.yueshow.http.HttpUrl
 import com.ybg.yxym.yueshow.http.SendRequest
@@ -42,8 +34,7 @@ import com.ybg.yxym.yueshow.view.CircleImageView
 import com.ybg.yxym.yueshow.view.bgarefresh.BGANormalRefreshViewHolder
 import com.ybg.yxym.yueshow.view.bgarefresh.BGARefreshLayout
 import kotlinx.android.synthetic.main.activity_user_center_listview.*
-
-import java.util.ArrayList
+import java.util.*
 
 /**
  * 类描述：用户中心
@@ -329,7 +320,7 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
 
     private fun loadFansNum(userBase: UserBase) {
         SendRequest.getFansNum(mContext!!, userBase.id, object : OkCallback<String>
-        (OkStringParser()){
+        (OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
@@ -347,7 +338,7 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
 
     private fun loadFollowNum(userBase: UserBase) {
         SendRequest.getFollowNum(mContext!!, userBase.id, object : OkCallback<String>
-        (OkStringParser()){
+        (OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
@@ -365,13 +356,13 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
 
     private fun loadMiAi(userBase: UserBase) {
         SendRequest.getMiAiBang(mContext!!, "2016-01-01", "2999-12-31", 1, 3, userBase.id, object :
-                OkCallback<String>(OkStringParser()){
+                OkCallback<String>(OkStringParser()) {
 
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
                     val list = GsonUtil.createGson().fromJson<List<BangItem>>(jsonBean.data, object :
-                            TypeToken<List<BangItem>>(){}.type)
+                            TypeToken<List<BangItem>>() {}.type)
                     if (list != null) {
                         if (list.isNotEmpty()) {
                             val first = list.first()
@@ -469,7 +460,7 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
         if (userBase == null) {
             return
         }
-        SendRequest.getUserShowList(mContext!!, userBase!!.id.toInt(), pageNum, pageSize,object : OkCallback<String>
+        SendRequest.getUserShowList(mContext!!, userBase!!.id.toInt(), pageNum, pageSize, object : OkCallback<String>
         (OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 if (pageNum == 1) {
@@ -495,12 +486,13 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
         if (userBase == null) {
             return
         }
-        SendRequest.getUserShowNum(mContext!!, userBase!!.id, object : OkCallback<String> (OkStringParser()) {
+        SendRequest.getUserShowNum(mContext!!, userBase!!.id, object : OkCallback<String>(OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
                     runOnUiThread {
                         tvDynamicNum?.text = jsonBean.data
+                        tvDynamicNum_float?.text = jsonBean.data
                     }
                 }
             }

@@ -33,7 +33,17 @@ class ShowApplication : YbgAPP() {
         Picasso.setSingletonInstance(picasso)
 
         PushManager.getInstance().initialize(applicationContext)
-        PgyCrashManager.register(this)
+        if (!AppConstants.DEBUG) {
+            PgyCrashManager.register(this)
+        }
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        if (!AppConstants.DEBUG) {
+            PgyCrashManager.unregister()
+        }
+        container.clear()
     }
 
     fun initImageLoader(context: Context) {
@@ -75,5 +85,23 @@ class ShowApplication : YbgAPP() {
 
     fun isReceiverMsg(): Boolean {
         return preference.getBoolean("receiverMsg", false)
+    }
+
+    private val container = mutableMapOf<String, Any>()
+
+    fun storeData(key: String, data: Any) {
+        container.put(key, data)
+    }
+
+    fun removeData(key: String) {
+        container.remove(key)
+    }
+
+    fun retrieveData(key: String): Any? {
+        return container.get(key)
+    }
+
+    fun checkData(key: String): Boolean {
+        return container.containsKey(key)
     }
 }

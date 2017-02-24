@@ -29,6 +29,7 @@ import com.ybg.yxym.yb.bean.UserInfo
 import com.ybg.yxym.yueshow.activity.MainActivity
 import com.ybg.yxym.yueshow.activity.user.LoginActivity
 import com.ybg.yxym.yueshow.app.ShowApplication
+import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.constant.MessageEvent
 import com.ybg.yxym.yueshow.http.OkHttpProxy
 import com.ybg.yxym.yueshow.http.SendRequest
@@ -79,13 +80,18 @@ abstract class BaseActivity : AppCompatActivity() {
         mGson = GsonBuilder().serializeNulls().create()
         setContent()
 
-        PgyCrashManager.register(this)
+        if (!AppConstants.DEBUG) {
+            PgyCrashManager.register(this)
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (mEventBus != null) mEventBus!!.unregister(this)
         OkHttpProxy.cancel(mContext!!)
+        if (!AppConstants.DEBUG) {
+            PgyCrashManager.unregister()
+        }
     }
 
     private fun setContent() {

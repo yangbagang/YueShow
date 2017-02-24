@@ -478,12 +478,12 @@ object FileUtils {
         if (TextUtils.isEmpty(filePath)) {
             return filePath
         }
-        var extName = getFileExtension(filePath).toLowerCase()
-        val validExtName = arrayOf("jpg", "gif", "png", "jpeg", "bmp")
-        if (extName !in validExtName) {
-            extName = "png"
-        }
-        return "${System.currentTimeMillis()}.$extName"
+//        var extName = getFileExtension(filePath).toLowerCase()
+//        val validExtName = arrayOf("jpg", "gif", "png", "jpeg", "bmp")
+//        if (extName !in validExtName) {
+//            extName = "png"
+//        }
+        return "${System.currentTimeMillis()}.png"
     }
 
     fun getResourceName(resource: String): String? {

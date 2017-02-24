@@ -11,10 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AbsListView
-import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ListView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.google.gson.Gson
@@ -25,11 +22,9 @@ import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yb.utils.GsonUtil
 import com.ybg.yxym.yb.utils.MeiLiUtil
-
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.MainActivity
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
-import com.ybg.yxym.yueshow.adapter.BangAdapter
 import com.ybg.yxym.yueshow.adapter.HomeShowAdapter
 import com.ybg.yxym.yueshow.http.HttpUrl
 import com.ybg.yxym.yueshow.http.SendRequest
@@ -42,8 +37,7 @@ import com.ybg.yxym.yueshow.view.CircleImageView
 import com.ybg.yxym.yueshow.view.bgarefresh.BGANormalRefreshViewHolder
 import com.ybg.yxym.yueshow.view.bgarefresh.BGARefreshLayout
 import kotlinx.android.synthetic.main.activity_user_center_listview.*
-
-import java.util.ArrayList
+import java.util.*
 
 /**
  * 类描述：个人中心
@@ -524,6 +518,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
                 if (jsonBean != null && jsonBean.isSuccess) {
                     runOnUiThread {
                         tvDynamicNum?.text = jsonBean.data
+                        tvDynamicNum_float?.text = jsonBean.data
                     }
                 }
             }
@@ -540,7 +535,7 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
          * @param context 跳转到本页面
          */
         fun start(context: Context) {
-            val starter = Intent(context, UserCenterActivity::class.java)
+            val starter = Intent(context, PersonCenterActivity::class.java)
             context.startActivity(starter)
         }
     }

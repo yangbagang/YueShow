@@ -190,7 +190,7 @@
             android:src="@mipmap/umeng_socialize_sina_off"/>
     </LinearLayout>
 
-    <com.ybg.yxym.yueshow.view.processButton.impl.GenerateProcessButton
+    <Button
         android:id="@+id/btn_post_show"
         android:layout_width="match_parent"
         android:layout_height="@dimen/px_88"
@@ -201,6 +201,5 @@
         android:background="#549316"
         android:onClick="onClick"
         android:text="发布"
-        app:pb_textComplete="完成"
-        app:pb_textProgress="正在上传数据..."/>
+        android:textColor="@color/white"/>
 </LinearLayout>

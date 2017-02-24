@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationSet
 import android.view.animation.ScaleAnimation
@@ -102,7 +103,6 @@ class ShowDetailActivity : BaseActivity() {
         pingHeaderView = findViewById(R.id.header) as RecyclerViewHeader
 
         w = ScreenUtils.getScreenWidth(mContext!!)
-        h = ScreenUtils.getScreenHeight(mContext!!)
 
         setCustomTitle("查看悦秀")
     }
@@ -500,6 +500,13 @@ class ShowDetailActivity : BaseActivity() {
     private inner class VideoPreparedListener : PLMediaPlayer.OnPreparedListener {
 
         override fun onPrepared(p0: PLMediaPlayer?) {
+            h = ScreenUtils.getDrawableHeight(this@ShowDetailActivity)
+            println("ScreenUtils.getDrawingHeight=${h}")
+            println("ScreenUtils.getScreenHeight=${ScreenUtils.getScreenHeight(this@ShowDetailActivity)}")
+            println("ScreenUtils.getStatusHeight=${ScreenUtils.getStatusHeight(this@ShowDetailActivity)}")
+            println("ScreenUtils.getToolBarHeight=${ScreenUtils.getToolBarHeight(this@ShowDetailActivity)}")
+
+            //进入全屏显示
             videoW = rl_video.width
             videoH = rl_video.height
 
@@ -508,12 +515,7 @@ class ShowDetailActivity : BaseActivity() {
             layoutParams.width = w
             rl_video.layoutParams = layoutParams
 
-            val animationSet = AnimationSet(true)
-            val animation = ScaleAnimation(videoW.toFloat(), w.toFloat(), videoH.toFloat(),
-                    h.toFloat(), Animation.RELATIVE_TO_SELF.toFloat(), 0.5f)
-            animation.duration = 1000
-            animationSet.addAnimation(animation)
-            v_player.startAnimation(animationSet)
+            ll_action_bar.visibility = View.GONE
         }
 
     }
@@ -521,17 +523,13 @@ class ShowDetailActivity : BaseActivity() {
     private inner class VideoCompletionListener : PLMediaPlayer.OnCompletionListener {
 
         override fun onCompletion(p0: PLMediaPlayer?) {
+            //退出全屏
             val layoutParams = rl_video.layoutParams
             layoutParams.height = videoH
             layoutParams.width = videoW
             rl_video.layoutParams = layoutParams
 
-            val animationSet = AnimationSet(true)
-            val animation = ScaleAnimation(w.toFloat(), videoW.toFloat(), h.toFloat(),
-                    videoH.toFloat(), Animation.RELATIVE_TO_SELF.toFloat(), 0.5f)
-            animation.duration = 1000
-            animationSet.addAnimation(animation)
-            v_player.startAnimation(animation)
+            ll_action_bar.visibility = View.VISIBLE
         }
 
     }

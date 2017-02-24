@@ -1,11 +1,11 @@
 package com.ybg.yxym.yueshow.http
 
+import com.ybg.yxym.yueshow.constant.AppConstants
+
 /**
  * 网络请求相关设置,配置请求地址及参数
  */
 object HttpUrl {
-
-    private val debug = true
 
     //开发服务器地址
     val API_HOST_DEBUG = "http://192.168.12.99:8080/ma"
@@ -18,7 +18,7 @@ object HttpUrl {
     //下载
     val FILE_SERVER_DOWNLOAD = "http://120.76.74.2/file/file/download"
 
-    val ROOT_URL = if (debug) API_HOST_DEBUG else API_HOST_PRODUCT
+    val ROOT_URL = if (AppConstants.DEBUG) API_HOST_DEBUG else API_HOST_PRODUCT
     //获取验证码
     private val GET_CAPTCHA = "/system/getCaptcha"
     //验证验证码
