@@ -100,7 +100,7 @@ class PhotoPostActivity : PostShowActivity() {
         val id = item.itemId
 
         if (id == R.id.action_finish) {
-            postShow()
+            checkAndPost()
             return true
         }
 

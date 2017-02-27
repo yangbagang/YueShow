@@ -27,7 +27,7 @@ import java.io.File
  */
 class UserSettingActivity : BaseActivity() {
 
-    private var tvCaech: TextView? = null
+    private var tvCache: TextView? = null
     private var tvCopyright: TextView? = null
     private var switchWifiAuto: Switch? = null
     private var switchNewMsg: Switch? = null
@@ -37,7 +37,7 @@ class UserSettingActivity : BaseActivity() {
     }
 
     override fun setUpView() {
-        tvCaech = findViewById(R.id.tv_caech) as TextView
+        tvCache = findViewById(R.id.tv_cache) as TextView
         tvCopyright = findViewById(R.id.tv_copyright) as TextView
         switchWifiAuto = findViewById(R.id.switch_wifi_auto) as Switch
         switchNewMsg = findViewById(R.id.switch_new_msg) as Switch

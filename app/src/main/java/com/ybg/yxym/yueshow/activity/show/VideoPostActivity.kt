@@ -71,7 +71,7 @@ class VideoPostActivity : PostShowActivity() {
         val id = item.itemId
 
         if (id == R.id.action_finish) {
-            postShow()
+            checkAndPost()
             return true
         }
 
@@ -79,6 +79,7 @@ class VideoPostActivity : PostShowActivity() {
     }
 
     private fun createShow() {
+        println("title=$title")
         SendRequest.createShow(mContext!!, mApplication.token, picId, title, "2",
                 object : OkCallback<String>(OkStringParser()) {
 
@@ -122,13 +123,19 @@ class VideoPostActivity : PostShowActivity() {
         override fun run() {
             super.run()
             uploadPic()
+            println("begin check...")
             while (isUploadPic || isUploadVideo || show == null) {
                 SystemClock.sleep(100)
+            }
+            println("after check...")
+            if (show == null) {
+                println("show is null...")
             }
             appendVideo(show)
         }
 
         private fun uploadPic() {
+            println("开始上传缩略图...")
             SendRequest.uploadFile(mContext!!, "show", File(pic), object : UploadListener() {
                 override fun onFailure(call: Call?, e: IOException?) {
                     e?.let { onFailure(e) }
@@ -139,28 +146,26 @@ class VideoPostActivity : PostShowActivity() {
                 }
 
                 override fun onSuccess(response: Response) {
+                    println("上传缩略图成功...")
                     val json = JSONObject(response.body().string())
                     picId = json.getString("fid")
+                    isUploadPic = false
                     uploadVideo()
                 }
 
                 override fun onFailure(e: Exception) {
+                    println("上传缩略图失败...")
                     e.printStackTrace()
-                    workInLoopThread {
-                        ToastUtil.show("上传图片失败")
-                    }
                 }
 
                 override fun onUIProgress(progress: Progress) {
-                    runOnUiThread {
-                        val progressInt: Int = (progress.currentBytes * 100 / progress.totalBytes).toInt()
-                        btn_post_show.text = "上传缩略图(${progressInt}%)"
-                    }
+
                 }
             })
         }
 
         private fun uploadVideo() {
+            println("开始上传视频文件...")
             SendRequest.uploadFile(mContext!!, "show", File(video), object : UploadListener() {
                 override fun onFailure(call: Call?, e: IOException?) {
                     e?.let { onFailure(e) }
@@ -171,28 +176,25 @@ class VideoPostActivity : PostShowActivity() {
                 }
 
                 override fun onSuccess(response: Response) {
+                    println("上传视频文件完成...")
                     val json = JSONObject(response.body().string())
                     videoId = json.getString("fid")
-                    createShow()
+                    isUploadVideo = false
                 }
 
                 override fun onFailure(e: Exception) {
+                    println("上传视频文件失败...")
                     e.printStackTrace()
-                    workInLoopThread {
-                        ToastUtil.show("上传视频失败")
-                    }
                 }
 
                 override fun onUIProgress(progress: Progress) {
-                    runOnUiThread {
-                        val progressInt: Int = (progress.currentBytes * 100 / progress.totalBytes).toInt()
-                        btn_post_show.text = "上传视频(${progressInt}%)"
-                    }
+
                 }
             })
         }
 
         private fun appendVideo(show: YueShow?) {
+            println("准备添加视频附件...")
             show?.let {
                 SendRequest.addFiles(mContext!!, show.id.toString(), videoId, "2", object :
                         OkCallback<String>(OkStringParser()) {
@@ -201,8 +203,7 @@ class VideoPostActivity : PostShowActivity() {
                         val resultBean = JSonResultBean.fromJSON(response)
                         if (resultBean != null && resultBean.isSuccess) {
                             //创建完成
-                            ToastUtil.show("创建完成。")
-                            finish()
+                            println("添加视频文件完成...")
                         } else {
                             resultBean?.let {
                                 checkUserValid(resultBean.message)
@@ -211,7 +212,9 @@ class VideoPostActivity : PostShowActivity() {
                     }
 
                     override fun onFailure(e: Throwable) {
-                        ToastUtil.show("保存文件失败。")
+                        //ToastUtil.show("保存文件失败。")
+                        e.printStackTrace()
+                        println("添加视频文件失败...")
                     }
 
                 })

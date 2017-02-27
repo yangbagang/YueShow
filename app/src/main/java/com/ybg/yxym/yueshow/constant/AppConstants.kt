@@ -6,7 +6,7 @@ import com.ybg.yxym.yueshow.utils.FileUtils
 object AppConstants {
 
     val PREF_VIDEO_EXIST_USER = "Qupai_has_video_exist_in_user_list_pref"
-    val DEBUG = true
+    val DEBUG = false
     // 外部存储设备的根路径
     private val ExternalStorageRootPath = EnvironmentStateUtils.externalStorageDirectory.path
 

@@ -16,6 +16,11 @@ abstract class PostShowActivity : BaseActivity() {
     fun onClick(view: View) {
         view.isEnabled = false
         //检查数据完整性
+        checkAndPost()
+    }
+
+    fun checkAndPost() {
+        //检查数据完整性
         title = et_show_title.text.toString()
         if (TextUtils.isEmpty(title)) {
             ToastUtil.show("描述不能为空。")
