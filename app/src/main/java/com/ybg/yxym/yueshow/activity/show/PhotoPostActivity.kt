@@ -312,8 +312,8 @@ class PhotoPostActivity : PostShowActivity() {
                     val resultBean = JSonResultBean.fromJSON(response)
                     if (resultBean != null && resultBean.isSuccess) {
                         //创建完成
-                        ToastUtil.show("创建完成。")
-                        finish()
+                        //ToastUtil.show("创建完成。")
+                        //finish()
                     } else {
                         resultBean?.let {
                             checkUserValid(resultBean.message)
@@ -335,6 +335,8 @@ class PhotoPostActivity : PostShowActivity() {
 
             })
         }
+        ToastUtil.show("创建完成。")
+        finish()
     }
 
     companion object {

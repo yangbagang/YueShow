@@ -10,7 +10,7 @@ object AppConstants {
     // 外部存储设备的根路径
     private val ExternalStorageRootPath = EnvironmentStateUtils.externalStorageDirectory.path
 
-    private val BasePath = ExternalStorageRootPath + "/yuemei/"
+    val BasePath = ExternalStorageRootPath + "/yuemei/"
     // 文件存放路径
     val FILE_CACHE_PATH = BasePath + "filecache/"
     // 视频存放路径

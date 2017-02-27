@@ -182,7 +182,10 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.AboutActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.AboutActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.AgreementActivity"></activity>
     </application>
 
 </manifest>

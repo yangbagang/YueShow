@@ -3,17 +3,24 @@ package com.ybg.yxym.yueshow.activity.user
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.AsyncTask
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.Switch
 import android.widget.TextView
+import com.pgyersdk.update.PgyUpdateManager
 import com.ybg.yxym.yb.utils.AppUtil
 
 import com.ybg.yxym.yueshow.R
+import com.ybg.yxym.yueshow.activity.AgreementActivity
 import com.ybg.yxym.yueshow.activity.MainActivity
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
+import com.ybg.yxym.yueshow.constant.AppConstants
+import com.ybg.yxym.yueshow.utils.FileUtils
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.CustomerDialog
+import kotlinx.android.synthetic.main.activity_user_setting.*
+import java.io.File
 
 /**
  * 类描述：设置中心页面
@@ -61,6 +68,14 @@ class UserSettingActivity : BaseActivity() {
             }
         }
         tvCopyright?.text = AppUtil.getAppVersion(mContext!!, "com.ybg.yxym.yueshow")
+
+        updateCacheSize()
+        PgyUpdateManager.register(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        PgyUpdateManager.unregister()
     }
 
     fun onClick(view: View) {
@@ -68,14 +83,15 @@ class UserSettingActivity : BaseActivity() {
             R.id.rl_drafts -> {
                 //ToastUtil.show("草稿箱")
             }
-            R.id.tv_caech -> {
-                //ToastUtil.show("本地缓存")
+            R.id.tv_cache -> {
+                clearCacheDir()
             }
             R.id.tv_copyright -> {
                 //ToastUtil.show("版本更新")
             }
             R.id.rl_agreement -> {
                 //ToastUtil.show("协议")
+                startActivity(Intent(this, AgreementActivity::class.java))
             }
             R.id.tv_logout -> {
                 mApplication.token = ""
@@ -84,16 +100,57 @@ class UserSettingActivity : BaseActivity() {
         }
     }
 
-    /**
-     * 推出提示
-     */
-    //    private fun logout() {
-//        val builder = CustomerDialog.Builder(mContext!!)
-//        builder.setMessage("今天是星期二")
-//        builder.setPositiveButton("确定", DialogInterface.OnClickListener { dialogInterface, i -> dialogInterface.dismiss() })
-//        builder.setNegativeButton("取消", DialogInterface.OnClickListener { dialogInterface, i -> dialogInterface.dismiss() })
-//        builder.create().show()
-//    }
+    private fun updateCacheSize() {
+        Thread {
+            try {
+                val cacheDir = File(AppConstants.BasePath)
+                val cacheSize = FileUtils.getDirSizeInByte(cacheDir)
+                val  formatSize = FileUtils.formatFileSize(cacheSize)
+                runOnUiThread {
+                    tv_cache.text = formatSize
+                }
+            } catch(e: Exception) {
+                e.printStackTrace()
+            }
+        }.start()
+    }
+
+    private fun clearCacheDir() {
+        object : AsyncTask<Unit, Unit, Boolean>() {
+
+            val progressDiag = AppUtil.getProgressDialog(this@UserSettingActivity, "正在清理缓存文件...")
+
+            override fun doInBackground(vararg params: Unit?): Boolean {
+                var result = false
+                try {
+                    result = FileUtils.deleteFile(AppConstants.BasePath)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    result = false
+                }
+                return result
+            }
+
+            override fun onPreExecute() {
+                super.onPreExecute()
+                if (!progressDiag.isShowing) {
+                    progressDiag.show()
+                }
+            }
+
+            override fun onPostExecute(result: Boolean?) {
+                super.onPostExecute(result)
+                if (progressDiag.isShowing) {
+                    progressDiag.dismiss()
+                }
+                if (result != null && result) {
+                    tv_cache.text = "0B"
+                } else {
+                    ToastUtil.show("清理缓存失败。")
+                }
+            }
+        }.execute()
+    }
 
     companion object {
 

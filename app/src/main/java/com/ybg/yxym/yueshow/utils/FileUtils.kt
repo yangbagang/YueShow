@@ -10,6 +10,7 @@ import android.provider.MediaStore.Images.ImageColumns
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import java.text.DecimalFormat
 
 
 object FileUtils {
@@ -515,5 +516,24 @@ object FileUtils {
             }
         }
         return data
+    }
+
+    fun formatFileSize(fileSize: Long): String {
+        val df = DecimalFormat("#.00")
+        var fileSizeString = ""
+        val wrongSize = "0B"
+        if (fileSize == 0L) {
+            return wrongSize
+        }
+        if (fileSize < 1024) {
+            fileSizeString = df.format(fileSize.toDouble()) + "B"
+        } else if (fileSize < 1048576) {
+            fileSizeString = df.format(fileSize.toDouble() / 1024) + "KB"
+        } else if (fileSize < 1073741824) {
+            fileSizeString = df.format(fileSize.toDouble() / 1048576) + "MB"
+        } else {
+            fileSizeString = df.format(fileSize.toDouble() / 1073741824) + "GB"
+        }
+        return fileSizeString
     }
 }

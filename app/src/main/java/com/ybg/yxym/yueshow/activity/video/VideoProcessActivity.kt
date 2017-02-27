@@ -2,11 +2,13 @@ package com.ybg.yxym.yueshow.activity.video
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.media.ThumbnailUtils
 import android.os.AsyncTask
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.MediaController
 import com.ybg.yxym.yb.utils.AppUtil
 import com.ybg.yxym.yueshow.R
@@ -22,6 +24,8 @@ class VideoProcessActivity : BaseActivity() {
 
     private var video = ""
     private var pic = ""
+
+    private var isSupported = false
 
     override fun setContentViewId(): Int {
         return R.layout.activity_video_process
@@ -39,7 +43,17 @@ class VideoProcessActivity : BaseActivity() {
                 val mediaController = MediaController(this)
                 vv_video_process.setMediaController(mediaController)
                 mediaController.setMediaPlayer(vv_video_process)
-                vv_video_process.requestFocus()
+                //vv_video_process.requestFocus()
+                vv_video_process.setOnCompletionListener {
+                    iv_video_process.visibility = View.VISIBLE
+                }
+                iv_video_process.setOnClickListener {
+                    if (isSupported) {
+                        iv_video_process.visibility = View.GONE
+                        vv_video_process.start()
+                    }
+                }
+                SaveImageFile().execute()
             }
         }
     }
@@ -53,54 +67,42 @@ class VideoProcessActivity : BaseActivity() {
         val id = item.itemId
 
         if (id == R.id.action_next) {
-            //保存修改，准备进行下一步。。。
-            SaveImageFile().execute()
+            if (isSupported) {
+                //启动发布界面
+                VideoPostActivity.start(mContext!!, pic, video)
+                finish()
+            } else {
+                ToastUtil.show("视频不存在或格式不支持")
+            }
             return true
         }
 
         return super.onOptionsItemSelected(item)
     }
 
-    private inner class SaveImageFile : AsyncTask<Unit, Unit, Unit>() {
-
-        private val progress = AppUtil.getProgressDialog(mContext!!, "正在保存...")
-        private var isSupported = false
+    private inner class SaveImageFile : AsyncTask<Unit, Unit, Bitmap?>() {
 
         override fun onPreExecute() {
             super.onPreExecute()
-            progress.show()
         }
 
-        override fun onPostExecute(result: Unit?) {
-            super.onPostExecute(result)
-            if (progress.isShowing) {
-                progress.dismiss()
-            }
-            if (isSupported) {
-                //启动发布界面
-                VideoPostActivity.start(mContext!!, pic, video)
-            } else {
-                ToastUtil.show("视频不存在或格式不支持")
-            }
-            //关闭本窗口
-            finish()
+        override fun onPostExecute(bitmap: Bitmap?) {
+            super.onPostExecute(bitmap)
+            iv_video_process.setImageBitmap(bitmap)
         }
 
-        override fun doInBackground(vararg p0: Unit?) {
-            var bitmap = ThumbnailUtils.createVideoThumbnail(video, MediaStore.Images.Thumbnails.MINI_KIND)
+        override fun doInBackground(vararg p0: Unit?): Bitmap? {
+            val bitmap = ThumbnailUtils.createVideoThumbnail(video, MediaStore.Images.Thumbnails.MINI_KIND)
             if (bitmap == null) {
                 isSupported = false
-                return
+                return null
             }
             pic = AppConstants.IMAGE_SAVE_PATH + "/" + System.currentTimeMillis() + ".png"
             val saveFile = File(pic)
-            //缩放尺寸
-            bitmap = BitmapUtils.resizeImage(bitmap, 1024, 768)
-            //压缩大小
-            bitmap = BitmapUtils.compressImage(bitmap, 500)
             //保存
             BitmapUtils.saveBitmap(bitmap, saveFile)
             isSupported = true
+            return bitmap
         }
 
     }
