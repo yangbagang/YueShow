@@ -498,4 +498,12 @@ object SendRequest {
         val params = mapOf<String, String>("token" to token, "showId" to showId, "flag" to flag, "content" to content)
         OkHttpProxy.post(HttpUrl.sendLiveMsgUrl, tag, params, callback)
     }
+
+    /**
+     * 3.6 检查直播状态
+     */
+    fun checkLiveStatus(tag: Context, showId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, Long>("showId" to showId)
+        OkHttpProxy.post(HttpUrl.checkStatusUrl, tag, params, callback)
+    }
 }

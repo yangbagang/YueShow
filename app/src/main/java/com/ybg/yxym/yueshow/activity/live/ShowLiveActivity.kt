@@ -5,7 +5,9 @@ import android.content.Intent
 import android.view.View
 import android.widget.ImageView
 import com.pili.pldroid.player.AVOptions
+import com.pili.pldroid.player.PLMediaPlayer
 import com.pili.pldroid.player.widget.PLVideoView
+import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yueshow.R
@@ -61,6 +63,8 @@ class ShowLiveActivity : LivingBaseActivity() {
             userList.addAll(users)
             userAvatarAdapter.setDataList(userList)
             userAvatarAdapter.notifyDataSetChanged()
+
+            mVideoView.setOnCompletionListener(VideoCompleteListener())
         }
     }
 
@@ -130,6 +134,33 @@ class ShowLiveActivity : LivingBaseActivity() {
                 //nothing
             }
         })
+    }
+
+    private inner class VideoCompleteListener : PLMediaPlayer.OnCompletionListener {
+
+        override fun onCompletion(p0: PLMediaPlayer?) {
+            SendRequest.checkLiveStatus(mContext!!, show!!.id!!, object : OkCallback<String>
+            (OkStringParser()){
+                override fun onSuccess(code: Int, response: String) {
+                    val jsonBean = JSonResultBean.fromJSON(response)
+                    if (jsonBean != null && jsonBean.isSuccess) {
+                        if (jsonBean.data == "1") {
+                            //reconnect
+                            mVideoView.setVideoPath(url)
+                            mVideoView.start()
+                        } else {
+                            //转向结束界面
+
+                        }
+                    }
+                }
+
+                override fun onFailure(e: Throwable) {
+
+                }
+            })
+        }
+
     }
 
     companion object {

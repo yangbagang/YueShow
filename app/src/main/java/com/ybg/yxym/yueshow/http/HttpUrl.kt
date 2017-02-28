@@ -59,6 +59,7 @@ object HttpUrl {
     private val APPEND_FILES = "/showFile/addFiles"
     private val APPEND_EVENTS = "/ruiEvent/appendEvent"
     private val LIVE_DETAIL = "/ruiShow/detail"
+    private val CHECK_LIVE_STATUS = "/ruiShow/checkStatus"
     /*评论美秀*/
     private val PING_LIVE = "/ruiShow/ping"
     /*点赞*/
@@ -139,6 +140,9 @@ object HttpUrl {
 
     val showDetailUrl: String
         get() = ROOT_URL + LIVE_DETAIL
+
+    val checkStatusUrl: String
+        get() = ROOT_URL + CHECK_LIVE_STATUS
 
     val authorInfoUrl: String
         get() = ROOT_URL + AUTHOR_INFO
