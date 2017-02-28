@@ -83,8 +83,8 @@ class LiveMsgAdapter(private var mContext: Activity): BaseAdapter() {
         viewHolder.userAvatar = convertView.findViewById(R.id.userAvatar) as CircleImageView?
         viewHolder.msgText = convertView.findViewById(R.id.msgText) as TextView?
         viewHolder.liveGift = convertView.findViewById(R.id.liveGift) as ImageView?
-        viewHolder.userLevelNum = convertView.findViewById(R.id.tv_mi_ai_name) as TextView?
-        viewHolder.userLevelImg = convertView.findViewById(R.id.tv_mi_ai_score) as ImageView?
+        viewHolder.userLevelNum = convertView.findViewById(R.id.userLevelNum) as TextView?
+        viewHolder.userLevelImg = convertView.findViewById(R.id.userLevelImg) as ImageView?
 
         convertView.tag = viewHolder
     }

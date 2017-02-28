@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.View
+import android.view.WindowManager
 import android.widget.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -60,6 +61,9 @@ abstract class LivingBaseActivity : Activity() {
         mContext = this
         mGson = GsonBuilder().serializeNulls().create()
         setContent()
+        val lp = mContext!!.window.attributes
+        lp.flags = lp.flags or WindowManager.LayoutParams.FLAG_FULLSCREEN
+        mContext!!.window.attributes = lp
     }
 
     private fun setContent() {

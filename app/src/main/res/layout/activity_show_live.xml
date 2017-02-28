@@ -71,6 +71,7 @@
         android:id="@+id/liveBottomBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#44000000"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/activity_vertical_margin">
         <!--底部工具栏-->
@@ -108,7 +109,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/white"
             android:gravity="center_vertical"
             android:visibility="gone">
             <EditText

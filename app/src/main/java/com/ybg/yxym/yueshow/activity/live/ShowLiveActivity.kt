@@ -102,8 +102,8 @@ class ShowLiveActivity : LivingBaseActivity() {
         val options = AVOptions()
 
         // the unit of timeout is ms
-        options.setInteger(AVOptions.KEY_PREPARE_TIMEOUT, 10 * 1000)
-        options.setInteger(AVOptions.KEY_GET_AV_FRAME_TIMEOUT, 10 * 1000)
+        options.setInteger(AVOptions.KEY_PREPARE_TIMEOUT, 60 * 1000)
+        options.setInteger(AVOptions.KEY_GET_AV_FRAME_TIMEOUT, 60 * 1000)
         options.setInteger(AVOptions.KEY_PROBESIZE, 128 * 1024)
         // Some optimization with buffering mechanism when be set to 1
         options.setInteger(AVOptions.KEY_LIVE_STREAMING, mIsLiveStreaming)
