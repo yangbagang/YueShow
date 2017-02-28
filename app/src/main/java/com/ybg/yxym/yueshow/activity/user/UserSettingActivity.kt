@@ -1,16 +1,13 @@
 package com.ybg.yxym.yueshow.activity.user
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.AsyncTask
 import android.view.View
-import android.widget.CompoundButton
 import android.widget.Switch
 import android.widget.TextView
 import com.pgyersdk.update.PgyUpdateManager
 import com.ybg.yxym.yb.utils.AppUtil
-
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.AgreementActivity
 import com.ybg.yxym.yueshow.activity.MainActivity
@@ -18,7 +15,6 @@ import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.utils.FileUtils
 import com.ybg.yxym.yueshow.utils.ToastUtil
-import com.ybg.yxym.yueshow.view.CustomerDialog
 import kotlinx.android.synthetic.main.activity_user_setting.*
 import java.io.File
 

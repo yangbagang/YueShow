@@ -506,4 +506,13 @@ object SendRequest {
         val params = mapOf<String, Long>("showId" to showId)
         OkHttpProxy.post(HttpUrl.checkStatusUrl, tag, params, callback)
     }
+
+    /**
+     * 3.7 直播數據統計
+     */
+    fun getLiveDetail(tag: Context, showId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, Long>("showId" to showId)
+        OkHttpProxy.post(HttpUrl.endLiveUrl, tag, params, callback)
+    }
+
 }

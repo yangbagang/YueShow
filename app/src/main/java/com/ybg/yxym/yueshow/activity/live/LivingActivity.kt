@@ -6,10 +6,7 @@ import android.hardware.Camera
 import android.opengl.GLSurfaceView
 import android.os.Handler
 import android.os.Message
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import com.google.gson.reflect.TypeToken
 import com.qiniu.pili.droid.streaming.*
 import com.qiniu.pili.droid.streaming.widget.AspectFrameLayout
 import com.ybg.yxym.yb.bean.JSonResultBean
@@ -20,7 +17,6 @@ import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_living.*
-import org.json.JSONObject
 
 class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
 
@@ -128,9 +124,10 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
         try {
             mProfile = StreamingProfile()
             mProfile!!.setVideoQuality(StreamingProfile.VIDEO_QUALITY_HIGH1)
-                    .setAudioQuality(StreamingProfile.AUDIO_QUALITY_MEDIUM2)
+                    .setAudioQuality(StreamingProfile.AUDIO_QUALITY_HIGH1)
                     .setEncodingSizeLevel(StreamingProfile.VIDEO_ENCODING_HEIGHT_480)
                     .setEncoderRCMode(StreamingProfile.EncoderRCModes.QUALITY_PRIORITY)
+                    .setAdaptiveBitrateEnable(true)
                     .publishUrl = url
 
             val setting = CameraStreamingSetting()
@@ -138,6 +135,11 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
                     .setContinuousFocusModeEnabled(true)
                     .setCameraPrvSizeLevel(CameraStreamingSetting.PREVIEW_SIZE_LEVEL.MEDIUM)
                     .setCameraPrvSizeRatio(CameraStreamingSetting.PREVIEW_SIZE_RATIO.RATIO_16_9)
+
+            //开启美颜。三个参数依次为磨皮程度、美白程度以及红润程度，取值范围为[0.0f, 1.0f]
+            setting.faceBeautySetting = CameraStreamingSetting.FaceBeautySetting(1.0f, 1.0f, 0.8f)
+            //滤镜
+            setting.setVideoFilter(CameraStreamingSetting.VIDEO_FILTER_TYPE.VIDEO_FILTER_BEAUTY)
 
             mMediaStreamingManager = MediaStreamingManager(this, afl, glSurfaceView, AVCodecType.SW_VIDEO_WITH_SW_AUDIO_CODEC)
             // soft codec
@@ -154,22 +156,6 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
         }
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        menuInflater.inflate(R.menu.complete, menu)
-//        return true
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        val id = item.itemId
-//
-//        if (id == R.id.action_finish) {
-//            closeLive()
-//            return true
-//        }
-//
-//        return super.onOptionsItemSelected(item)
-//    }
-
     private fun startLiveStream() {
         try {
             Thread(Runnable {
@@ -184,16 +170,16 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
     }
 
     private fun stopLiveStream() {
-         try {
-             Thread(Runnable {
-                 if (mMediaStreamingManager != null) {
-                     mMediaStreamingManager?.stopStreaming()
-                 }
-             }).start()
-         } catch (e: Exception) {
-             println(e.message)
-             e.printStackTrace()
-         }
+        try {
+            Thread(Runnable {
+                if (mMediaStreamingManager != null) {
+                    mMediaStreamingManager?.stopStreaming()
+                }
+            }).start()
+        } catch (e: Exception) {
+            println(e.message)
+            e.printStackTrace()
+        }
     }
 
     private fun closeLive() {
@@ -202,11 +188,7 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
             override fun onSuccess(code: Int, response: String) {
                 val jsonBean = JSonResultBean.fromJSON(response)
                 if (jsonBean != null && jsonBean.isSuccess) {
-                    val json = JSONObject(jsonBean.data)
-                    val num = json.getInt("num")
-                    val show = mGson!!.fromJson<YueShow>(json.getString("show"), object
-                        : TypeToken<YueShow>() {}.type)
-                    EndingLiveActivity.start(mContext!!, show, num)
+                    EndingLiveActivity.start(mContext!!, show!!.id!!)
                     finish()
                 } else {
                     jsonBean?.let {

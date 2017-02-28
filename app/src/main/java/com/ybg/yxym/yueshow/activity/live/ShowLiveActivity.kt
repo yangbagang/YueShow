@@ -11,7 +11,6 @@ import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yueshow.R
-import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
@@ -88,7 +87,7 @@ class ShowLiveActivity : LivingBaseActivity() {
 
     override fun sendLiveMsg(msg: String, flag: Int, call: () -> Unit) {
         SendRequest.sendLiveMsg(mContext!!, mApplication.token, "${show?.id}", "$flag", msg,
-                object : OkCallback<String>(OkStringParser()){
+                object : OkCallback<String>(OkStringParser()) {
                     override fun onSuccess(code: Int, response: String) {
                         call()
                     }
@@ -125,7 +124,7 @@ class ShowLiveActivity : LivingBaseActivity() {
         if (show == null) {
             return
         }
-        SendRequest.leaveLive(mContext!!, mApplication.token, "${show!!.id}", object : OkCallback<String>(OkStringParser()){
+        SendRequest.leaveLive(mContext!!, mApplication.token, "${show!!.id}", object : OkCallback<String>(OkStringParser()) {
             override fun onSuccess(code: Int, response: String) {
                 //nothing
             }
@@ -140,7 +139,7 @@ class ShowLiveActivity : LivingBaseActivity() {
 
         override fun onCompletion(p0: PLMediaPlayer?) {
             SendRequest.checkLiveStatus(mContext!!, show!!.id!!, object : OkCallback<String>
-            (OkStringParser()){
+            (OkStringParser()) {
                 override fun onSuccess(code: Int, response: String) {
                     val jsonBean = JSonResultBean.fromJSON(response)
                     if (jsonBean != null && jsonBean.isSuccess) {
@@ -150,7 +149,8 @@ class ShowLiveActivity : LivingBaseActivity() {
                             mVideoView.start()
                         } else {
                             //转向结束界面
-
+                            EndingLiveActivity.start(mContext!!, show!!.id!!)
+                            finish()
                         }
                     }
                 }

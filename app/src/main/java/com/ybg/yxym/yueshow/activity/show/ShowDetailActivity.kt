@@ -252,7 +252,7 @@ class ShowDetailActivity : BaseActivity() {
         rl_video.visibility = View.VISIBLE
         ll_photo_video.visibility = View.GONE
         ImageLoaderUtils.instance.loadBitmap(iv_video_cover, HttpUrl.getImageUrl(show.thumbnail))
-        v_player.setCoverView(iv_video_cover)
+        //v_player.setCoverView(iv_video_cover)
         v_player.setBufferingIndicator(loadingView)
         loadingView.visibility = View.VISIBLE
 
@@ -260,9 +260,16 @@ class ShowDetailActivity : BaseActivity() {
 
         val mMediaController = MediaController(this)
         v_player.setMediaController(mMediaController)
-        v_player.displayAspectRatio = PLVideoView.ASPECT_RATIO_FIT_PARENT
+        //v_player.displayAspectRatio = PLVideoView.ASPECT_RATIO_FIT_PARENT
         v_player.setOnPreparedListener(VideoPreparedListener())
         v_player.setOnCompletionListener(VideoCompletionListener())
+        v_player.setOnVideoSizeChangedListener(VideoSizeChangedListener())
+
+        iv_video_cover.setOnClickListener {
+            if (hasVideo) {
+                v_player.start()
+            }
+        }
     }
 
     private fun loadShowFiles() {
@@ -506,7 +513,7 @@ class ShowDetailActivity : BaseActivity() {
             return windowHeight - statusHeight - toolBarHeight
         }
 
-        override fun onPrepared(p0: PLMediaPlayer?) {
+        override fun onPrepared(mediaPlayer: PLMediaPlayer?) {
             h = getMaxHeight()
             //进入全屏显示
             videoW = rl_video.width
@@ -518,20 +525,34 @@ class ShowDetailActivity : BaseActivity() {
             rl_video.layoutParams = layoutParams
 
             ll_action_bar.visibility = View.GONE
+            iv_video_cover.visibility = View.GONE
         }
 
     }
 
     private inner class VideoCompletionListener : PLMediaPlayer.OnCompletionListener {
 
-        override fun onCompletion(p0: PLMediaPlayer?) {
+        override fun onCompletion(mediaPlayer: PLMediaPlayer?) {
             //退出全屏
             val layoutParams = rl_video.layoutParams
             layoutParams.height = videoH
             layoutParams.width = videoW
             rl_video.layoutParams = layoutParams
 
+            ImageLoaderUtils.instance.loadBitmap(iv_video_cover, HttpUrl.getImageUrl(show.thumbnail))
             ll_action_bar.visibility = View.VISIBLE
+            iv_video_cover.visibility = View.VISIBLE
+        }
+
+    }
+
+    private inner class VideoSizeChangedListener : PLMediaPlayer.OnVideoSizeChangedListener {
+
+        override fun onVideoSizeChanged(mediaPlayer: PLMediaPlayer?, width: Int, height: Int) {
+            if ((v_player.width < v_player.height && rl_video.width > rl_video.height) ||
+                    (v_player.width > v_player.height && rl_video.width < rl_video.height)) {
+                v_player.displayOrientation = 270
+            }
         }
 
     }
