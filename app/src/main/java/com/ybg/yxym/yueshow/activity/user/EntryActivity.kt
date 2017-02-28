@@ -99,6 +99,7 @@ class EntryActivity : BaseActivity() {
                 R.id.rl_entry_video_live//直播
                 -> {
                     StartLiveActivity.start(mContext!!)
+                    finish()
                 }
                 R.id.rl_entry_video_play//视频
                 -> {
