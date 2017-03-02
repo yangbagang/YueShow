@@ -220,7 +220,11 @@ class PhotoProcessActivity : BaseActivity() {
             override fun onItemClick(position: Int) {
                 val filter = GPUImageFilterTools.createFilterForType(mContext, mFilterList!![position].type)
                 val gpuImage = GPUImage(this@PhotoProcessActivity)
-                gpuImage.setImage(BitmapFactory.decodeFile(mPics[mIndex]))
+                var imgPath = mPics[mIndex]
+                if (imgPath.startsWith("file:", true)) {
+                    imgPath = imgPath.substring(5)
+                }
+                gpuImage.setImage(BitmapFactory.decodeFile(imgPath))
                 gpuImage.setFilter(filter)
                 //应用过滤效果
                 mBitmapList[mIndex] = gpuImage.bitmapWithFilterApplied

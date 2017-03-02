@@ -1,5 +1,6 @@
 package com.ybg.yxym.yueshow.http
 
+import com.ybg.yxym.yb.utils.Base64Util
 import com.ybg.yxym.yueshow.constant.AppConstants
 
 /**
@@ -10,13 +11,13 @@ object HttpUrl {
     //开发服务器地址
     val API_HOST_DEBUG = "http://192.168.12.99:8080/ma"
     //生产服务器地址
-    val API_HOST_PRODUCT = "https://139.224.186.241:8443/ma"
+    val API_HOST_PRODUCT = "http://139.224.186.241:8080/ma"
     //上传
     val FILE_SERVER_UPLOAD = "http://120.76.74.2/file/file/upload"
     //预览
-    val FILE_SERVER_PREVIEW = "http://120.76.74.2/file/file/preview"
+    val FILE_SERVER_PREVIEW = "http://139.224.186.241"
     //下载
-    val FILE_SERVER_DOWNLOAD = "http://120.76.74.2/file/file/download"
+    val FILE_SERVER_DOWNLOAD = "http://139.224.186.241"
 
     val ROOT_URL = if (AppConstants.DEBUG) API_HOST_DEBUG else API_HOST_PRODUCT
     //获取验证码
@@ -244,13 +245,17 @@ object HttpUrl {
         if (fid.startsWith("http:", true) || fid.startsWith("https:", true)) {
             return fid
         }
-        return FILE_SERVER_PREVIEW + "/" + fid
+        val path = Base64Util.getDecodeString(fid)
+        //println("path=$path")
+        return FILE_SERVER_PREVIEW + "/" + path
     }
 
     fun getVideoUrl(fid: String): String {
         if (fid.startsWith("http:", true) || fid.startsWith("https:", true)) {
             return fid
         }
-        return FILE_SERVER_DOWNLOAD + "/" + fid
+        val path = Base64Util.getDecodeString(fid)
+        //println("path=$path")
+        return FILE_SERVER_DOWNLOAD + "/" + path
     }
 }

@@ -27,8 +27,8 @@ android {
         applicationId "com.ybg.yxym.yueshow"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 5
-        versionName "0.5"
+        versionCode 6
+        versionName "0.5.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //个推推送配置
         manifestPlaceholders = [
