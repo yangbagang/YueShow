@@ -44,7 +44,7 @@ class HallFragment : BaseFragment() {
 
         slidingTabs.addTab(slidingTabs.newTab().setText("最热"))
         slidingTabs.addTab(slidingTabs.newTab().setText("友秀圈"))
-        slidingTabs.addTab(slidingTabs.newTab().setText("最鲜"))
+        slidingTabs.addTab(slidingTabs.newTab().setText("最近"))
         slidingTabs.setupWithViewPager(vpMainContent)
     }
 

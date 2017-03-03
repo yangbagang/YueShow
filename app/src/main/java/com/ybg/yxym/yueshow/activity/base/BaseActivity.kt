@@ -80,7 +80,7 @@ abstract class BaseActivity : AppCompatActivity() {
         mGson = GsonBuilder().serializeNulls().create()
         setContent()
 
-        if (!AppConstants.DEBUG) {
+        if (!AppConstants.isDebug) {
             PgyCrashManager.register(this)
         }
     }
@@ -89,7 +89,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onDestroy()
         if (mEventBus != null) mEventBus!!.unregister(this)
         OkHttpProxy.cancel(mContext!!)
-        if (!AppConstants.DEBUG) {
+        if (!AppConstants.isDebug) {
             PgyCrashManager.unregister()
         }
     }

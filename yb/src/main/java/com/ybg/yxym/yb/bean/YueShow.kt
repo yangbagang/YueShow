@@ -20,6 +20,7 @@ class YueShow : Serializable {
     var fileNum: Int = 1//附带文件数量
     var flag: Int = 1//是否有效
     var user: UserBase? = null
+    val price: Int = 0//需要付多少钱才可以看
 
     override fun toString(): String {
         return "YueShow{" +

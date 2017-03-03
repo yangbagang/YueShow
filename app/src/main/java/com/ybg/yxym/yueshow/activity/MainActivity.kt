@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setUpView()
         init()
 
-        if (!AppConstants.DEBUG) {
+        if (!AppConstants.isDebug) {
             PgyCrashManager.register(this)
             PgyUpdateManager.register(this)
         }
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onDestroy() {
         super.onDestroy()
-        if (!AppConstants.DEBUG) {
+        if (!AppConstants.isDebug) {
             PgyUpdateManager.unregister()
             PgyCrashManager.unregister()
         }

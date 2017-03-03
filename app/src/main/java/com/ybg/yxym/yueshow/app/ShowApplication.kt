@@ -33,14 +33,14 @@ class ShowApplication : YbgAPP() {
         Picasso.setSingletonInstance(picasso)
 
         PushManager.getInstance().initialize(applicationContext)
-        if (!AppConstants.DEBUG) {
+        if (!AppConstants.isDebug) {
             PgyCrashManager.register(this)
         }
     }
 
     override fun onTerminate() {
         super.onTerminate()
-        if (!AppConstants.DEBUG) {
+        if (!AppConstants.isDebug) {
             PgyCrashManager.unregister()
         }
         container.clear()

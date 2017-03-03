@@ -19,7 +19,7 @@ object HttpUrl {
     //下载
     val FILE_SERVER_DOWNLOAD = "http://139.224.186.241"
 
-    val ROOT_URL = if (AppConstants.DEBUG) API_HOST_DEBUG else API_HOST_PRODUCT
+    val ROOT_URL = if (AppConstants.isDebug) API_HOST_DEBUG else API_HOST_PRODUCT
     //获取验证码
     private val GET_CAPTCHA = "/system/getCaptcha"
     //验证验证码

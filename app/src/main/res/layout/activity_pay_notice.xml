@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/activity_pay_notice"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ybg.yxym.yueshow.activity.show.PayNoticeActivity">
+
+    <ImageView
+        android:id="@+id/iv_pay_notice"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@mipmap/ic_start_live_bg"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/px_120"
+        android:layout_marginRight="@dimen/px_120"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="您需要支付"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/px_text_24"/>
+
+            <TextView
+                android:id="@+id/tv_price_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:text="38美票"
+                android:textColor="#00f0ff"
+                android:textSize="@dimen/px_text_30"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="才能观看"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/px_text_24"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_pay_notice"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px_80"
+            android:layout_marginTop="@dimen/px_54"
+            android:background="@drawable/shape_orange_bg"
+            android:gravity="center"
+            android:text="支付"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/px_text_30"/>
+    </LinearLayout>
+
+</RelativeLayout>

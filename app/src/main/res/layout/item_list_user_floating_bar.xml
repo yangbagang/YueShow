@@ -25,7 +25,7 @@
             android:layout_centerInParent="true"
             android:text="动态"
             android:textColor="#afb6bc"
-            android:textSize="@dimen/px_30"/>
+            android:textSize="@dimen/px_text_30"/>
 
         <TextView
             android:id="@+id/tv_dynamic_num"
@@ -35,7 +35,7 @@
             android:layout_toRightOf="@id/tv_dynamic"
             android:text="15"
             android:textColor="@color/color_7dcf2c"
-            android:textSize="@dimen/px_20"/>
+            android:textSize="@dimen/px_text_20"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -58,7 +58,7 @@
             android:layout_centerInParent="true"
             android:text="约会"
             android:textColor="#afb6bc"
-            android:textSize="@dimen/px_30"/>
+            android:textSize="@dimen/px_text_30"/>
 
         <TextView
             android:id="@+id/tv_join_data_num"
@@ -68,7 +68,7 @@
             android:layout_toRightOf="@id/tv_join_data"
             android:text="15"
             android:textColor="@color/color_7dcf2c"
-            android:textSize="@dimen/px_20"/>
+            android:textSize="@dimen/px_text_20"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -92,7 +92,7 @@
             android:layout_centerInParent="true"
             android:text="成就"
             android:textColor="#afb6bc"
-            android:textSize="@dimen/px_30"/>
+            android:textSize="@dimen/px_text_30"/>
 
         <TextView
             android:id="@+id/tv_achievement_num"
@@ -102,7 +102,7 @@
             android:layout_toRightOf="@id/tv_achievement"
             android:text="15"
             android:textColor="@color/color_7dcf2c"
-            android:textSize="@dimen/px_20"/>
+            android:textSize="@dimen/px_text_20"/>
     </RelativeLayout>
 
 </LinearLayout>

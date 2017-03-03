@@ -5,6 +5,7 @@
               android:orientation="vertical">
 
     <FrameLayout
+        android:id="@+id/fl_user_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -35,4 +36,14 @@
         </LinearLayout>
     </FrameLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_user_fortune"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <include layout="@layout/item_list_user_fortune"/>
+
+    </LinearLayout>
 </LinearLayout>

@@ -80,7 +80,7 @@ class EndingLiveActivity : BaseActivity() {
 
             override fun onFailure(e: Throwable) {
                 ToastUtil.show("获取数据失败")
-                if (AppConstants.DEBUG) {
+                if (AppConstants.isDebug) {
                     e.printStackTrace()
                 }
             }

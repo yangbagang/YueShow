@@ -36,7 +36,7 @@ import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.CircleImageView
 import com.ybg.yxym.yueshow.view.bgarefresh.BGANormalRefreshViewHolder
 import com.ybg.yxym.yueshow.view.bgarefresh.BGARefreshLayout
-import kotlinx.android.synthetic.main.activity_user_center_listview.*
+import kotlinx.android.synthetic.main.activity_person_center_listview.*
 import java.util.*
 
 /**
@@ -263,7 +263,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
         when (view.id) {
             R.id.rl_dynamic -> {
                 setResSelector(0)
-                ToastUtil.show("动态")
+                fl_user_activity.visibility = View.VISIBLE
+                ll_user_fortune.visibility = View.GONE
             }
             R.id.rl_join_data -> {
                 setResSelector(1)
@@ -271,7 +272,8 @@ class PersonCenterActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.rl_achievement -> {
                 setResSelector(2)
-                ToastUtil.show("成就")
+                fl_user_activity.visibility = View.GONE
+                ll_user_fortune.visibility = View.VISIBLE
             }
             R.id.rl_user_level -> LevelActivity.start(mContext!!)
             R.id.tv_go_mi_ai -> {
