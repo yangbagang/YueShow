@@ -22,9 +22,9 @@ abstract class ProgressHandler(uiProgressListener: UIProgressListener) : Handler
         when (msg.what) {
             UPDATE -> if (listener != null)
                 progress(listener, msg.obj as Progress)
-            START -> if (mListenerWeakRef.get() != null)
+            START -> if (listener != null)
                 start(listener)
-            FINISH -> if (mListenerWeakRef.get() != null)
+            FINISH -> if (listener != null)
                 finish(listener)
             else -> super.handleMessage(msg)
         }
