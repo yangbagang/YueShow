@@ -112,12 +112,28 @@
             android:src="@mipmap/zima_kameng"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginLeft="@dimen/px_20"
             android:text="芝麻开门"
             android:textSize="@dimen/px_text_30"
-            android:textColor="#545866"/>
+            android:textColor="#545866"
+            android:onClick="selectShowPrice"/>
+
+        <TextView
+            android:id="@+id/tv_show_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/px_12"
+            android:textColor="#de4942"
+            android:textSize="@dimen/px_text_30"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/px_30"
+            android:src="@mipmap/ic_gray_right_arrow"/>
 
     </LinearLayout>
 

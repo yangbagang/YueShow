@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ybg.yxym.yueshow.activity.show.ShowPriceActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/px_36"
+        android:layout_marginLeft="@dimen/px_40"
+        android:text="请选择门票"
+        android:textSize="@dimen/px_text_30"
+        android:textColor="#4d5359" />
+
+    <TextView
+        android:id="@+id/tv_show_38"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_88"
+        android:layout_marginLeft="@dimen/px_40"
+        android:layout_marginRight="@dimen/px_40"
+        android:layout_marginTop="@dimen/px_36"
+        android:background="@drawable/shape_gray_border"
+        android:gravity="center"
+        android:text="38美票"
+        android:textColor="#de4942"
+        android:textSize="@dimen/px_text_30"
+        android:onClick="onClick"/>
+
+    <TextView
+        android:id="@+id/tv_show_58"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_88"
+        android:layout_marginLeft="@dimen/px_40"
+        android:layout_marginRight="@dimen/px_40"
+        android:layout_marginTop="@dimen/px_40"
+        android:background="@drawable/shape_gray_border"
+        android:gravity="center"
+        android:text="58美票"
+        android:textColor="#de4942"
+        android:textSize="@dimen/px_text_30"
+        android:onClick="onClick"/>
+
+    <TextView
+        android:id="@+id/tv_show_88"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_88"
+        android:layout_marginLeft="@dimen/px_40"
+        android:layout_marginRight="@dimen/px_40"
+        android:layout_marginTop="@dimen/px_40"
+        android:background="@drawable/shape_gray_border"
+        android:gravity="center"
+        android:text="88美票"
+        android:textColor="#de4942"
+        android:textSize="@dimen/px_text_30"
+        android:onClick="onClick"/>
+</LinearLayout>
