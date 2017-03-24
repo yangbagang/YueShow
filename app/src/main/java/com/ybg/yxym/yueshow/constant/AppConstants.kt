@@ -5,7 +5,7 @@ import com.ybg.yxym.yueshow.utils.FileUtils
 
 object AppConstants {
 
-    val isDebug = false
+    val isDebug = true
 
     val PREF_VIDEO_EXIST_USER = "Qupai_has_video_exist_in_user_list_pref"
 
