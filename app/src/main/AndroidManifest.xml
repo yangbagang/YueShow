@@ -188,6 +188,12 @@
         <activity android:name=".activity.AgreementActivity"/>
         <activity android:name=".activity.show.PayNoticeActivity">
         </activity>
+        <activity android:name=".activity.msg.ContactActivity">
+        </activity>
+        <activity android:name=".activity.msg.FriendActivity">
+        </activity>
+        <activity android:name=".activity.msg.DateDetailActivity">
+        </activity>
     </application>
 
 </manifest>

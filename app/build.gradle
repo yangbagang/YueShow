@@ -10,15 +10,17 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def oldFile = output.outputFile
-            if (variant.buildType.name.equals('release')) {
+            if (variant.buildType.name == 'release') {
                 def releaseApkName = 'YM-' + defaultConfig.versionName + '.apk'
                 output.outputFile = new File(oldFile.parent, releaseApkName)
             }
-            if (variant.buildType.name.equals('beta')) {
+            if (variant.buildType.name == 'beta') {
                 def betaName = oldFile.name.replace(".apk", "-v" + "-build.apk")
                 output.outputFile = new File(oldFile.parent, betaName)
             }
-            if (variant.buildType.name.equals('debug')) {
+            if (variant.buildType.name == 'debug') {
+                def releaseApkName = 'YM-debug-' + defaultConfig.versionName + '.apk'
+                output.outputFile = new File(oldFile.parent, releaseApkName)
             }
         }
     }
@@ -27,8 +29,8 @@ android {
         applicationId "com.ybg.yxym.yueshow"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 7
-        versionName "0.6"
+        versionCode 8
+        versionName "0.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //个推推送配置
         manifestPlaceholders = [
@@ -54,23 +56,24 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:design:25.2.0'
-    testCompile 'junit:junit:4.12'
     compile project(':yb')
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.github.danylovolokh:video-player-manager:0.2.0'
     compile 'com.github.danylovolokh:list-visibility-utils:0.2.0'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'com.bartoszlipinski:recyclerviewheader2:2.0.1'
     compile 'com.qiniu:happy-dns:0.2.7'
     compile 'com.qiniu.pili:pili-android-qos:0.8.18'
     compile 'com.getui:sdk:2.7.0.0'
     compile 'com.getui:ext:2.0.3'
     compile 'com.pgyersdk:sdk:2.5.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'junit:junit:4.12'
 }
 repositories {
     mavenCentral()

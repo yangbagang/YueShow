@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ybg.yxym.yueshow.activity.msg.FriendActivity"
+    android:orientation="vertical"
+    android:background="#eaeaea">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_82"
+        android:layout_marginTop="@dimen/px_18"
+        android:layout_marginBottom="@dimen/px_18"
+        android:layout_marginLeft="@dimen/px_10"
+        android:layout_marginRight="@dimen/px_10"
+        android:background="@drawable/shape_edittext_white_bg"
+        android:gravity="center_vertical">
+        <ImageView
+            android:layout_width="@dimen/px_30"
+            android:layout_height="@dimen/px_30"
+            android:src="@mipmap/ic_search_logo"
+            android:layout_marginLeft="@dimen/px_38"/>
+        <EditText
+            android:id="@+id/et_friend_search_key"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/px_20"
+            android:hint="搜悦美用户和群组"
+            android:textColor="#aab1b8"
+            android:textSize="@dimen/px_text_24"
+            android:background="@color/white"/>
+        <TextView
+            android:layout_width="@dimen/px_80"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/px_40"
+            android:gravity="center"
+            android:text="搜索"
+            android:textSize="@dimen/px_text_30"
+            android:textColor="#545866"/>
+    </LinearLayout>
+    <ListView
+        android:id="@+id/lv_friend_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+</LinearLayout>

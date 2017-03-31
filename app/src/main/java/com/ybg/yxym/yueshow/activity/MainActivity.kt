@@ -29,6 +29,7 @@ import com.ybg.yxym.yb.utils.LogUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.home.ChartsFragment
 import com.ybg.yxym.yueshow.activity.home.HallFragment
+import com.ybg.yxym.yueshow.activity.msg.FriendActivity
 import com.ybg.yxym.yueshow.activity.user.*
 import com.ybg.yxym.yueshow.adapter.ViewPagerAdapter
 import com.ybg.yxym.yueshow.app.ShowApplication
@@ -105,7 +106,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (id == R.id.action_msg) {
             //跳转到消息页面
-            //UserSettingActivity.start(mContext!!)
+            FriendActivity.start(this@MainActivity)
             return true
         }
 

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_98"
+        android:gravity="center_vertical">
+
+        <com.ybg.yxym.yueshow.view.CircleImageView
+            android:id="@+id/ci_friend_avatar"
+            android:layout_width="@dimen/px_70"
+            android:layout_height="@dimen/px_70"
+            android:layout_marginLeft="@dimen/px_26"
+            android:layout_marginRight="@dimen/px_26"
+            android:src="@mipmap/default_avatar"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_friend_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="你好友"
+                android:textColor="#545866"
+                android:textSize="@dimen/px_text_30"/>
+
+            <TextView
+                android:id="@+id/tv_friend_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px_16"
+                android:text="系统给你发一个通知"
+                android:textColor="#aab1b8"
+                android:textSize="@dimen/px_text_22"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_friend_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/px_30"
+            android:text="刚刚"
+            android:textColor="#aab1b8"
+            android:textSize="@dimen/px_text_20"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_2"
+        android:background="#d3d9df"/>
+</LinearLayout>

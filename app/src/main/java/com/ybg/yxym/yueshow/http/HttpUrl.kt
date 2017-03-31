@@ -258,4 +258,17 @@ object HttpUrl {
         //println("path=$path")
         return FILE_SERVER_DOWNLOAD + "/" + path
     }
+
+    val friendMsgUrl: String
+        get() = ROOT_URL + "/userMsg/getMsgList"
+    val friendListUrl: String
+        get() = ROOT_URL + "/friend/getFriendList"
+    val dateDetailUrl: String
+        get() = ROOT_URL + "/userDate/viewDetail"
+    val acceptDateUrl: String
+        get() = ROOT_URL + "/userDate/accept"
+    val rejectDateUrl: String
+        get() = ROOT_URL + "/userDate/reject"
+    val ignoreDateUrl: String
+        get() = ROOT_URL + "/userDate/ignore"
 }

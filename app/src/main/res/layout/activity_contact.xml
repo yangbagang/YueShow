@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ybg.yxym.yueshow.activity.msg.ContactActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_contact_search"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_98"
+        android:gravity="center_vertical">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/px_82"
+            android:layout_marginTop="@dimen/px_18"
+            android:layout_marginBottom="@dimen/px_18"
+            android:layout_marginLeft="@dimen/px_10"
+            android:layout_marginRight="@dimen/px_10"
+            android:background="@drawable/shape_btn_b3"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="@dimen/px_30"
+                android:layout_height="@dimen/px_30"
+                android:src="@mipmap/ic_search_logo"
+                android:layout_marginLeft="@dimen/px_38"/>
+            <EditText
+                android:id="@+id/et_friend_search_key"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/px_20"
+                android:hint="搜悦美用户和群组"
+                android:textColor="#aab1b8"
+                android:textSize="@dimen/px_text_24"
+                android:background="@null"/>
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="@dimen/px_80"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/px_40"
+            android:gravity="center"
+            android:text="搜索"
+            android:textSize="@dimen/px_text_30"
+            android:textColor="#545866"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/v_contact_split_1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_20"
+        android:layout_below="@id/ll_contact_search"
+        android:background="#ecedf3" />
+
+    <LinearLayout
+        android:id="@+id/ll_contact_add"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_98"
+        android:layout_below="@id/v_contact_split_1"
+        android:gravity="center_vertical">
+        <ImageView
+            android:layout_width="@dimen/px_70"
+            android:layout_height="@dimen/px_70"
+            android:src="@mipmap/ic_add_friends"
+            android:layout_marginLeft="@dimen/px_26"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px_30"
+            android:text="添加朋友"
+            android:textColor="#4d5359"
+            android:textSize="@dimen/px_text_30"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_contact"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_contact_add">
+
+    </ListView>
+
+    <com.ybg.yxym.yueshow.view.ContactSideBar
+        android:id="@+id/ct_side_bar"
+        android:layout_width="32dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"/>
+</RelativeLayout>

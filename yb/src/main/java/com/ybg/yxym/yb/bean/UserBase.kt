@@ -1,5 +1,6 @@
 package com.ybg.yxym.yb.bean
 
+import com.ybg.yxym.yb.utils.PinyinUtil
 import java.io.Serializable
 
 /**
@@ -16,6 +17,14 @@ class UserBase : Serializable {
     var flag = 1//扩展用字段，为1可以关注，0不能关注。
     var ml = 0//扩展用字段，记录美秀美力值。
     var score = 0//扩展字段，记录用户总美力值
+
+    fun getFirstPY(): String {
+        val py = PinyinUtil.getPingYin(nickName)
+        if (py != null && py!!.length > 0) {
+            return py!!.toUpperCase().substring(0, 1)
+        }
+        return "#"
+    }
 
     override fun toString(): String {
         return "UserBase{" +

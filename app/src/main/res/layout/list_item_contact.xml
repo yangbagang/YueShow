@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <!-- 这个TextView就是显示字母的 -->
+    <TextView
+        android:id="@+id/tv_contact_tag"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_30"
+        android:background="#efefef"
+        android:gravity="center_vertical"
+        android:paddingLeft="26dp"
+        android:text="Z"
+        android:textColor="#afb6bc"
+        android:textSize="@dimen/px_text_20"
+        android:visibility="visible"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_94"
+        android:gravity="center_vertical">
+
+        <com.ybg.yxym.yueshow.view.CircleImageView
+            android:id="@+id/ci_contact_avatar"
+            android:layout_width="@dimen/px_70"
+            android:layout_height="@dimen/px_70"
+            android:layout_marginLeft="@dimen/px_26"
+            android:layout_marginRight="@dimen/px_26"
+            android:src="@mipmap/default_avatar"/>
+
+        <TextView
+            android:id="@+id/tv_contact_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="张三"
+            android:textColor="#4d5359"
+            android:textSize="@dimen/px_text_26"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/v_contact_split"
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="#efefef"/>
+</LinearLayout>
