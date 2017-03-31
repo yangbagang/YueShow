@@ -39,9 +39,7 @@ import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.picasso.Picasso
-import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
-import com.ybg.yxym.yueshow.utils.ScreenUtils
-import com.ybg.yxym.yueshow.utils.ToastUtil
+import com.ybg.yxym.yueshow.utils.*
 import com.ybg.yxym.yueshow.view.BannerFrame
 import com.ybg.yxym.yueshow.view.CircleImageView
 import com.ybg.yxym.yueshow.view.MediaController
@@ -74,13 +72,7 @@ class ShowDetailActivity : BaseActivity() {
     private lateinit var pingHeaderView: RecyclerViewHeader
 
     private var w = 0
-    private var h = 0
-    private var videoW = 0
-    private var videoH = 0
-
-    //视频播放相关
-    private val mIsLiveStreaming = 0
-    private var hasVideo = false
+    private var videoUrl: String? = null
 
     private var user: UserBase? = null
 
@@ -145,27 +137,6 @@ class ShowDetailActivity : BaseActivity() {
             }
         } else {
             //
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (hasVideo) {
-            v_player.start()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if (hasVideo) {
-            v_player.pause()
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (hasVideo) {
-            v_player.stopPlayback()
         }
     }
 
@@ -251,23 +222,11 @@ class ShowDetailActivity : BaseActivity() {
     private fun initVideoView() {
         rl_video.visibility = View.VISIBLE
         ll_photo_video.visibility = View.GONE
-        ImageLoaderUtils.instance.loadBitmap(iv_video_cover, HttpUrl.getImageUrl(show.thumbnail))
-        //v_player.setCoverView(iv_video_cover)
-        v_player.setBufferingIndicator(loadingView)
-        loadingView.visibility = View.VISIBLE
-
-        setOptions(0)
-
-        val mMediaController = MediaController(this)
-        v_player.setMediaController(mMediaController)
-        //v_player.displayAspectRatio = PLVideoView.ASPECT_RATIO_FIT_PARENT
-        v_player.setOnPreparedListener(VideoPreparedListener())
-        v_player.setOnCompletionListener(VideoCompletionListener())
-        v_player.setOnVideoSizeChangedListener(VideoSizeChangedListener())
+        ImageLoaderUtils.instance.loadBitmap(iv_video_thumbnail, HttpUrl.getImageUrl(show.thumbnail))
 
         iv_video_cover.setOnClickListener {
-            if (hasVideo) {
-                v_player.start()
+            if (videoUrl != null) {
+                VideoPlayerActivity.start(mContext!!, videoUrl!!)
             }
         }
     }
@@ -294,9 +253,12 @@ class ShowDetailActivity : BaseActivity() {
                     } else if (show.type == 2) {
                         if (files.isNotEmpty()) {
                             val first = files.first()
-                            v_player.setVideoPath(HttpUrl.getVideoUrl(first.file))
-                            hasVideo = true
-                            v_player.start()
+                            videoUrl = HttpUrl.getVideoUrl(first.file)
+                            if (videoUrl != null && mApplication.isAutoPlay() &&
+                                    NetworkUtil.getNetworkState(mContext!!) == NetworkType.WIFI) {
+                                //wifi下自动播放
+                                VideoPlayerActivity.start(mContext!!, videoUrl!!)
+                            }
                         }
                     }
                 } else {
@@ -387,28 +349,6 @@ class ShowDetailActivity : BaseActivity() {
             }
 
         })
-    }
-
-    private fun setOptions(codecType: Int) {
-        val options = AVOptions()
-
-        // the unit of timeout is ms
-        options.setInteger(AVOptions.KEY_PREPARE_TIMEOUT, 10 * 1000)
-        options.setInteger(AVOptions.KEY_GET_AV_FRAME_TIMEOUT, 10 * 1000)
-        options.setInteger(AVOptions.KEY_PROBESIZE, 128 * 1024)
-        // Some optimization with buffering mechanism when be set to 1
-        options.setInteger(AVOptions.KEY_LIVE_STREAMING, mIsLiveStreaming)
-        if (mIsLiveStreaming === 1) {
-            options.setInteger(AVOptions.KEY_DELAY_OPTIMIZATION, 1)
-        }
-
-        // 1 -> hw codec enable, 0 -> disable [recommended]
-        options.setInteger(AVOptions.KEY_MEDIACODEC, codecType)
-
-        // whether start play automatically after prepared, default value is 1
-        options.setInteger(AVOptions.KEY_START_ON_PREPARED, 0)
-
-        v_player.setAVOptions(options)
     }
 
     /**
@@ -502,59 +442,6 @@ class ShowDetailActivity : BaseActivity() {
                 UserCenterActivity.start(mContext!!, user!!)
             }
         }
-    }
-
-    private inner class VideoPreparedListener : PLMediaPlayer.OnPreparedListener {
-
-        private fun getMaxHeight(): Int {
-            val windowHeight = ScreenUtils.getScreenHeight(this@ShowDetailActivity)
-            val statusHeight = ScreenUtils.getStatusHeight(this@ShowDetailActivity)
-            val toolBarHeight = supportActionBar?.height ?: 0
-            return windowHeight - statusHeight - toolBarHeight
-        }
-
-        override fun onPrepared(mediaPlayer: PLMediaPlayer?) {
-            h = getMaxHeight()
-            //进入全屏显示
-            videoW = rl_video.width
-            videoH = rl_video.height
-
-            val layoutParams = rl_video.layoutParams
-            layoutParams.height = h
-            layoutParams.width = w
-            rl_video.layoutParams = layoutParams
-
-            ll_action_bar.visibility = View.GONE
-            iv_video_cover.visibility = View.GONE
-        }
-
-    }
-
-    private inner class VideoCompletionListener : PLMediaPlayer.OnCompletionListener {
-
-        override fun onCompletion(mediaPlayer: PLMediaPlayer?) {
-            //退出全屏
-            val layoutParams = rl_video.layoutParams
-            layoutParams.height = videoH
-            layoutParams.width = videoW
-            rl_video.layoutParams = layoutParams
-
-            ImageLoaderUtils.instance.loadBitmap(iv_video_cover, HttpUrl.getImageUrl(show.thumbnail))
-            ll_action_bar.visibility = View.VISIBLE
-            iv_video_cover.visibility = View.VISIBLE
-        }
-
-    }
-
-    private inner class VideoSizeChangedListener : PLMediaPlayer.OnVideoSizeChangedListener {
-
-        override fun onVideoSizeChanged(mediaPlayer: PLMediaPlayer?, width: Int, height: Int) {
-            if ((v_player.width < v_player.height && rl_video.width > rl_video.height) ||
-                    (v_player.width > v_player.height && rl_video.width < rl_video.height)) {
-                v_player.displayOrientation = 270
-            }
-        }
-
     }
 
     /**

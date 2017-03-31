@@ -16,9 +16,11 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
+import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.http.HttpUrl
 import com.ybg.yxym.yueshow.transformer.ZoomOutPageTransformer
@@ -33,12 +35,13 @@ import java.util.concurrent.TimeUnit
  */
 class BannerFrame @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
                                             defStyle: Int = 0) : FrameLayout(context, attrs, defStyle) {
-    private var imageViewList: MutableList<ImageView> = ArrayList<ImageView>()
+    private var imageViewList: MutableList<BannerFrameItem> = ArrayList<BannerFrameItem>()
     private lateinit var viewIndex: TextView
     private lateinit var mViewPager: ViewPager
     private var currentItem = 0
     private var scheduledExecutorService: ScheduledExecutorService? = null
     private var w = 0
+    private lateinit var options: DisplayImageOptions
     @SuppressLint("HandlerLeak")
     private val handler = object : Handler() {
         override fun handleMessage(msg: Message) {
@@ -49,6 +52,7 @@ class BannerFrame @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
     init {
         initUI(context)
+        initOptions()
     }
 
     private fun initUI(context: Context) {
@@ -59,21 +63,27 @@ class BannerFrame @JvmOverloads constructor(context: Context, attrs: AttributeSe
         w = ScreenUtils.getScreenWidth(context)
     }
 
+    private fun initOptions() {
+        options = DisplayImageOptions.Builder().cacheOnDisk(true).build()
+    }
+
     fun setImageResources(imageUrls: List<String>) {
         imageViewList.clear()
         for (url in imageUrls) {
-            val imageView = ImageView(context)
-            imageView.scaleType = ImageView.ScaleType.FIT_CENTER//铺满屏幕
+            //val imageView = ImageView(context)
+            //imageView.scaleType = ImageView.ScaleType.FIT_CENTER//铺满屏幕
+            val bannerItem = BannerFrameItem(context)
 
-            ImageLoader.getInstance().displayImage(HttpUrl.getImageUrl(url), imageView, object :
+            ImageLoader.getInstance().displayImage(HttpUrl.getImageUrl(url), bannerItem.getBannerImg(), options, object :
                     ImageLoadingListener{
                 override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
-                    val p = imageView.layoutParams
-                    if (p != null) {
-                        p.width = loadedImage?.width ?: w
-                        p.height = loadedImage?.height ?: (w * 0.75).toInt()
-                        imageView.layoutParams = p
-                    }
+//                    val p = imageView.layoutParams
+//                    if (p != null) {
+//                        p.width = loadedImage?.width ?: w
+//                        p.height = loadedImage?.height ?: (w * 0.75).toInt()
+//                        imageView.layoutParams = p
+//                    }
+                    bannerItem.setProgress(100)
                 }
 
                 override fun onLoadingCancelled(imageUri: String?, view: View?) {
@@ -88,8 +98,13 @@ class BannerFrame @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
                 }
 
+            }, object : ImageLoadingProgressListener {
+                override fun onProgressUpdate(imageUri: String?, view: View?, current: Int, total: Int) {
+                    val progress = current * 100 / total
+                    bannerItem.setProgress(progress)
+                }
             })
-            imageViewList.add(imageView)
+            imageViewList.add(bannerItem)
         }
         mViewPager.isFocusable = true
         mViewPager.adapter = MyPagerAdapter()

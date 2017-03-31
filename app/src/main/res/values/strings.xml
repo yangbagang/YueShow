@@ -99,4 +99,7 @@
     <string name="post">发布</string>
     <!--好友通讯录搜索-->
     <string name="no_results">没有搜索到匹配的内容</string>
+    <!--付费-->
+    <string name="date_price">你需要支付 %d 美票报名参加此约会，若对方没有接受约会或你主动取消，美票将自动返还。</string>
+    <string name="yue_price">你每接受一次需要报名需支付 %d 美币。礼物价值趣高，约会的诚意越高，约会成功率越高。</string>
 </resources>

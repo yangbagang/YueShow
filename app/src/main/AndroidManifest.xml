@@ -184,6 +184,14 @@
 
         <activity
             android:name=".activity.AboutActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.AgreementActivity" />
+        <activity android:name=".activity.show.PayNoticeActivity" />
+        <activity android:name=".activity.show.MakeDateActivity" />
+        <activity android:name=".activity.show.VideoPlayerActivity" />
+        <activity android:name=".activity.show.ShowPriceActivity" />
+        <activity android:name=".activity.show.YaoYueActivity" />
+        <activity android:name=".activity.show.HongBaoActivity"></activity>
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.AgreementActivity"/>
         <activity android:name=".activity.show.PayNoticeActivity">

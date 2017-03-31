@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_dynamic"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/px_88"
+    android:background="@color/white">
+
+    <View
+        android:id="@+id/v_dynamic"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_4"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_f84f21" />
+
+    <TextView
+        android:id="@+id/tv_dynamic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:text="动态"
+        android:textColor="#afb6bc"
+        android:textSize="@dimen/px_text_30" />
+
+    <TextView
+        android:id="@+id/tv_dynamic_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/px_16"
+        android:layout_toRightOf="@id/tv_dynamic"
+        android:text="15"
+        android:textColor="@color/color_7dcf2c"
+        android:textSize="@dimen/px_text_20" />
+
+</RelativeLayout>

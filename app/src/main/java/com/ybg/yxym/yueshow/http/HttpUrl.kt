@@ -13,11 +13,11 @@ object HttpUrl {
     //生产服务器地址
     val API_HOST_PRODUCT = "http://139.224.186.241:8080/ma"
     //上传
-    val FILE_SERVER_UPLOAD = "http://120.76.74.2/file/file/upload"
+    val FILE_SERVER_UPLOAD = "http://139.224.186.241:8080/fileserver/file/upload3"
     //预览
-    val FILE_SERVER_PREVIEW = "http://139.224.186.241"
+    val FILE_SERVER_PREVIEW = "http://139.224.186.241:8080/fileserver/file/preview"
     //下载
-    val FILE_SERVER_DOWNLOAD = "http://139.224.186.241"
+    val FILE_SERVER_DOWNLOAD = "http://139.224.186.241:8080/fileserver/file/download"
 
     val ROOT_URL = if (AppConstants.isDebug) API_HOST_DEBUG else API_HOST_PRODUCT
     //获取验证码
@@ -245,18 +245,18 @@ object HttpUrl {
         if (fid.startsWith("http:", true) || fid.startsWith("https:", true)) {
             return fid
         }
-        val path = Base64Util.getDecodeString(fid)
+        //val path = Base64Util.getDecodeString(fid)
         //println("path=$path")
-        return FILE_SERVER_PREVIEW + "/" + path
+        return FILE_SERVER_PREVIEW + "/" + fid
     }
 
     fun getVideoUrl(fid: String): String {
         if (fid.startsWith("http:", true) || fid.startsWith("https:", true)) {
             return fid
         }
-        val path = Base64Util.getDecodeString(fid)
+        //val path = Base64Util.getDecodeString(fid)
         //println("path=$path")
-        return FILE_SERVER_DOWNLOAD + "/" + path
+        return FILE_SERVER_DOWNLOAD + "/" + fid
     }
 
     val friendMsgUrl: String

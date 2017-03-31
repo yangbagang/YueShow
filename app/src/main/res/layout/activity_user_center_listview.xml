@@ -29,7 +29,7 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <include layout="@layout/item_list_user_floating_bar"/>
+            <include layout="@layout/item_list_user_floating_bar2"/>
 
         </LinearLayout>
     </FrameLayout>

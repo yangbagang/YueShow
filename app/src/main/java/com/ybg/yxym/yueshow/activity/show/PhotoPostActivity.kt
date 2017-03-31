@@ -271,7 +271,7 @@ class PhotoPostActivity : PostShowActivity() {
     }
 
     private fun createShow() {
-        SendRequest.createShow(mContext!!, mApplication.token, thumbnailId, title, "1",
+        SendRequest.createShow(mContext!!, mApplication.token, thumbnailId, title, "1", "$price",
                 object : OkCallback<String>(OkStringParser()) {
 
             override fun onSuccess(code: Int, response: String) {
