@@ -2,6 +2,7 @@ package com.ybg.yxym.yueshow.activity.msg
 
 import android.content.Context
 import android.content.Intent
+import android.view.View
 import com.google.gson.reflect.TypeToken
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.UserBase
@@ -77,6 +78,10 @@ class ContactActivity : BaseActivity() {
             }
         })
 
+    }
+
+    fun goNewFriend(v: View) {
+        NewFriendActivity.start(mContext!!)
     }
 
     companion object {

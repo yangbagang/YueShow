@@ -64,7 +64,7 @@ class FriendActivity : BaseActivity() {
                     msgList.clear()
                     if (data != null && data.isNotEmpty()) {
                         msgList.addAll(data)
-                        msgAdapter.setData(data)
+                        msgAdapter.setData(msgList)
                         msgAdapter.notifyDataSetChanged()
                     }
                 } else {

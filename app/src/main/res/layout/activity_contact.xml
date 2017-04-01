@@ -61,7 +61,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/px_98"
         android:layout_below="@id/v_contact_split_1"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:onClick="goNewFriend">
         <ImageView
             android:layout_width="@dimen/px_70"
             android:layout_height="@dimen/px_70"

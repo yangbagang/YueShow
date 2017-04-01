@@ -271,4 +271,8 @@ object HttpUrl {
         get() = ROOT_URL + "/userDate/reject"
     val ignoreDateUrl: String
         get() = ROOT_URL + "/userDate/ignore"
+    val friendRequestListUrl: String
+        get() = ROOT_URL + "/friendRequest/getRequestList"
+    val acceptFriendRequestUrl: String
+        get() = ROOT_URL + "/friendRequest/acceptFriendRequest"
 }

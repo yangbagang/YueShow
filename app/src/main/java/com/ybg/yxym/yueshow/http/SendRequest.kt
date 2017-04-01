@@ -398,14 +398,14 @@ object SendRequest {
     }
 
     fun getRenQiBang(tag: Context, beginTime: String, endTime: String, pageNum: Int, pageSize: Int,
-                      callback: OkCallback<*>) {
+                     callback: OkCallback<*>) {
         val params = mapOf<String, String>("beginTime" to beginTime, "endTime" to endTime,
                 "pageNum" to "$pageNum", "pageSize" to "$pageSize")
         OkHttpProxy.post(HttpUrl.renQiBang, tag, params, callback)
     }
 
     fun getHuoLiBang(tag: Context, beginTime: String, endTime: String, pageNum: Int, pageSize: Int,
-                      callback: OkCallback<*>) {
+                     callback: OkCallback<*>) {
         val params = mapOf<String, String>("beginTime" to beginTime, "endTime" to endTime,
                 "pageNum" to "$pageNum", "pageSize" to "$pageSize")
         OkHttpProxy.post(HttpUrl.huoLiBang, tag, params, callback)
@@ -527,6 +527,23 @@ object SendRequest {
     fun ignoreDate(tag: Context, token: String, dateId: String, callback: OkCallback<*>) {
         val params = mapOf<String, String>("token" to token, "dateId" to dateId)
         OkHttpProxy.post(HttpUrl.ignoreDateUrl, tag, params, callback)
+    }
+
+    /**
+     * 4.7 查询好友请求列表
+     */
+    fun getFriendRequestList(tag: Context, token: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token)
+        OkHttpProxy.post(HttpUrl.friendRequestListUrl, tag, params, callback)
+    }
+
+    /**
+     * 4.8 同意好友请求
+     */
+    fun acceptFriendRequest(tag: Context, token: String, requestId: String, callback:
+    OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "requestId" to requestId)
+        OkHttpProxy.post(HttpUrl.acceptFriendRequestUrl, tag, params, callback)
     }
 
 }
