@@ -546,4 +546,13 @@ object SendRequest {
         OkHttpProxy.post(HttpUrl.acceptFriendRequestUrl, tag, params, callback)
     }
 
+    /**
+     * 4.9 同意好友请求
+     */
+    fun getMemberList(tag: Context, token: String, groupId: String, callback:
+    OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "groupId" to groupId)
+        OkHttpProxy.post(HttpUrl.acceptFriendRequestUrl, tag, params, callback)
+    }
+
 }

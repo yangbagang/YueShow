@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ybg.yxym.yueshow.activity.msg.ContactActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_contact_search"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_122"
+        android:gravity="center_vertical">
+        <android.support.v7.app.AlertController.RecycleListView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px_26">
+
+        </android.support.v7.app.AlertController.RecycleListView>
+        <TextView
+            android:layout_width="@dimen/px_80"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/px_48"
+            android:gravity="center"
+            android:text="搜索"
+            android:textSize="@dimen/px_text_30"
+            android:textColor="#545866"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_contact"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_contact_search">
+
+    </ListView>
+
+    <com.ybg.yxym.yueshow.view.ContactSideBar
+        android:id="@+id/ct_side_bar"
+        android:layout_width="32dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"/>
+</RelativeLayout>

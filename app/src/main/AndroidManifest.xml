@@ -185,25 +185,18 @@
         <activity
             android:name=".activity.AboutActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.AgreementActivity"/>
-        <activity android:name=".activity.show.PayNoticeActivity"/>
-        <activity android:name=".activity.show.MakeDateActivity"/>
-        <activity android:name=".activity.show.VideoPlayerActivity"/>
-        <activity android:name=".activity.show.ShowPriceActivity"/>
-        <activity android:name=".activity.show.YaoYueActivity"/>
-        <activity android:name=".activity.show.HongBaoActivity"/>
-        android:screenOrientation="portrait"/>
-        <activity android:name=".activity.AgreementActivity"/>
-        <activity android:name=".activity.show.PayNoticeActivity">
-        </activity>
-        <activity android:name=".activity.msg.ContactActivity">
-        </activity>
-        <activity android:name=".activity.msg.FriendActivity">
-        </activity>
-        <activity android:name=".activity.msg.DateDetailActivity">
-        </activity>
-        <activity android:name=".activity.msg.NewFriendActivity">
-        </activity>
+        <activity android:name=".activity.AgreementActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.show.PayNoticeActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.show.MakeDateActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.show.VideoPlayerActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.show.ShowPriceActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.show.YaoYueActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.show.HongBaoActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.msg.ContactActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.msg.FriendActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.msg.DateDetailActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.msg.NewFriendActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.msg.GroupMemberActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
