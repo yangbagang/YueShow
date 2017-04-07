@@ -555,4 +555,12 @@ object SendRequest {
         OkHttpProxy.post(HttpUrl.acceptFriendRequestUrl, tag, params, callback)
     }
 
+    /**
+     * 5.1 获取融云token
+     */
+    fun getRongCloudToken(tag: Context, token: String, callback: OkCallback<*>) {
+        val params = mapOf("token" to token)
+        OkHttpProxy.post(HttpUrl.rongCloudTokenUrl, tag, params, callback)
+    }
+
 }

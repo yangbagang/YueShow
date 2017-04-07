@@ -275,4 +275,7 @@ object HttpUrl {
         get() = ROOT_URL + "/friendRequest/getRequestList"
     val acceptFriendRequestUrl: String
         get() = ROOT_URL + "/friendRequest/acceptFriendRequest"
+
+    val rongCloudTokenUrl: String
+        get() = ROOT_URL + "/IM/getIMToken"
 }

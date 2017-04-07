@@ -12,6 +12,7 @@ import com.ybg.yxym.yb.app.YbgAPP
 import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.picasso.OkHttp3Downloader
 import com.ybg.yxym.yueshow.picasso.Picasso
+import io.rong.imkit.RongIM
 import java.io.File
 
 
@@ -36,6 +37,9 @@ class ShowApplication : YbgAPP() {
         if (!AppConstants.isDebug) {
             PgyCrashManager.register(this)
         }
+
+        //初始化融云
+        RongIM.init(this)
     }
 
     override fun onTerminate() {
