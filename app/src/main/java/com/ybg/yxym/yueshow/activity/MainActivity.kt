@@ -40,8 +40,10 @@ import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.AndroidPermissonRequest
 import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
+import com.ybg.yxym.yueshow.utils.RongCloudUtil
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.CircleImageView
+import io.rong.imkit.RongIM
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
@@ -265,6 +267,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     //成功
                     val userBase = mGson.fromJson(jsonBean.data, UserBase::class.java)
                     setUserInfo(userBase)
+                    if (showApplication.rcToken == "") {
+                        updateRCToken()
+                    } else {
+                        RongCloudUtil.connect(showApplication.rcToken)
+                    }
                 } else {
                     if (showApplication.checkNeedLogin(jsonBean?.message ?: "")) {
                         //登录凭证失效，需要重新登录。去除己经相关信息。
@@ -294,6 +301,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 OkCallback<String>(OkStringParser()){
             override fun onSuccess(code: Int, response: String) {
                 //nothing
+            }
+
+            override fun onFailure(e: Throwable) {
+                //nothing
+            }
+        })
+    }
+
+    private fun updateRCToken() {
+        SendRequest.getRongCloudToken(this@MainActivity, showApplication.token, object :
+                OkCallback<String>(OkStringParser()){
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    showApplication.rcToken = jsonBean.data
+                }
             }
 
             override fun onFailure(e: Throwable) {
