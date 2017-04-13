@@ -13,14 +13,12 @@ import com.ybg.yxym.yueshow.adapter.FriendAdapter
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
+import com.ybg.yxym.yueshow.openIM.LoginHelper
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_friend.*
 import java.util.*
 
 class FriendActivity : BaseActivity() {
-
-    private var msgList: MutableList<UserMsg> = ArrayList<UserMsg>()
-    private lateinit var msgAdapter: FriendAdapter
 
     override fun setContentViewId(): Int {
         return R.layout.activity_friend
@@ -31,9 +29,10 @@ class FriendActivity : BaseActivity() {
     }
 
     override fun init() {
-        msgAdapter = FriendAdapter(mContext!!)
-        lv_friend_list.adapter = msgAdapter
-        getFriendMsgList()
+        val transaction = supportFragmentManager.beginTransaction()
+        val msgFragment = LoginHelper.instance.imKit!!.conversationFragment
+        transaction.replace(R.id.msgFragment, msgFragment)
+        transaction.commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -51,33 +50,6 @@ class FriendActivity : BaseActivity() {
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun getFriendMsgList() {
-        SendRequest.getMsgList(mContext!!, mApplication.token, object : OkCallback<String>
-        (OkStringParser()) {
-            override fun onSuccess(code: Int, response: String) {
-                val jsonBean = JSonResultBean.fromJSON(response)
-                if (jsonBean != null && jsonBean.isSuccess) {
-                    val data = mGson!!.fromJson<List<UserMsg>>(jsonBean.data, object :
-                            TypeToken<List<UserMsg>>() {}.type)
-                    msgList.clear()
-                    if (data != null && data.isNotEmpty()) {
-                        msgList.addAll(data)
-                        msgAdapter.setData(msgList)
-                        msgAdapter.notifyDataSetChanged()
-                    }
-                } else {
-                    jsonBean.let {
-                        ToastUtil.show(jsonBean?.message ?: "获取消息列表失败")
-                    }
-                }
-            }
-
-            override fun onFailure(e: Throwable) {
-                ToastUtil.show("获取消息列表失败")
-            }
-        })
     }
 
     companion object {

@@ -16,7 +16,6 @@ import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.gson.GsonBuilder
@@ -30,7 +29,9 @@ import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.home.ChartsFragment
 import com.ybg.yxym.yueshow.activity.home.HallFragment
 import com.ybg.yxym.yueshow.activity.msg.FriendActivity
-import com.ybg.yxym.yueshow.activity.user.*
+import com.ybg.yxym.yueshow.activity.user.EntryActivity
+import com.ybg.yxym.yueshow.activity.user.LoginActivity
+import com.ybg.yxym.yueshow.activity.user.PersonCenterActivity
 import com.ybg.yxym.yueshow.adapter.ViewPagerAdapter
 import com.ybg.yxym.yueshow.app.ShowApplication
 import com.ybg.yxym.yueshow.constant.AppConstants
@@ -40,10 +41,8 @@ import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.AndroidPermissonRequest
 import com.ybg.yxym.yueshow.utils.ImageLoaderUtils
-import com.ybg.yxym.yueshow.utils.RongCloudUtil
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.CircleImageView
-import io.rong.imkit.RongIM
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
@@ -267,11 +266,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     //成功
                     val userBase = mGson.fromJson(jsonBean.data, UserBase::class.java)
                     setUserInfo(userBase)
-                    if (showApplication.rcToken == "") {
-                        updateRCToken()
-                    } else {
-                        RongCloudUtil.connect(showApplication.rcToken)
-                    }
+                    //TODO
                 } else {
                     if (showApplication.checkNeedLogin(jsonBean?.message ?: "")) {
                         //登录凭证失效，需要重新登录。去除己经相关信息。

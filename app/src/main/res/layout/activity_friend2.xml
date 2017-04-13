@@ -42,10 +42,10 @@
             android:textSize="@dimen/px_text_30"
             android:textColor="#545866"/>
     </LinearLayout>
-    <android.support.v4.app.Fragment
-        android:id="@+id/msgFragment"
+    <ListView
+        android:id="@+id/lv_friend_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v4.app.Fragment>
+    </ListView>
 </LinearLayout>

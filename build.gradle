@@ -19,6 +19,7 @@ allprojects {
         jcenter()
         maven { url "http://mvn.gt.igexin.com/nexus/content/repositories/releases/" }
         maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
+        maven { url 'http://repo.baichuan-android.taobao.com/content/groups/BaichuanRepositories/' }
     }
 }
 
