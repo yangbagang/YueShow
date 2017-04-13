@@ -222,50 +222,6 @@
             android:name=".activity.msg.GroupMemberActivity"
             android:screenOrientation="portrait" />
 
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.ybg.yxym.yueshow.FileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/rc_file_path" />
-        </provider>
-
-        <!-- 会话列表 -->
-        <activity
-            android:name=".activity.msg.ConversationListActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data
-                    android:host="com.ybg.yxym.yueshow"
-                    android:pathPrefix="/conversationlist"
-                    android:scheme="rong" />
-            </intent-filter>
-        </activity>
-
-        <!--会话界面-->
-        <activity
-            android:name=".activity.msg.ConversationActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize">
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data
-                    android:host="com.ybg.yxym.yueshow"
-                    android:pathPrefix="/conversation/"
-                    android:scheme="rong" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
