@@ -13,7 +13,7 @@ import com.ybg.yxym.yueshow.adapter.FriendAdapter
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
-import com.ybg.yxym.yueshow.openIM.LoginHelper
+import com.ybg.yxym.im.activity.ConversationListFragment
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_friend.*
 import java.util.*
@@ -30,7 +30,7 @@ class FriendActivity : BaseActivity() {
 
     override fun init() {
         val transaction = supportFragmentManager.beginTransaction()
-        val msgFragment = LoginHelper.instance.imKit!!.conversationFragment
+        val msgFragment = ConversationListFragment()
         transaction.replace(R.id.msgFragment, msgFragment)
         transaction.commit()
     }

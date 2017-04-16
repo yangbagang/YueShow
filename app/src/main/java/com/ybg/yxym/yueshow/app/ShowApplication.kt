@@ -1,9 +1,6 @@
 package com.ybg.yxym.yueshow.app
 
 import android.content.Context
-import android.util.Log
-import com.alibaba.mobileim.YWAPI
-import com.alibaba.wxlib.util.SysUtil
 import com.igexin.sdk.PushManager
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator
 import com.nostra13.universalimageloader.core.ImageLoader
@@ -13,7 +10,6 @@ import com.pgyersdk.crash.PgyCrashManager
 import com.qiniu.pili.droid.streaming.StreamingEnv
 import com.ybg.yxym.yb.app.YbgAPP
 import com.ybg.yxym.yueshow.constant.AppConstants
-import com.ybg.yxym.yueshow.openIM.InitHelper
 import com.ybg.yxym.yueshow.picasso.OkHttp3Downloader
 import com.ybg.yxym.yueshow.picasso.Picasso
 import java.io.File
@@ -26,12 +22,6 @@ import java.io.File
 class ShowApplication : YbgAPP() {
 
     val TAG = "ShowApplication"
-
-    val imKey = "23750892"
-
-    var rcToken: String
-        get() = preference.getString("token", "")
-        set(token) = preference.setString("token", token)
 
     override fun onCreate() {
         super.onCreate()
@@ -49,8 +39,8 @@ class ShowApplication : YbgAPP() {
             PgyCrashManager.register(this)
         }
 
-        //Init openIMSdk
-        initOpenIM()
+        //Init im
+        initIM()
     }
 
     override fun onTerminate() {
@@ -78,14 +68,8 @@ class ShowApplication : YbgAPP() {
         ImageLoader.getInstance().init(config.build())
     }
 
-    private fun initOpenIM() {
-        //必须的初始化
-        SysUtil.setApplication(this)
-        //如果在":TCMSSevice"进程中，无需进行openIM和app业务的初始化，以节省内存
-        if(!SysUtil.isTCMSServiceProcess(this)) {
-            //初始化云旺SDK
-            InitHelper.initYWSDK(this)
-        }
+    private fun initIM() {
+
     }
 
     companion object {
