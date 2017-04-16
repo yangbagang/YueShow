@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
-                    android:background="@anim/jmui_voice_receive" />
+                    android:background="@drawable/jmui_voice_receive" />
 
             </RelativeLayout>
 
