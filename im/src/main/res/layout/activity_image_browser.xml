@@ -5,9 +5,12 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+    <include layout="@layout/base_bar_without_title"/>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/title_bar_rl"
         android:layout_above="@+id/check_box_rl">
 
         <com.ybg.yxym.im.view.ImgBrowserViewPager
@@ -45,9 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-
-            />
+            android:layout_marginLeft="15dp"/>
 
         <TextView
             android:id="@+id/total_size_tv"
@@ -58,8 +59,7 @@
             android:layout_toRightOf="@id/origin_picture_cb"
             android:text="@string/origin_picture"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/choose_tv"
@@ -70,8 +70,7 @@
             android:layout_marginRight="15dp"
             android:text="@string/choose"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp"/>
 
         <CheckBox
             android:id="@+id/picture_selected_cb"

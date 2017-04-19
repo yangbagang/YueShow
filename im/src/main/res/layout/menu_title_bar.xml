@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menu_title_bar"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/actionBarSize"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical" >
+    
+        <ImageButton
+            android:id="@+id/return_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/default_padding_left"
+            android:src="@mipmap/ic_back"
+            android:background="@null"/>
+        
+        <TextView 
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/return_btn"
+            android:layout_marginLeft="@dimen/default_padding_left"
+            android:text="Title"
+            android:textColor="#FFFFFF"
+            android:layout_centerInParent="true"
+            android:maxLines="1"
+            android:textSize="20sp"/>
+        
+        <ImageButton
+                android:id="@+id/right_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:src="@mipmap/jmui_chat_detail"
+                android:scaleType="fitXY"
+                android:background="@null" />
+
+</RelativeLayout>

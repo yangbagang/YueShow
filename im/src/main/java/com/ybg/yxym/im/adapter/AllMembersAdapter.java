@@ -188,10 +188,10 @@ public class AllMembersAdapter extends BaseAdapter implements AdapterView.OnItem
         String userName = userInfo.getUserName();
         Intent intent = new Intent();
         if (userName.equals(JMessageClient.getMyInfo().getUserName())) {
-            intent.setClass(mContext, MeInfoActivity.class);
+            //intent.setClass(mContext, MeInfoActivity.class);
             mContext.startActivity(intent);
         } else {
-            intent.setClass(mContext, FriendInfoActivity.class);
+            //intent.setClass(mContext, FriendInfoActivity.class);
             intent.putExtra(IMConstants.TARGET_APP_KEY, userInfo.getAppKey());
             intent.putExtra(IMConstants.TARGET_ID,
                     userInfo.getUserName());
@@ -206,29 +206,28 @@ public class AllMembersAdapter extends BaseAdapter implements AdapterView.OnItem
             View.OnClickListener listener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    switch (v.getId()) {
-                        case R.id.jmui_cancel_btn:
-                            mDialog.dismiss();
-                            break;
-                        case R.id.jmui_commit_btn:
-                            mDialog.dismiss();
-                            mLoadingDialog = DialogCreator.createLoadingDialog(mContext,
-                                    mContext.getString(R.string.deleting_hint));
-                            mLoadingDialog.show();
-                            List<String> list = new ArrayList<String>();
-                            list.add(mMemberList.get(position).data.getUserName());
-                            JMessageClient.removeGroupMembers(mGroupId, list, new BasicCallback() {
-                                @Override
-                                public void gotResult(int status, String desc) {
-                                    mLoadingDialog.dismiss();
-                                    if (status == 0) {
-                                        mContext.refreshMemberList();
-                                    } else {
-                                        HandleResponseCode.onHandle(mContext, status, false);
-                                    }
+                    int i = v.getId();
+                    if (i == R.id.jmui_cancel_btn) {
+                        mDialog.dismiss();
+
+                    } else if (i == R.id.jmui_commit_btn) {
+                        mDialog.dismiss();
+                        mLoadingDialog = DialogCreator.createLoadingDialog(mContext,
+                                mContext.getString(R.string.deleting_hint));
+                        mLoadingDialog.show();
+                        List<String> list = new ArrayList<String>();
+                        list.add(mMemberList.get(position).data.getUserName());
+                        JMessageClient.removeGroupMembers(mGroupId, list, new BasicCallback() {
+                            @Override
+                            public void gotResult(int status, String desc) {
+                                mLoadingDialog.dismiss();
+                                if (status == 0) {
+                                    mContext.refreshMemberList();
+                                } else {
+                                    HandleResponseCode.onHandle(mContext, status, false);
                                 }
-                            });
-                            break;
+                            }
+                        });
 
                     }
                 }
@@ -239,4 +238,5 @@ public class AllMembersAdapter extends BaseAdapter implements AdapterView.OnItem
         }
         return true;
     }
+
 }

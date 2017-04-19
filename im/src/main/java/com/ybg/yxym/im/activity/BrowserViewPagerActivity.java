@@ -50,7 +50,7 @@ import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 
 //用于浏览图片
-public class BrowserViewPagerActivity extends BaseActivity {
+public class BrowserViewPagerActivity extends BaseActivity2 {
 
     private static String TAG = BrowserViewPagerActivity.class.getSimpleName();
     private PhotoView photoView;
@@ -296,7 +296,6 @@ public class BrowserViewPagerActivity extends BaseActivity {
 
     /**
      * 点击发送原图CheckBox，触发事件
-     *
      */
     private void checkOriginPictureSelected() {
         mOriginPictureCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -315,7 +314,7 @@ public class BrowserViewPagerActivity extends BaseActivity {
     private void showTotalSize() {
         if (mSelectMap.size() > 0) {
             List<String> pathList = new ArrayList<String>();
-            for (int i=0; i < mSelectMap.size(); i++) {
+            for (int i = 0; i < mSelectMap.size(); i++) {
                 pathList.add(mPathList.get(mSelectMap.keyAt(i)));
             }
             String totalSize = BitmapLoader.getPictureSize(pathList);
@@ -466,39 +465,39 @@ public class BrowserViewPagerActivity extends BaseActivity {
     private OnClickListener listener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.return_btn:
-                    int pathArray[] = new int[mPathList.size()];
-                    for (int i = 0; i < pathArray.length; i++) {
-                        pathArray[i] = 0;
-                    }
-                    for (int j = 0; j < mSelectMap.size(); j++) {
-                        pathArray[mSelectMap.keyAt(j)] = 1;
-                    }
-                    Intent intent = new Intent();
-                    intent.putExtra("pathArray", pathArray);
-                    setResult(IMConstants.RESULT_CODE_SELECT_PICTURE, intent);
-                    finish();
-                    break;
-                case R.id.pick_picture_send_btn:
-                    mProgressDialog = new ProgressDialog(mContext);
-                    mProgressDialog.setMessage(mContext.getString(R.string.sending_hint));
-                    mProgressDialog.setCanceledOnTouchOutside(false);
-                    mProgressDialog.show();
-                    mPosition = mViewPager.getCurrentItem();
+            int i1 = v.getId();
+            if (i1 == R.id.return_btn) {
+                int pathArray[] = new int[mPathList.size()];
+                for (int i = 0; i < pathArray.length; i++) {
+                    pathArray[i] = 0;
+                }
+                for (int j = 0; j < mSelectMap.size(); j++) {
+                    pathArray[mSelectMap.keyAt(j)] = 1;
+                }
+                Intent intent = new Intent();
+                intent.putExtra("pathArray", pathArray);
+                setResult(IMConstants.RESULT_CODE_SELECT_PICTURE, intent);
+                finish();
 
-                    if (mOriginPictureCb.isChecked()) {
-                        Log.i(TAG, "发送原图");
-                        getOriginPictures(mPosition);
-                    } else {
-                        Log.i(TAG, "发送缩略图");
-                        getThumbnailPictures(mPosition);
-                    }
-                    break;
+            } else if (i1 == R.id.pick_picture_send_btn) {
+                mProgressDialog = new ProgressDialog(mContext);
+                mProgressDialog.setMessage(mContext.getString(R.string.sending_hint));
+                mProgressDialog.setCanceledOnTouchOutside(false);
+                mProgressDialog.show();
+                mPosition = mViewPager.getCurrentItem();
+
+                if (mOriginPictureCb.isChecked()) {
+                    Log.i(TAG, "发送原图");
+                    getOriginPictures(mPosition);
+                } else {
+                    Log.i(TAG, "发送缩略图");
+                    getThumbnailPictures(mPosition);
+                }
+
                 //点击显示原图按钮，下载原图
-                case R.id.load_image_btn:
-                    downloadOriginalPicture();
-                    break;
+            } else if (i1 == R.id.load_image_btn) {
+                downloadOriginalPicture();
+
             }
         }
     };
@@ -574,7 +573,8 @@ public class BrowserViewPagerActivity extends BaseActivity {
 
     /**
      * 根据图片路径生成ImageContent
-     * @param path 图片路径
+     *
+     * @param path       图片路径
      * @param isOriginal 是否发送原图
      */
     private void createImageContent(String path, final boolean isOriginal) {
@@ -586,7 +586,7 @@ public class BrowserViewPagerActivity extends BaseActivity {
                 public void gotResult(int status, String desc, ImageContent imageContent) {
                     if (status == 0) {
                         if (isOriginal) {
-                            imageContent.setBooleanExtra("originalPicture" , true);
+                            imageContent.setBooleanExtra("originalPicture", true);
                         }
                         Message msg = mConv.createSendMessage(imageContent);
                         mMsgIds[mIndex] = msg.getId();
@@ -633,7 +633,6 @@ public class BrowserViewPagerActivity extends BaseActivity {
     public void onBackPressed() {
         if (mDownloading) {
             mProgressDialog.dismiss();
-            //TODO cancel download image
         }
         int pathArray[] = new int[mPathList.size()];
         for (int i = 0; i < pathArray.length; i++) {
@@ -708,7 +707,7 @@ public class BrowserViewPagerActivity extends BaseActivity {
     private static class UIHandler extends Handler {
         private final WeakReference<BrowserViewPagerActivity> mActivity;
 
-        public UIHandler(BrowserViewPagerActivity activity){
+        public UIHandler(BrowserViewPagerActivity activity) {
             mActivity = new WeakReference<BrowserViewPagerActivity>(activity);
         }
 

@@ -34,6 +34,9 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.ybg.yxym.im.R;
+import com.ybg.yxym.im.chatting.utils.BitmapLoader;
+import com.ybg.yxym.im.constants.IMConstants;
 
 import java.util.UUID;
 
@@ -107,7 +110,7 @@ public class SendLocationActivity extends BaseActivity {
             double latitude = intent.getDoubleExtra("latitude", 0);
             double longitude = intent.getDoubleExtra("longitude", 0);
             LatLng ll = new LatLng(latitude, longitude);
-            BitmapDescriptor descriptor = BitmapDescriptorFactory.fromResource(R.drawable.oval);
+            BitmapDescriptor descriptor = BitmapDescriptorFactory.fromResource(R.mipmap.oval);
             OverlayOptions options = new MarkerOptions().position(ll).icon(descriptor).zIndex(10);
             mMap.addOverlay(options);
             MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
@@ -163,9 +166,9 @@ public class SendLocationActivity extends BaseActivity {
         });
 
 
-        String targetId = getIntent().getStringExtra(JChatDemoApplication.TARGET_ID);
-        String targetAppKey = getIntent().getStringExtra(JChatDemoApplication.TARGET_APP_KEY);
-        long groupId = getIntent().getLongExtra(JChatDemoApplication.GROUP_ID, 0);
+        String targetId = getIntent().getStringExtra(IMConstants.TARGET_ID);
+        String targetAppKey = getIntent().getStringExtra(IMConstants.TARGET_APP_KEY);
+        long groupId = getIntent().getLongExtra(IMConstants.GROUP_ID, 0);
         final Conversation conv;
         if (groupId != 0) {
             conv = JMessageClient.getGroupConversation(groupId);
@@ -189,7 +192,7 @@ public class SendLocationActivity extends BaseActivity {
                             locationContent.setStringExtra("path", path);
                             Intent intent = new Intent();
                             Message msg = conv.createSendMessage(locationContent);
-                            intent.putExtra(JChatDemoApplication.MsgIDs, msg.getId());
+                            intent.putExtra(IMConstants.MsgIDs, msg.getId());
                             if (conv.getType() == ConversationType.single) {
                                 UserInfo userInfo = (UserInfo) conv.getTargetInfo();
                                 JMessageClient.sendMessage(msg);
@@ -205,7 +208,7 @@ public class SendLocationActivity extends BaseActivity {
                                 JMessageClient.sendMessage(msg);
                             }
 
-                            setResult(JChatDemoApplication.RESULT_CODE_SEND_LOCATION, intent);
+                            setResult(IMConstants.RESULT_CODE_SEND_LOCATION, intent);
                             finish();
                         } else {
                             Toast.makeText(context, context.getString(R.string.send_location_error),

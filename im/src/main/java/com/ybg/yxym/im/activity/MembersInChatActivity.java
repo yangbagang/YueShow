@@ -79,7 +79,7 @@ public class MembersInChatActivity extends BaseActivity {
         mListView = (ListView) findViewById(R.id.members_list_view);
         mReturnBtn = (ImageButton) findViewById(R.id.return_btn);
         mTitle = (TextView) findViewById(R.id.number_tv);
-        mRightBtn = (Button) findViewById(R.id.right_btn);
+        //mRightBtn = (Button) findViewById(R.id.right_btn);
         mSearchEt = (EditText) findViewById(R.id.search_et);
 
         mBackgroundThread = new HandlerThread("Work on MembersInChatActivity");
@@ -112,22 +112,22 @@ public class MembersInChatActivity extends BaseActivity {
     View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.return_btn:
-                    Intent intent = new Intent();
-                    setResult(IMConstants.RESULT_CODE_ALL_MEMBER, intent);
-                    finish();
-                    break;
-                case R.id.right_btn:
-                    if (mIsDeleteMode) {
-                        List<String> deleteList = mAdapter.getSelectedList();
-                        if (deleteList.size() >= 0) {
-                            showDeleteMemberDialog(deleteList);
-                        }
-                    } else {
-                        addMemberToGroup();
+            int i = v.getId();
+            if (i == R.id.return_btn) {
+                Intent intent = new Intent();
+                setResult(IMConstants.RESULT_CODE_ALL_MEMBER, intent);
+                finish();
+
+            } else if (i == R.id.right_btn) {
+                if (mIsDeleteMode) {
+                    List<String> deleteList = mAdapter.getSelectedList();
+                    if (deleteList.size() >= 0) {
+                        showDeleteMemberDialog(deleteList);
                     }
-                    break;
+                } else {
+                    addMemberToGroup();
+                }
+
             }
         }
     };
@@ -157,29 +157,28 @@ public class MembersInChatActivity extends BaseActivity {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.jmui_cancel_btn:
-                        mDialog.dismiss();
-                        break;
-                    case R.id.jmui_commit_btn:
-                        mDialog.dismiss();
-                        mLoadingDialog = DialogCreator.createLoadingDialog(mContext,
-                                mContext.getString(R.string.deleting_hint));
-                        mLoadingDialog.show();
-                        JMessageClient.removeGroupMembers(mGroupId, list, new BasicCallback() {
-                            @Override
-                            public void gotResult(int status, String desc) {
-                                mLoadingDialog.dismiss();
-                                if (status == 0) {
-                                    Intent intent = new Intent();
-                                    setResult(IMConstants.RESULT_CODE_ALL_MEMBER, intent);
-                                    finish();
-                                } else {
-                                    HandleResponseCode.onHandle(mContext, status, false);
-                                }
+                int i = v.getId();
+                if (i == R.id.jmui_cancel_btn) {
+                    mDialog.dismiss();
+
+                } else if (i == R.id.jmui_commit_btn) {
+                    mDialog.dismiss();
+                    mLoadingDialog = DialogCreator.createLoadingDialog(mContext,
+                            mContext.getString(R.string.deleting_hint));
+                    mLoadingDialog.show();
+                    JMessageClient.removeGroupMembers(mGroupId, list, new BasicCallback() {
+                        @Override
+                        public void gotResult(int status, String desc) {
+                            mLoadingDialog.dismiss();
+                            if (status == 0) {
+                                Intent intent = new Intent();
+                                setResult(IMConstants.RESULT_CODE_ALL_MEMBER, intent);
+                                finish();
+                            } else {
+                                HandleResponseCode.onHandle(mContext, status, false);
                             }
-                        });
-                        break;
+                        }
+                    });
 
                 }
             }
@@ -191,44 +190,44 @@ public class MembersInChatActivity extends BaseActivity {
 
     //点击添加按钮触发事件
     private void addMemberToGroup() {
-        final Dialog dialog = new Dialog(this, R.style.jmui_default_dialog_style);
-        final View view = LayoutInflater.from(mContext)
-                .inflate(R.layout.dialog_add_friend_to_conv_list, null);
-        dialog.setContentView(view);
-        dialog.getWindow().setLayout((int) (0.8 * mWidth), WindowManager.LayoutParams.WRAP_CONTENT);
-        dialog.show();
-        TextView title = (TextView) view.findViewById(R.id.dialog_name);
-        title.setText(mContext.getString(R.string.add_friend_to_group_title));
-        final EditText userNameEt = (EditText) view.findViewById(R.id.user_name_et);
-        final Button cancel = (Button) view.findViewById(R.id.jmui_cancel_btn);
-        final Button commit = (Button) view.findViewById(R.id.jmui_commit_btn);
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (view.getId()) {
-                    case R.id.jmui_cancel_btn:
-                        dialog.cancel();
-                        break;
-                    case R.id.jmui_commit_btn:
-                        final String targetId = userNameEt.getText().toString().trim();
-                        if (TextUtils.isEmpty(targetId)) {
-                            HandleResponseCode.onHandle(mContext, 801001, true);
-                            break;
-                            //检查群组中是否包含该用户
-                        } else if (checkIfNotContainUser(targetId)) {
-                            mLoadingDialog = DialogCreator.createLoadingDialog(mContext,
-                                    mContext.getString(R.string.searching_user));
-                            mLoadingDialog.show();
-                            getUserInfo(targetId, dialog);
-                        } else {
-                            HandleResponseCode.onHandle(mContext, 1002, true);
-                        }
-                        break;
-                }
-            }
-        };
-        cancel.setOnClickListener(listener);
-        commit.setOnClickListener(listener);
+//        final Dialog dialog = new Dialog(this, R.style.jmui_default_dialog_style);
+//        final View view = LayoutInflater.from(mContext)
+//                .inflate(R.layout.dialog_add_friend_to_conv_list, null);
+//        dialog.setContentView(view);
+//        dialog.getWindow().setLayout((int) (0.8 * mWidth), WindowManager.LayoutParams.WRAP_CONTENT);
+//        dialog.show();
+//        TextView title = (TextView) view.findViewById(R.id.dialog_name);
+//        title.setText(mContext.getString(R.string.add_friend_to_group_title));
+//        final EditText userNameEt = (EditText) view.findViewById(R.id.user_name_et);
+//        final Button cancel = (Button) view.findViewById(R.id.jmui_cancel_btn);
+//        final Button commit = (Button) view.findViewById(R.id.jmui_commit_btn);
+//        View.OnClickListener listener = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                switch (view.getId()) {
+//                    case R.id.jmui_cancel_btn:
+//                        dialog.cancel();
+//                        break;
+//                    case R.id.jmui_commit_btn:
+//                        final String targetId = userNameEt.getText().toString().trim();
+//                        if (TextUtils.isEmpty(targetId)) {
+//                            HandleResponseCode.onHandle(mContext, 801001, true);
+//                            break;
+//                            //检查群组中是否包含该用户
+//                        } else if (checkIfNotContainUser(targetId)) {
+//                            mLoadingDialog = DialogCreator.createLoadingDialog(mContext,
+//                                    mContext.getString(R.string.searching_user));
+//                            mLoadingDialog.show();
+//                            getUserInfo(targetId, dialog);
+//                        } else {
+//                            HandleResponseCode.onHandle(mContext, 1002, true);
+//                        }
+//                        break;
+//                }
+//            }
+//        };
+//        cancel.setOnClickListener(listener);
+//        commit.setOnClickListener(listener);
     }
 
     /**
@@ -441,8 +440,8 @@ public class MembersInChatActivity extends BaseActivity {
             if (TextUtils.isEmpty(nickname)) {
                 nickname = userInfo.getUserName();
             }
-            pinyin = HanyuPinyin.getInstance().getStringPinYin(nickname);
-            mPinyinList.add(pinyin);
+            //pinyin = HanyuPinyin.getInstance().getStringPinYin(nickname);
+            //mPinyinList.add(pinyin);
             itemModel.highlight = new SpannableString(nickname);
             mShowUserList.add(itemModel);
         }

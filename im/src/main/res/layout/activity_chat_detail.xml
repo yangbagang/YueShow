@@ -5,6 +5,8 @@
                                      android:layout_height="match_parent"
                                      android:background="@android:color/white">
 
+    <include layout="@layout/menu_title_bar" />
+
     <ScrollView
         android:id="@+id/chat_detail_sv"
         android:layout_width="match_parent"

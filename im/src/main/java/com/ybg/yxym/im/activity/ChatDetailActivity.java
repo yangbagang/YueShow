@@ -45,7 +45,7 @@ import cn.jpush.im.api.BasicCallback;
 /*
  * 在对话界面中点击聊天信息按钮进来的聊天信息界面
  */
-public class ChatDetailActivity extends BaseActivity {
+public class ChatDetailActivity extends BaseActivity2 {
 
     private static final String TAG = "ChatDetailActivity";
 
@@ -119,36 +119,36 @@ public class ChatDetailActivity extends BaseActivity {
             View.OnClickListener listener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    switch (view.getId()) {
-                        case R.id.jmui_cancel_btn:
-                            dialog.cancel();
-                            break;
-                        case R.id.jmui_commit_btn:
-                            final String newName = pwdEt.getText().toString().trim();
-                            if (newName.equals("")) {
-                                Toast.makeText(mContext, mContext.getString(R.string.group_name_not_null_toast), Toast.LENGTH_SHORT).show();
-                            } else {
-                                dismissSoftInput();
-                                dialog.dismiss();
-                                mDialog = new ProgressDialog(mContext);
-                                mDialog.setMessage(mContext.getString(R.string.modifying_hint));
-                                mDialog.show();
-                                JMessageClient.updateGroupName(groupID, newName, new BasicCallback() {
-                                    @Override
-                                    public void gotResult(final int status, final String desc) {
-                                        mDialog.dismiss();
-                                        if (status == 0) {
-                                            mChatDetailView.updateGroupName(newName);
-                                            mChatDetailController.refreshGroupName(newName);
-                                            Toast.makeText(mContext, mContext.getString(R.string.modify_success_toast), Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Log.i(TAG, "desc :" + desc);
-                                            HandleResponseCode.onHandle(mContext, status, false);
-                                        }
+                    int i = view.getId();
+                    if (i == R.id.jmui_cancel_btn) {
+                        dialog.cancel();
+
+                    } else if (i == R.id.jmui_commit_btn) {
+                        final String newName = pwdEt.getText().toString().trim();
+                        if (newName.equals("")) {
+                            Toast.makeText(mContext, mContext.getString(R.string.group_name_not_null_toast), Toast.LENGTH_SHORT).show();
+                        } else {
+                            dismissSoftInput();
+                            dialog.dismiss();
+                            mDialog = new ProgressDialog(mContext);
+                            mDialog.setMessage(mContext.getString(R.string.modifying_hint));
+                            mDialog.show();
+                            JMessageClient.updateGroupName(groupID, newName, new BasicCallback() {
+                                @Override
+                                public void gotResult(final int status, final String desc) {
+                                    mDialog.dismiss();
+                                    if (status == 0) {
+                                        mChatDetailView.updateGroupName(newName);
+                                        mChatDetailController.refreshGroupName(newName);
+                                        Toast.makeText(mContext, mContext.getString(R.string.modify_success_toast), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Log.i(TAG, "desc :" + desc);
+                                        HandleResponseCode.onHandle(mContext, status, false);
                                     }
-                                });
-                            }
-                            break;
+                                }
+                            });
+                        }
+
                     }
                 }
             };
@@ -168,13 +168,13 @@ public class ChatDetailActivity extends BaseActivity {
             View.OnClickListener listener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    switch (view.getId()) {
-                        case R.id.jmui_cancel_btn:
-                            dialog.cancel();
-                            break;
-                        case R.id.jmui_commit_btn:
-                            dialog.cancel();
-                            break;
+                    int i = view.getId();
+                    if (i == R.id.jmui_cancel_btn) {
+                        dialog.cancel();
+
+                    } else if (i == R.id.jmui_commit_btn) {
+                        dialog.cancel();
+
                     }
                 }
             };
@@ -209,7 +209,6 @@ public class ChatDetailActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_CANCELED) {
             return;

@@ -154,88 +154,87 @@ public class ChatDetailController implements OnClickListener, OnItemClickListene
     @Override
     public void onClick(View v) {
         Intent intent = new Intent();
-        switch (v.getId()) {
-            case R.id.return_btn:
-                intent.putExtra("deleteMsg", mDeleteMsg);
-                intent.putExtra(IMConstants.CONV_TITLE, getName());
-                intent.putExtra(IMConstants.MEMBERS_COUNT, mMemberInfoList.size());
-                mContext.setResult(IMConstants.RESULT_CODE_CHAT_DETAIL, intent);
-                mContext.finish();
-                break;
+        int i = v.getId();
+        if (i == R.id.return_btn) {
+            intent.putExtra("deleteMsg", mDeleteMsg);
+            intent.putExtra(IMConstants.CONV_TITLE, getName());
+            intent.putExtra(IMConstants.MEMBERS_COUNT, mMemberInfoList.size());
+            mContext.setResult(IMConstants.RESULT_CODE_CHAT_DETAIL, intent);
+            mContext.finish();
+
             //显示所有群成员
-            case R.id.all_member_ll:
-                intent.putExtra(IMConstants.GROUP_ID, mGroupId);
-                intent.putExtra(IMConstants.DELETE_MODE, false);
-                intent.setClass(mContext, MembersInChatActivity.class);
-                mContext.startActivityForResult(intent, IMConstants.REQUEST_CODE_ALL_MEMBER);
-                break;
+        } else if (i == R.id.all_member_ll) {
+            intent.putExtra(IMConstants.GROUP_ID, mGroupId);
+            intent.putExtra(IMConstants.DELETE_MODE, false);
+            intent.setClass(mContext, MembersInChatActivity.class);
+            mContext.startActivityForResult(intent, IMConstants.REQUEST_CODE_ALL_MEMBER);
+
 
             // 设置群组名称
-            case R.id.group_name_ll:
-                mContext.showGroupNameSettingDialog(1, mGroupId, mGroupName);
-                break;
+        } else if (i == R.id.group_name_ll) {
+            mContext.showGroupNameSettingDialog(1, mGroupId, mGroupName);
+
 
             // 设置我在群组的昵称
-            case R.id.group_my_name_ll:
-                mContext.showGroupNameSettingDialog(2, mGroupId, mGroupName);
-                break;
+        } else if (i == R.id.group_my_name_ll) {
+            mContext.showGroupNameSettingDialog(2, mGroupId, mGroupName);
+
 
             // 群组人数
-            case R.id.group_num_ll:
-                break;
+        } else if (i == R.id.group_num_ll) {
 
             // 查询聊天记录
-            case R.id.group_chat_record_ll:
-                break;
+        } else if (i == R.id.group_chat_record_ll) {
 
             // 删除聊天记录
-            case R.id.group_chat_del_ll:
-                View.OnClickListener listener = new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        switch (view.getId()) {
-                            case R.id.jmui_cancel_btn:
-                                mDialog.cancel();
-                                break;
-                            case R.id.jmui_commit_btn:
-                                Conversation conv;
-                                if (mIsGroup) {
-                                    conv = JMessageClient.getGroupConversation(mGroupId);
-                                } else {
-                                    conv = JMessageClient.getSingleConversation(mTargetId, mTargetAppKey);
-                                }
-                                if (conv != null) {
-                                    conv.deleteAllMessage();
-                                    mDeleteMsg = true;
-                                }
-                                mDialog.cancel();
-                                break;
+        } else if (i == R.id.group_chat_del_ll) {
+            OnClickListener listener = new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int i = view.getId();
+                    if (i == R.id.jmui_cancel_btn) {
+                        mDialog.cancel();
+
+                    } else if (i == R.id.jmui_commit_btn) {
+                        Conversation conv;
+                        if (mIsGroup) {
+                            conv = JMessageClient.getGroupConversation(mGroupId);
+                        } else {
+                            conv = JMessageClient.getSingleConversation(mTargetId, mTargetAppKey);
                         }
-                    }
-                };
-                mDialog = DialogCreator.createDeleteMessageDialog(mContext, listener);
-                mDialog.getWindow().setLayout((int) (0.8 * mWidth), WindowManager.LayoutParams.WRAP_CONTENT);
-                mDialog.show();
-                break;
-            case R.id.chat_detail_del_group:
-                listener = new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        switch (view.getId()) {
-                            case R.id.jmui_cancel_btn:
-                                mDialog.cancel();
-                                break;
-                            case R.id.jmui_commit_btn:
-                                deleteAndExit();
-                                mDialog.cancel();
-                                break;
+                        if (conv != null) {
+                            conv.deleteAllMessage();
+                            mDeleteMsg = true;
                         }
+                        mDialog.cancel();
+
                     }
-                };
-                mDialog = DialogCreator.createExitGroupDialog(mContext, listener);
-                mDialog.getWindow().setLayout((int) (0.8 * mWidth), WindowManager.LayoutParams.WRAP_CONTENT);
-                mDialog.show();
-                break;
+                }
+            };
+            mDialog = DialogCreator.createDeleteMessageDialog(mContext, listener);
+            mDialog.getWindow().setLayout((int) (0.8 * mWidth), WindowManager.LayoutParams.WRAP_CONTENT);
+            mDialog.show();
+
+        } else if (i == R.id.chat_detail_del_group) {
+            OnClickListener listener;
+            listener = new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int i = view.getId();
+                    if (i == R.id.jmui_cancel_btn) {
+                        mDialog.cancel();
+
+                    } else if (i == R.id.jmui_commit_btn) {
+                        deleteAndExit();
+                        mDialog.cancel();
+
+                    }
+                }
+            };
+            mDialog = DialogCreator.createExitGroupDialog(mContext, listener);
+            mDialog.getWindow().setLayout((int) (0.8 * mWidth), WindowManager.LayoutParams.WRAP_CONTENT);
+            mDialog.show();
+
         }
     }
 
@@ -274,13 +273,13 @@ public class ChatDetailController implements OnClickListener, OnItemClickListene
             // 点击群成员项时
             if (position < mCurrentNum) {
                 if (mMemberInfoList.get(position).getUserName().equals(mMyUsername)) {
-                    intent.setClass(mContext, MeInfoActivity.class);
+                    //intent.setClass(mContext, MeInfoActivity.class);
                 } else {
                     UserInfo userInfo = mMemberInfoList.get(position);
                     if (userInfo.isFriend()) {
-                        intent.setClass(mContext, FriendInfoActivity.class);
+                        //intent.setClass(mContext, FriendInfoActivity.class);
                     } else {
-                        intent.setClass(mContext, SearchFriendDetailActivity.class);
+                        //intent.setClass(mContext, SearchFriendDetailActivity.class);
                     }
                     intent.putExtra(IMConstants.TARGET_ID, userInfo.getUserName());
                     intent.putExtra(IMConstants.TARGET_APP_KEY, userInfo.getAppKey());
@@ -301,9 +300,9 @@ public class ChatDetailController implements OnClickListener, OnItemClickListene
             //单聊
         } else if (position < mCurrentNum) {
             if (mUserInfo.isFriend()) {
-                intent.setClass(mContext, FriendInfoActivity.class);
+                //intent.setClass(mContext, FriendInfoActivity.class);
             } else {
-                intent.setClass(mContext, SearchFriendDetailActivity.class);
+                //intent.setClass(mContext, SearchFriendDetailActivity.class);
             }
             intent.putExtra(IMConstants.TARGET_ID, mTargetId);
             intent.putExtra(IMConstants.TARGET_APP_KEY, mTargetAppKey);
@@ -348,27 +347,27 @@ public class ChatDetailController implements OnClickListener, OnItemClickListene
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (view.getId()) {
-                    case R.id.jmui_cancel_btn:
-                        dialog.cancel();
-                        break;
-                    case R.id.jmui_commit_btn:
-                        final String targetId = userNameEt.getText().toString().trim();
-                        Log.i(TAG, "targetID " + targetId);
-                        if (TextUtils.isEmpty(targetId)) {
-                            HandleResponseCode.onHandle(mContext, 801001, true);
-                            break;
-                            //检查群组中是否包含该用户
-                        } else if (checkIfNotContainUser(targetId)) {
-                            mLoadingDialog = DialogCreator.createLoadingDialog(mContext,
-                                    mContext.getString(R.string.searching_user));
-                            mLoadingDialog.show();
-                            getUserInfo(targetId, dialog);
-                        } else {
-                            userNameEt.setText("");
-                            HandleResponseCode.onHandle(mContext, 1002, true);
-                        }
-                        break;
+                int i = view.getId();
+                if (i == R.id.jmui_cancel_btn) {
+                    dialog.cancel();
+
+                } else if (i == R.id.jmui_commit_btn) {
+                    final String targetId = userNameEt.getText().toString().trim();
+                    Log.i(TAG, "targetID " + targetId);
+                    if (TextUtils.isEmpty(targetId)) {
+                        HandleResponseCode.onHandle(mContext, 801001, true);
+                        //break;
+                        //检查群组中是否包含该用户
+                    } else if (checkIfNotContainUser(targetId)) {
+                        mLoadingDialog = DialogCreator.createLoadingDialog(mContext,
+                                mContext.getString(R.string.searching_user));
+                        mLoadingDialog.show();
+                        getUserInfo(targetId, dialog);
+                    } else {
+                        userNameEt.setText("");
+                        HandleResponseCode.onHandle(mContext, 1002, true);
+                    }
+
                 }
             }
         };
@@ -465,87 +464,86 @@ public class ChatDetailController implements OnClickListener, OnItemClickListene
 
     @Override
     public void onChanged(int id, final boolean checked) {
-        switch (id) {
-            case R.id.no_disturb_slip_btn:
-                final Dialog dialog = DialogCreator.createLoadingDialog(mContext, mContext.getString(R.string.processing));
-                dialog.show();
-                //设置免打扰,1为将当前用户或群聊设为免打扰,0为移除免打扰
-                if (mIsGroup) {
-                    mGroupInfo.setNoDisturb(checked ? 1 : 0, new BasicCallback() {
-                        @Override
-                        public void gotResult(int status, String desc) {
-                            dialog.dismiss();
-                            if (status == 0) {
-                                if (checked) {
-                                    Toast.makeText(mContext, mContext.getString(R.string.set_do_not_disturb_success_hint),
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(mContext, mContext.getString(R.string.remove_from_no_disturb_list_hint),
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                                //设置失败,恢复为原来的状态
-                            } else {
-                                if (checked) {
-                                    mChatDetailView.setNoDisturbChecked(false);
-                                } else {
-                                    mChatDetailView.setNoDisturbChecked(true);
-                                }
-                                HandleResponseCode.onHandle(mContext, status, false);
-                            }
-                        }
-                    });
-                } else {
-                    mUserInfo.setNoDisturb(checked ? 1 : 0, new BasicCallback() {
-                        @Override
-                        public void gotResult(int status, String desc) {
-                            dialog.dismiss();
-                            if (status == 0) {
-                                if (checked) {
-                                    Toast.makeText(mContext, mContext.getString(R.string.set_do_not_disturb_success_hint),
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(mContext, mContext.getString(R.string.remove_from_no_disturb_list_hint),
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                                //设置失败,恢复为原来的状态
-                            } else {
-                                if (checked) {
-                                    mChatDetailView.setNoDisturbChecked(false);
-                                } else {
-                                    mChatDetailView.setNoDisturbChecked(true);
-                                }
-                                HandleResponseCode.onHandle(mContext, status, false);
-                            }
-                        }
-                    });
-                }
-                break;
-            case R.id.block_slip_btn:
-                mDialog = DialogCreator.createLoadingDialog(mContext, mContext.getString(R.string.processing));
-                mDialog.show();
-                mGroupInfo.setBlockGroupMessage(checked ? 1 : 0, new BasicCallback() {
+        if (id == R.id.no_disturb_slip_btn) {
+            final Dialog dialog = DialogCreator.createLoadingDialog(mContext, mContext.getString(R.string.processing));
+            dialog.show();
+            //设置免打扰,1为将当前用户或群聊设为免打扰,0为移除免打扰
+            if (mIsGroup) {
+                mGroupInfo.setNoDisturb(checked ? 1 : 0, new BasicCallback() {
                     @Override
                     public void gotResult(int status, String desc) {
-                        mDialog.dismiss();
+                        dialog.dismiss();
                         if (status == 0) {
                             if (checked) {
-                                Toast.makeText(mContext, mContext.getString(R.string
-                                        .set_block_succeed_hint), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, mContext.getString(R.string.set_do_not_disturb_success_hint),
+                                        Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(mContext, mContext.getString(R.string
-                                        .remove_block_succeed_hint), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, mContext.getString(R.string.remove_from_no_disturb_list_hint),
+                                        Toast.LENGTH_SHORT).show();
                             }
+                            //设置失败,恢复为原来的状态
                         } else {
+                            if (checked) {
+                                mChatDetailView.setNoDisturbChecked(false);
+                            } else {
+                                mChatDetailView.setNoDisturbChecked(true);
+                            }
+                            HandleResponseCode.onHandle(mContext, status, false);
+                        }
+                    }
+                });
+            } else {
+                mUserInfo.setNoDisturb(checked ? 1 : 0, new BasicCallback() {
+                    @Override
+                    public void gotResult(int status, String desc) {
+                        dialog.dismiss();
+                        if (status == 0) {
+                            if (checked) {
+                                Toast.makeText(mContext, mContext.getString(R.string.set_do_not_disturb_success_hint),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(mContext, mContext.getString(R.string.remove_from_no_disturb_list_hint),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            //设置失败,恢复为原来的状态
+                        } else {
+                            if (checked) {
+                                mChatDetailView.setNoDisturbChecked(false);
+                            } else {
+                                mChatDetailView.setNoDisturbChecked(true);
+                            }
+                            HandleResponseCode.onHandle(mContext, status, false);
+                        }
+                    }
+                });
+            }
+
+        } else if (id == R.id.block_slip_btn) {
+            mDialog = DialogCreator.createLoadingDialog(mContext, mContext.getString(R.string.processing));
+            mDialog.show();
+            mGroupInfo.setBlockGroupMessage(checked ? 1 : 0, new BasicCallback() {
+                @Override
+                public void gotResult(int status, String desc) {
+                    mDialog.dismiss();
+                    if (status == 0) {
+                        if (checked) {
+                            Toast.makeText(mContext, mContext.getString(R.string
+                                    .set_block_succeed_hint), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(mContext, mContext.getString(R.string
+                                    .remove_block_succeed_hint), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
 //                            if (checked) {
 //                                mChatDetailView.setBlockChecked(false);
 //                            } else {
 //                                mChatDetailView.setBlockChecked(true);
 //                            }
-                            HandleResponseCode.onHandle(mContext, status, false);
-                        }
+                        HandleResponseCode.onHandle(mContext, status, false);
                     }
-                });
-                break;
+                }
+            });
+
         }
     }
 

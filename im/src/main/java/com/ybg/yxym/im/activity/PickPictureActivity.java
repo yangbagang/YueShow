@@ -98,33 +98,31 @@ public class PickPictureActivity extends BaseActivity {
     private OnClickListener listener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                //点击发送按钮，发送选中的图片
-                case R.id.pick_picture_send_btn:
-                    //存放选中图片的路径
-                    mPickedList = new ArrayList<String>();
-                    //存放选中的图片的position
-                    List<Integer> positionList;
-                    positionList = mAdapter.getSelectItems();
-                    //拿到选中图片的路径
-                    for (int i = 0; i < positionList.size(); i++) {
-                        mPickedList.add(mList.get(positionList.get(i)));
-                    }
-                    if (mPickedList.size() < 1) {
-                        return;
-                    } else {
-                        mDialog = new ProgressDialog(PickPictureActivity.this);
-                        mDialog.setCanceledOnTouchOutside(false);
-                        mDialog.setCancelable(false);
-                        mDialog.setMessage(PickPictureActivity.this.getString(R.string.sending_hint));
-                        mDialog.show();
+            int i1 = v.getId();
+            if (i1 == R.id.pick_picture_send_btn) {//存放选中图片的路径
+                mPickedList = new ArrayList<String>();
+                //存放选中的图片的position
+                List<Integer> positionList;
+                positionList = mAdapter.getSelectItems();
+                //拿到选中图片的路径
+                for (int i = 0; i < positionList.size(); i++) {
+                    mPickedList.add(mList.get(positionList.get(i)));
+                }
+                if (mPickedList.size() < 1) {
+                    return;
+                } else {
+                    mDialog = new ProgressDialog(PickPictureActivity.this);
+                    mDialog.setCanceledOnTouchOutside(false);
+                    mDialog.setCancelable(false);
+                    mDialog.setMessage(PickPictureActivity.this.getString(R.string.sending_hint));
+                    mDialog.show();
 
-                        getThumbnailPictures();
-                    }
-                    break;
-                case R.id.return_btn:
-                    finish();
-                    break;
+                    getThumbnailPictures();
+                }
+
+            } else if (i1 == R.id.return_btn) {
+                finish();
+
             }
         }
 

@@ -115,141 +115,141 @@ public class SendFileController implements View.OnClickListener, ViewPager.OnPag
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.actionbar_file_btn:
-                mSFView.setCurrentItem(0);
-                break;
-            case R.id.actionbar_video_btn:
-                mSFView.setCurrentItem(1);
-                break;
-            case R.id.actionbar_album_btn:
-                mSFView.setCurrentItem(2);
-                break;
-            case R.id.actionbar_audio_btn:
-                mSFView.setCurrentItem(3);
-                break;
-            case R.id.actionbar_other_btn:
-                mSFView.setCurrentItem(4);
-                break;
-            case R.id.return_btn:
-                mContext.finish();
-                break;
-            case R.id.send_file_btn:
-                if (mSize == 0) {
-                    break;
-                }
-                mDialog = new ProgressDialog(mContext);
-                mDialog.setCanceledOnTouchOutside(false);
-                mDialog.setCancelable(false);
-                mDialog.setMessage(mContext.getString(R.string.sending_hint));
-                mDialog.show();
-                Iterator<Map.Entry<FileType, ArrayList<String>>> iterator = mFileMap.entrySet().iterator();
-                mMsgIds = new int[mSize];
-                while (iterator.hasNext()) {
-                    Map.Entry<FileType, ArrayList<String>> entry = iterator.next();
-                    ArrayList<String> list = entry.getValue();
-                    switch (entry.getKey()) {
-                        case image:
-                            Bitmap bitmap;
-                            for (String path : list) {
-                                if (BitmapLoader.verifyPictureSize(path)) {
-                                    File file = new File(path);
-                                    ImageContent.createImageContentAsync(file, new ImageContent.CreateImageContentCallback() {
-                                        @Override
-                                        public void gotResult(int status, String desc, ImageContent imageContent) {
-                                            if (status == 0) {
-                                                Message msg = mConv.createSendMessage(imageContent);
-                                                mMsgIds[mIndex.get()] = msg.getId();
-                                            } else {
-                                                mMsgIds[mIndex.get()] = -1;
-                                                HandleResponseCode.onHandle(mContext, status, false);
-                                            }
-                                            mIndex.incrementAndGet();
-                                            if (mIndex.get() >= mSize) {
-                                                myHandler.sendEmptyMessage(SEND_FILE);
-                                            }
-                                        }
-                                    });
-                                } else {
-                                    bitmap = BitmapLoader.getBitmapFromFile(path, 720, 1280);
-                                    ImageContent.createImageContentAsync(bitmap, new ImageContent.CreateImageContentCallback() {
-                                        @Override
-                                        public void gotResult(int status, String desc, ImageContent imageContent) {
-                                            if (status == 0) {
-                                                Message msg = mConv.createSendMessage(imageContent);
-                                                mMsgIds[mIndex.get()] = msg.getId();
-                                            } else {
-                                                mMsgIds[mIndex.get()] = -1;
-                                                HandleResponseCode.onHandle(mContext, status, false);
-                                            }
-                                            mIndex.incrementAndGet();
-                                            if (mIndex.get() >= mSize) {
-                                                myHandler.sendEmptyMessage(SEND_FILE);
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                            break;
-                        case video:
-                            mIndex.getAndAdd(list.size());
-                            if (mIndex.get() >= mSize) {
-                                myHandler.sendEmptyMessage(SEND_FILE);
-                            }
-                            Toast.makeText(mContext, mContext.getString(R.string.video_not_support_hint),
-                                    Toast.LENGTH_SHORT).show();
-                            break;
-                        default:
-                            for (String path : list) {
+        int i = view.getId();
+        if (i == R.id.actionbar_file_btn) {
+            mSFView.setCurrentItem(0);
+
+        } else if (i == R.id.actionbar_video_btn) {
+            mSFView.setCurrentItem(1);
+
+        } else if (i == R.id.actionbar_album_btn) {
+            mSFView.setCurrentItem(2);
+
+        } else if (i == R.id.actionbar_audio_btn) {
+            mSFView.setCurrentItem(3);
+
+        } else if (i == R.id.actionbar_other_btn) {
+            mSFView.setCurrentItem(4);
+
+        } else if (i == R.id.return_btn) {
+            mContext.finish();
+
+        } else if (i == R.id.send_file_btn) {
+            if (mSize == 0) {
+                return;
+            }
+            mDialog = new ProgressDialog(mContext);
+            mDialog.setCanceledOnTouchOutside(false);
+            mDialog.setCancelable(false);
+            mDialog.setMessage(mContext.getString(R.string.sending_hint));
+            mDialog.show();
+            Iterator<Map.Entry<FileType, ArrayList<String>>> iterator = mFileMap.entrySet().iterator();
+            mMsgIds = new int[mSize];
+            while (iterator.hasNext()) {
+                Map.Entry<FileType, ArrayList<String>> entry = iterator.next();
+                ArrayList<String> list = entry.getValue();
+                switch (entry.getKey()) {
+                    case image:
+                        Bitmap bitmap;
+                        for (String path : list) {
+                            if (BitmapLoader.verifyPictureSize(path)) {
                                 File file = new File(path);
-                                int index = path.lastIndexOf('/');
-                                String fileName;
-                                if (index > 0) {
-                                    fileName = path.substring(index + 1);
-                                    try {
-                                        FileContent content = new FileContent(file, fileName);
-                                        content.setStringExtra("fileType", entry.getKey().toString());
-                                        NumberFormat ddf1 = NumberFormat.getNumberInstance();
-                                        //保留小数点后两位
-                                        ddf1.setMaximumFractionDigits(2);
-                                        String sizeDisplay;
-                                        if (file.length() > 1048576.0) {
-                                            double result = file.length() / 1048576.0;
-                                            sizeDisplay = ddf1.format(result) + " MB";
-                                        } else if (file.length() > 1024) {
-                                            double result = file.length() / 1024;
-                                            sizeDisplay = ddf1.format(result) + " KB";
-
-                                        } else {
-                                            sizeDisplay = ddf1.format(file.length()) + " B";
-                                        }
-                                        content.setStringExtra("fileSize", sizeDisplay);
-                                        Message msg = mConv.createSendMessage(content);
-                                        if (mIndex.get() < mSize) {
+                                ImageContent.createImageContentAsync(file, new ImageContent.CreateImageContentCallback() {
+                                    @Override
+                                    public void gotResult(int status, String desc, ImageContent imageContent) {
+                                        if (status == 0) {
+                                            Message msg = mConv.createSendMessage(imageContent);
                                             mMsgIds[mIndex.get()] = msg.getId();
-                                            mIndex.incrementAndGet();
-                                            if (mIndex.get() >= mSize) {
-                                                myHandler.sendEmptyMessage(SEND_FILE);
-                                            }
+                                        } else {
+                                            mMsgIds[mIndex.get()] = -1;
+                                            HandleResponseCode.onHandle(mContext, status, false);
                                         }
-                                    } catch (FileNotFoundException e) {
-                                        mDialog.dismiss();
-                                        Toast.makeText(mContext, mContext.getString(R.string.jmui_file_not_found_toast),
-                                                Toast.LENGTH_SHORT).show();
                                         mIndex.incrementAndGet();
-                                        e.printStackTrace();
-                                    } catch (JMFileSizeExceedException e) {
-                                        mDialog.dismiss();
-                                        Toast.makeText(mContext, mContext.getString(R.string.file_size_over_limit_hint),
-                                                Toast.LENGTH_SHORT).show();
-                                        e.printStackTrace();
+                                        if (mIndex.get() >= mSize) {
+                                            myHandler.sendEmptyMessage(SEND_FILE);
+                                        }
                                     }
-                                }
-
+                                });
+                            } else {
+                                bitmap = BitmapLoader.getBitmapFromFile(path, 720, 1280);
+                                ImageContent.createImageContentAsync(bitmap, new ImageContent.CreateImageContentCallback() {
+                                    @Override
+                                    public void gotResult(int status, String desc, ImageContent imageContent) {
+                                        if (status == 0) {
+                                            Message msg = mConv.createSendMessage(imageContent);
+                                            mMsgIds[mIndex.get()] = msg.getId();
+                                        } else {
+                                            mMsgIds[mIndex.get()] = -1;
+                                            HandleResponseCode.onHandle(mContext, status, false);
+                                        }
+                                        mIndex.incrementAndGet();
+                                        if (mIndex.get() >= mSize) {
+                                            myHandler.sendEmptyMessage(SEND_FILE);
+                                        }
+                                    }
+                                });
                             }
-                    }
+                        }
+                        break;
+                    case video:
+                        mIndex.getAndAdd(list.size());
+                        if (mIndex.get() >= mSize) {
+                            myHandler.sendEmptyMessage(SEND_FILE);
+                        }
+                        Toast.makeText(mContext, mContext.getString(R.string.video_not_support_hint),
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        for (String path : list) {
+                            File file = new File(path);
+                            int index = path.lastIndexOf('/');
+                            String fileName;
+                            if (index > 0) {
+                                fileName = path.substring(index + 1);
+                                try {
+                                    FileContent content = new FileContent(file, fileName);
+                                    content.setStringExtra("fileType", entry.getKey().toString());
+                                    NumberFormat ddf1 = NumberFormat.getNumberInstance();
+                                    //保留小数点后两位
+                                    ddf1.setMaximumFractionDigits(2);
+                                    String sizeDisplay;
+                                    if (file.length() > 1048576.0) {
+                                        double result = file.length() / 1048576.0;
+                                        sizeDisplay = ddf1.format(result) + " MB";
+                                    } else if (file.length() > 1024) {
+                                        double result = file.length() / 1024;
+                                        sizeDisplay = ddf1.format(result) + " KB";
+
+                                    } else {
+                                        sizeDisplay = ddf1.format(file.length()) + " B";
+                                    }
+                                    content.setStringExtra("fileSize", sizeDisplay);
+                                    Message msg = mConv.createSendMessage(content);
+                                    if (mIndex.get() < mSize) {
+                                        mMsgIds[mIndex.get()] = msg.getId();
+                                        mIndex.incrementAndGet();
+                                        if (mIndex.get() >= mSize) {
+                                            myHandler.sendEmptyMessage(SEND_FILE);
+                                        }
+                                    }
+                                } catch (FileNotFoundException e) {
+                                    mDialog.dismiss();
+                                    Toast.makeText(mContext, mContext.getString(R.string.jmui_file_not_found_toast),
+                                            Toast.LENGTH_SHORT).show();
+                                    mIndex.incrementAndGet();
+                                    e.printStackTrace();
+                                } catch (JMFileSizeExceedException e) {
+                                    mDialog.dismiss();
+                                    Toast.makeText(mContext, mContext.getString(R.string.file_size_over_limit_hint),
+                                            Toast.LENGTH_SHORT).show();
+                                    e.printStackTrace();
+                                }
+                            }
+
+                        }
                 }
-                break;
+            }
+
         }
     }
 

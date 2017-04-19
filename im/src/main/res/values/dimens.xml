@@ -14,8 +14,8 @@
     <dimen name="text_large_size">22sp</dimen>
     <dimen name="default_padding_top">5dp</dimen>
     <dimen name="default_padding_bottom">5dp</dimen>
-    <dimen name="default_padding_right">15dp</dimen>
-    <dimen name="default_padding_left">15dp</dimen>
+    <dimen name="default_padding_right">16dp</dimen>
+    <dimen name="default_padding_left">16dp</dimen>
     <dimen name="contact_item_padding_left">5dp</dimen>
     <dimen name="item_head_icon_size">50dp</dimen>
     <dimen name="chat_head_icon_size">40dp</dimen>

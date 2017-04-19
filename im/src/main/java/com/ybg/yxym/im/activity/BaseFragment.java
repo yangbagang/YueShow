@@ -7,9 +7,6 @@ import android.util.DisplayMetrics;
 
 import cn.jpush.im.android.api.JMessageClient;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class BaseFragment extends Fragment {
 
     private static final String TAG = "BaseFragment";
