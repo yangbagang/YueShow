@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/all_members_bg_color"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="#d4d4d4"
+            android:src="@mipmap/search"/>
+
+        <EditText
+            android:id="@+id/search_et"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/default_input_bg"
+            android:hint="@string/search"
+            android:paddingLeft="5dp"
+            android:textColor="#555555"
+            android:textColorHint="@color/gray"
+            android:textCursorDrawable="@drawable/jmui_text_cursor_bg"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/jmui_chat_detail_split_line_color"/>
+
+    <ListView
+        android:id="@+id/members_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null">
+
+    </ListView>
+
+</LinearLayout>

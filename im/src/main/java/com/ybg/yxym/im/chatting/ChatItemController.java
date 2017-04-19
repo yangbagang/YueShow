@@ -22,13 +22,11 @@ import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.ybg.yxym.yueshow.constant.AppConstants;
-import com.ybg.yxym.yueshow.constant.IntentExtra;
 import com.ybg.yxym.im.chatting.utils.FileHelper;
 import com.ybg.yxym.im.chatting.utils.HandleResponseCode;
 import com.ybg.yxym.im.chatting.utils.IdHelper;
+import com.ybg.yxym.im.constants.IMConstants;
 import com.ybg.yxym.im.entity.FileType;
-import com.ybg.yxym.yueshow.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -850,15 +848,15 @@ public class ChatItemController {
                 case image:
                     if (holder.picture != null && v.getId() == holder.picture.getId()) {
                         Intent intent = new Intent();
-                        intent.putExtra(IntentExtra.Conversation.INSTANCE.getTARGET_ID(), mConv.getTargetId());
+                        intent.putExtra(IMConstants.TARGET_ID, mConv.getTargetId());
                         intent.putExtra("msgId", msg.getId());
                         if (mConv.getType() == ConversationType.group) {
                             GroupInfo groupInfo = (GroupInfo) mConv.getTargetInfo();
-                            intent.putExtra(IntentExtra.Conversation.INSTANCE.getGROUP_ID(), groupInfo.getGroupID());
+                            intent.putExtra(IMConstants.GROUP_ID, groupInfo.getGroupID());
                         }
-                        intent.putExtra(IntentExtra.Conversation.INSTANCE.getTARGET_APP_KEY(), mConv.getTargetAppKey());
+                        intent.putExtra(IMConstants.TARGET_APP_KEY, mConv.getTargetAppKey());
                         intent.putExtra("msgCount", mMsgList.size());
-                        intent.putIntegerArrayListExtra(JChatDemoApplication.MsgIDs, getImgMsgIDList());
+                        intent.putIntegerArrayListExtra(IMConstants.MsgIDs, getImgMsgIDList());
                         intent.putExtra("fromChatActivity", true);
                         intent.setClass(mContext, BrowserViewPagerActivity.class);
                         mContext.startActivity(intent);
@@ -883,7 +881,7 @@ public class ChatItemController {
                         if (msg.getDirect() == MessageDirect.send) {
                             browseDocument(fileName, path);
                         } else {
-                            final String newPath = AppConstants.INSTANCE.getFILE_CACHE_PATH() + fileName;
+                            final String newPath = IMConstants.FILE_CACHE_PATH + fileName;
                             File file = new File(newPath);
                             if (file.exists() && file.isFile()) {
                                 browseDocument(fileName, newPath);

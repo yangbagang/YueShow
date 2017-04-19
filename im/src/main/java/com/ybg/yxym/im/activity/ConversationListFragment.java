@@ -19,7 +19,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ybg.yxym.yueshow.app.ShowApplication;
+import com.ybg.yxym.im.R;
+import com.ybg.yxym.im.app.IMApplication;
 import com.ybg.yxym.im.chatting.utils.HandleResponseCode;
 import com.ybg.yxym.im.controller.ConversationListController;
 import com.ybg.yxym.im.entity.Event;
@@ -62,7 +63,7 @@ public class ConversationListFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         mRootView = layoutInflater.inflate(R.layout.fragment_conversation_list,
-                (ViewGroup) getActivity().findViewById(R.id.msgFragment), false);
+                null, false);
         mConvListView = new ConversationListView(mRootView, this.getActivity());
         mConvListView.initModule();
 
@@ -124,7 +125,7 @@ public class ConversationListFragment extends BaseFragment {
             Conversation conv = JMessageClient.getGroupConversation(groupID);
             if (conv != null && mConvListController != null) {
                 if (msg.isAtMe()) {
-                    ShowApplication.Companion.getInstance().setNeedAtMsg(true);
+                    IMApplication.getInstance().setNeedAtMsg(true);
                     mConvListController.getAdapter().putAtConv(conv, msg.getId());
                 }
                 mBackgroundHandler.sendMessage(mBackgroundHandler.obtainMessage(REFRESH_CONVERSATION_LIST,

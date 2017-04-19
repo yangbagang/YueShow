@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">im</string>
 
+    <string name="jmui_user_already_exist_toast">该用户已存在</string>
+
     <!-- fixProfile界面中使用到的字符串 -->
     <string name="nickname_hit">昵称</string>
     <string name="jmui_take_new_photo">拍摄照片</string>

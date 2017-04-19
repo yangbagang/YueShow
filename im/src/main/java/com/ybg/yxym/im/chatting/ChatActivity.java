@@ -26,6 +26,21 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.ybg.yxym.im.activity.BaseActivity;
+import com.ybg.yxym.im.activity.ChatDetailActivity;
+import com.ybg.yxym.im.activity.PickPictureTotalActivity;
+import com.ybg.yxym.im.activity.SendFileActivity;
+import com.ybg.yxym.im.activity.SendLocationActivity;
+import com.ybg.yxym.im.app.IMApplication;
+import com.ybg.yxym.im.chatting.utils.BitmapLoader;
+import com.ybg.yxym.im.chatting.utils.DialogCreator;
+import com.ybg.yxym.im.chatting.utils.FileHelper;
+import com.ybg.yxym.im.chatting.utils.IdHelper;
+import com.ybg.yxym.im.chatting.utils.SharePreferenceManager;
+import com.ybg.yxym.im.constants.IMConstants;
+import com.ybg.yxym.im.entity.Event;
+import com.ybg.yxym.im.entity.EventType;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -45,17 +60,6 @@ import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.GroupInfo;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
-
-import io.jchat.android.activity.ChatDetailActivity;
-import io.jchat.android.activity.PickPictureTotalActivity;
-import io.jchat.android.activity.SendFileActivity;
-import io.jchat.android.activity.SendLocationActivity;
-import io.jchat.android.application.JChatDemoApplication;
-import io.jchat.android.chatting.utils.BitmapLoader;
-import io.jchat.android.chatting.utils.DialogCreator;
-import io.jchat.android.chatting.utils.FileHelper;
-import io.jchat.android.chatting.utils.IdHelper;
-import io.jchat.android.chatting.utils.SharePreferenceManager;
 
 /*
  * 对话界面,合并了ChatController,整个chatting文件夹下的文件都使用反射机制获取相关资源文件,
@@ -125,13 +129,13 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         Intent intent = getIntent();
         mTargetId = intent.getStringExtra(TARGET_ID);
         mTargetAppKey = intent.getStringExtra(TARGET_APP_KEY);
-        mTitle = intent.getStringExtra(JChatDemoApplication.CONV_TITLE);
+        mTitle = intent.getStringExtra(IMConstants.CONV_TITLE);
         mMyInfo = JMessageClient.getMyInfo();
         if (!TextUtils.isEmpty(mTargetId)) {
             //单聊
             mIsSingle = true;
             mConv = JMessageClient.getSingleConversation(mTargetId, mTargetAppKey);
-            mChatView.setChatTitle(mTitle);
+            setChatTitle(mTitle);
             if (mConv == null) {
                 mConv = Conversation.createSingleConversation(mTargetId, mTargetAppKey);
             }
@@ -142,11 +146,10 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             mIsSingle = false;
             mGroupId = intent.getLongExtra(GROUP_ID, 0);
             final boolean fromGroup = intent.getBooleanExtra("fromGroup", false);
-            // TODO Provide at message button to jump
             Log.d(TAG, "GroupId : " + mGroupId);
             //判断是否从创建群组跳转过来, 如果作为UIKit使用,去掉if else这一段
             if (fromGroup) {
-                mChatView.setChatTitle(IdHelper.getString(mContext, "group"),
+                setChatTitle(IdHelper.getString(mContext, "group"),
                         intent.getIntExtra(MEMBERS_COUNT, 0));
                 mConv = JMessageClient.getGroupConversation(mGroupId);
                 mChatAdapter = new MsgListAdapter(mContext, mConv, longClickListener);
@@ -159,19 +162,18 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                     UserInfo userInfo = groupInfo.getGroupMemberInfo(mMyInfo.getUserName(), mMyInfo.getAppKey());
                     //如果自己在群聊中，聊天标题显示群人数
                     if (userInfo != null) {
-                        // TODO: 2017/3/2
                         if (!TextUtils.isEmpty(groupInfo.getGroupName())) {
-                            mChatView.setChatTitle(mTitle, groupInfo.getGroupMembers().size());
+                            setChatTitle(mTitle, groupInfo.getGroupMembers().size());
                         } else {
-                            mChatView.setChatTitle(IdHelper.getString(mContext, "group"),
+                            setChatTitle(IdHelper.getString(mContext, "group"),
                                     groupInfo.getGroupMembers().size());
                         }
                         mChatView.showRightBtn();
                     } else {
                         if (!TextUtils.isEmpty(groupInfo.getGroupName())) {
-                            mChatView.setChatTitle(mTitle);
+                            setChatTitle(mTitle);
                         } else {
-                            mChatView.setChatTitle(IdHelper.getString(mContext, "group"));
+                            setChatTitle(IdHelper.getString(mContext, "group"));
                         }
                         mChatView.dismissRightBtn();
                     }
@@ -337,7 +339,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                     Toast.makeText(ChatActivity.this, "对方不是你的好友.也可以发消息", Toast.LENGTH_SHORT).show();
                     JMessageClient.sendMessage(msg);
                 }
-            }else {
+            } else {
                 JMessageClient.sendMessage(msg);
             }
             if (null != mAtList) {
@@ -381,24 +383,24 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 Toast.makeText(this, IdHelper.getString(mContext, "sdcard_not_exist_toast"), Toast.LENGTH_SHORT).show();
             } else {
                 intent.setClass(this, PickPictureTotalActivity.class);
-                startActivityForResult(intent, JChatDemoApplication.REQUEST_CODE_SELECT_PICTURE);
+                startActivityForResult(intent, IMConstants.REQUEST_CODE_SELECT_PICTURE);
             }
         } else if (v.getId() == IdHelper.getViewID(mContext, "jmui_send_location_btn")) {
             if (mChatView.getMoreMenu().getVisibility() == View.VISIBLE) {
                 mChatView.dismissMoreMenu();
             }
             Intent intent = new Intent(mContext, SendLocationActivity.class);
-            intent.putExtra(JChatDemoApplication.TARGET_ID, mTargetId);
-            intent.putExtra(JChatDemoApplication.TARGET_APP_KEY, mTargetAppKey);
-            intent.putExtra(JChatDemoApplication.GROUP_ID, mGroupId);
+            intent.putExtra(IMConstants.TARGET_ID, mTargetId);
+            intent.putExtra(IMConstants.TARGET_APP_KEY, mTargetAppKey);
+            intent.putExtra(IMConstants.GROUP_ID, mGroupId);
             intent.putExtra("sendLocation", true);
-            startActivityForResult(intent, JChatDemoApplication.REQUEST_CODE_SEND_LOCATION);
+            startActivityForResult(intent, IMConstants.REQUEST_CODE_SEND_LOCATION);
         } else if (v.getId() == IdHelper.getViewID(mContext, "jmui_send_file_btn")) {
             Intent intent = new Intent(mContext, SendFileActivity.class);
-            intent.putExtra(JChatDemoApplication.TARGET_ID, mTargetId);
-            intent.putExtra(JChatDemoApplication.TARGET_APP_KEY, mTargetAppKey);
-            intent.putExtra(JChatDemoApplication.GROUP_ID, mGroupId);
-            startActivityForResult(intent, JChatDemoApplication.REQUEST_CODE_SEND_FILE);
+            intent.putExtra(IMConstants.TARGET_ID, mTargetId);
+            intent.putExtra(IMConstants.TARGET_APP_KEY, mTargetAppKey);
+            intent.putExtra(IMConstants.GROUP_ID, mGroupId);
+            startActivityForResult(intent, IMConstants.REQUEST_CODE_SEND_FILE);
             // 滚动到 @我 的那条消息处
         } else if (v.getId() == IdHelper.getViewID(mContext, "jmui_at_me_btn")) {
             if (mUnreadMsgCnt < MsgListAdapter.PAGE_MESSAGE_COUNT) {
@@ -416,7 +418,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mPhotoPath)));
             try {
-                startActivityForResult(intent, JChatDemoApplication.REQUEST_CODE_TAKE_PHOTO);
+                startActivityForResult(intent, IMConstants.REQUEST_CODE_TAKE_PHOTO);
             } catch (ActivityNotFoundException anf) {
                 Toast.makeText(mContext, IdHelper.getString(mContext, "camera_not_prepared"),
                         Toast.LENGTH_SHORT).show();
@@ -503,7 +505,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         if (!mIsSingle) {
             long groupId = getIntent().getLongExtra(GROUP_ID, 0);
             if (groupId != 0) {
-                JChatDemoApplication.isNeedAtMsg = false;
+                IMApplication.getInstance().setNeedAtMsg(false);
                 JMessageClient.enterGroupConversation(groupId);
             }
         } else if (null != targetId) {
@@ -530,46 +532,48 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             return;
         }
         switch (resultCode) {
-            case JChatDemoApplication.RESULT_CODE_SELECT_PICTURE:
+            case IMConstants.RESULT_CODE_SELECT_PICTURE:
                 handleSendMsg(data);
                 break;
-            case JChatDemoApplication.RESULT_CODE_CHAT_DETAIL:
-                String title = data.getStringExtra(JChatDemoApplication.CONV_TITLE);
+            case IMConstants.RESULT_CODE_CHAT_DETAIL:
+                String title = data.getStringExtra(IMConstants.CONV_TITLE);
                 if (!mIsSingle) {
                     GroupInfo groupInfo = (GroupInfo) mConv.getTargetInfo();
                     UserInfo userInfo = groupInfo.getGroupMemberInfo(mMyInfo.getUserName(), mMyInfo.getAppKey());
                     //如果自己在群聊中，同时显示群人数
                     if (userInfo != null) {
                         if (TextUtils.isEmpty(title)) {
-                            mChatView.setChatTitle(IdHelper.getString(mContext, "group"),
+                            setChatTitle(IdHelper.getString(mContext, "group"),
                                     data.getIntExtra(MEMBERS_COUNT, 0));
                         } else {
-                            mChatView.setChatTitle(title, data.getIntExtra(MEMBERS_COUNT, 0));
+                            setChatTitle(title, data.getIntExtra(MEMBERS_COUNT, 0));
                         }
                     } else {
                         if (TextUtils.isEmpty(title)) {
-                            mChatView.setChatTitle(IdHelper.getString(mContext, "group"));
+                            setChatTitle(IdHelper.getString(mContext, "group"));
                         } else {
-                            mChatView.setChatTitle(title);
+                            setChatTitle(title);
                         }
                         mChatView.dismissGroupNum();
                     }
 
-                } else mChatView.setChatTitle(title);
+                } else {
+                    setChatTitle(title);
+                }
                 if (data.getBooleanExtra("deleteMsg", false)) {
                     mChatAdapter.clearMsgList();
                 }
                 break;
-            case JChatDemoApplication.RESULT_CODE_FRIEND_INFO:
+            case IMConstants.RESULT_CODE_FRIEND_INFO:
                 if (mIsSingle) {
-                    title = data.getStringExtra(JChatDemoApplication.CONV_TITLE);
+                    title = data.getStringExtra(IMConstants.CONV_TITLE);
                     if (!TextUtils.isEmpty(title)) {
-                        mChatView.setChatTitle(title);
+                        setChatTitle(title);
                     }
                 }
                 break;
-            case JChatDemoApplication.RESULT_CODE_SEND_LOCATION:
-                Message msg = mConv.getMessage(data.getIntExtra(JChatDemoApplication.MsgIDs, 0));
+            case IMConstants.RESULT_CODE_SEND_LOCATION:
+                Message msg = mConv.getMessage(data.getIntExtra(IMConstants.MsgIDs, 0));
                 mChatAdapter.addMsgToList(msg);
                 int customMsgId = data.getIntExtra("customMsg", -1);
                 if (-1 != customMsgId) {
@@ -578,25 +582,25 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 }
                 mChatView.setToBottom();
                 break;
-            case JChatDemoApplication.RESULT_CODE_SEND_FILE:
+            case IMConstants.RESULT_CODE_SEND_FILE:
                 handleSendMsg(data);
                 break;
-            case JChatDemoApplication.RESULT_CODE_AT_MEMBER:
+            case IMConstants.RESULT_CODE_AT_MEMBER:
                 if (!mIsSingle) {
                     GroupInfo groupInfo = (GroupInfo) mConv.getTargetInfo();
-                    String username = data.getStringExtra(JChatDemoApplication.TARGET_ID);
-                    String appKey = data.getStringExtra(JChatDemoApplication.TARGET_APP_KEY);
+                    String username = data.getStringExtra(IMConstants.TARGET_ID);
+                    String appKey = data.getStringExtra(IMConstants.TARGET_APP_KEY);
                     UserInfo userInfo = groupInfo.getGroupMemberInfo(username, appKey);
                     if (null == mAtList) {
                         mAtList = new ArrayList<UserInfo>();
                     }
                     mAtList.add(userInfo);
-                    mChatView.setAtText(data.getStringExtra(JChatDemoApplication.NAME));
+                    mChatView.setAtText(data.getStringExtra(IMConstants.NAME));
                     showSoftInputAndDismissMenu();
                 }
                 break;
         }
-        if (requestCode == JChatDemoApplication.REQUEST_CODE_TAKE_PHOTO) {
+        if (requestCode == IMConstants.REQUEST_CODE_TAKE_PHOTO) {
             final Conversation conv = mConv;
             try {
                 String originPath = mPhotoPath;
@@ -607,7 +611,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                         if (status == 0) {
                             Message msg = conv.createSendMessage(imageContent);
                             Intent intent = new Intent();
-                            intent.putExtra(MsgIDs, new int[] {msg.getId()});
+                            intent.putExtra(MsgIDs, new int[]{msg.getId()});
                             handleSendMsg(intent);
                         }
                     }
@@ -705,12 +709,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                         if (activity.mConv != null) {
                             int num = msg.getData().getInt(MEMBERS_COUNT);
                             String groupName = msg.getData().getString(GROUP_NAME);
-                            activity.mChatView.setChatTitle(groupName, num);
+                            activity.setChatTitle(groupName, num);
                         }
                         break;
                     case REFRESH_GROUP_NUM:
                         int num = msg.getData().getInt(MEMBERS_COUNT);
-                        activity.mChatView.setChatTitle(IdHelper.getString(activity, "group"), num);
+                        activity.setChatTitle(IdHelper.getString(activity, "group"), num);
                         break;
                     case REFRESH_CHAT_TITLE:
                         if (activity.mGroupInfo != null) {
@@ -719,11 +723,11 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                                     activity.mMyInfo.getAppKey());
                             if (!TextUtils.isEmpty(activity.mGroupInfo.getGroupName())) {
                                 if (info != null) {
-                                    activity.mChatView.setChatTitle(activity.mTitle,
+                                    activity.setChatTitle(activity.mTitle,
                                             activity.mGroupInfo.getGroupMembers().size());
                                     activity.mChatView.showRightBtn();
                                 } else {
-                                    activity.mChatView.setChatTitle(activity.mTitle);
+                                    activity.setChatTitle(activity.mTitle);
                                     activity.mChatView.dismissRightBtn();
                                 }
                             }
@@ -781,7 +785,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         intent.putExtra(TARGET_APP_KEY, appKey);
         intent.putExtra(GROUP_ID, groupId);
         intent.setClass(this, ChatDetailActivity.class);
-        startActivityForResult(intent, JChatDemoApplication.REQUEST_CODE_CHAT_DETAIL);
+        startActivityForResult(intent, IMConstants.REQUEST_CODE_CHAT_DETAIL);
     }
 
 
@@ -827,9 +831,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                                     mChatView.dismissRightBtn();
                                     GroupInfo groupInfo = (GroupInfo) mConv.getTargetInfo();
                                     if (TextUtils.isEmpty(groupInfo.getGroupName())) {
-                                        mChatView.setChatTitle(IdHelper.getString(mContext, "group"));
+                                        setChatTitle(IdHelper.getString(mContext, "group"));
                                     } else {
-                                        mChatView.setChatTitle(groupInfo.getGroupName());
+                                        setChatTitle(groupInfo.getGroupName());
                                     }
                                     mChatView.dismissGroupNum();
                                 }
@@ -1023,4 +1027,24 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         }
         return false;
     }
+
+    private void setChatTitle(String title) {
+        setCustomTitle(title);
+    }
+
+    private void setChatTitle(int id) {
+        setCustomTitle(getString(id));
+    }
+
+    //设置群聊名字
+    private void setChatTitle(String name, int count) {
+        String title = name + "(" + count + ")";
+        setCustomTitle(title);
+    }
+
+    private void setChatTitle(int id, int count) {
+        String title = getString(id) + "(" + count + ")";
+        setCustomTitle(title);
+    }
+
 }

@@ -11,10 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import cn.jpush.im.android.api.JMessageClient;
-
-
 public class DialogCreator {
+
     public static Dialog createLoadingDialog(Context context, String msg) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(IdHelper.getLayout(context, "jmui_loading_view"), null);

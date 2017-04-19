@@ -10,11 +10,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-import com.ybg.yxym.yueshow.constant.IntentExtra;
 import com.ybg.yxym.im.activity.ConversationListFragment;
 import com.ybg.yxym.im.adapter.ConversationListAdapter;
 import com.ybg.yxym.im.chatting.ChatActivity;
 import com.ybg.yxym.im.chatting.utils.DialogCreator;
+import com.ybg.yxym.im.constants.IMConstants;
 import com.ybg.yxym.im.tools.SortConversationList;
 import com.ybg.yxym.im.view.ConversationListView;
 
@@ -66,7 +66,7 @@ public class ConversationListController implements OnItemClickListener, OnItemLo
             if (position > 0) {
                 // 减去 header view 个数
                 Conversation conv = mDatas.get(position - 2);
-                intent.putExtra(IntentExtra.Conversation.INSTANCE.getCONV_TITLE(), conv.getTitle());
+                intent.putExtra(IMConstants.CONV_TITLE, conv.getTitle());
                 if (null != conv) {
                     // 当前点击的会话是否为群组
                     if (conv.getType() == ConversationType.group) {
@@ -74,17 +74,19 @@ public class ConversationListController implements OnItemClickListener, OnItemLo
                             intent.putExtra("atMsgId", mListAdapter.getAtMsgId(conv));
                         }
                         long groupId = ((GroupInfo) conv.getTargetInfo()).getGroupID();
-                        intent.putExtra(IntentExtra.Conversation.INSTANCE.getGROUP_ID(), groupId);
-                        intent.putExtra(IntentExtra.Conversation.INSTANCE.getDRAFT(), getAdapter().getDraft(conv.getId()));
+                        intent.putExtra(IMConstants.GROUP_ID, groupId);
+                        intent.putExtra(IMConstants.DRAFT, getAdapter().getDraft(conv.getId
+                                ()));
                         intent.setClass(mContext.getActivity(), ChatActivity.class);
                         mContext.getActivity().startActivity(intent);
                         return;
                     } else {
                         String targetId = ((UserInfo) conv.getTargetInfo()).getUserName();
-                        intent.putExtra(IntentExtra.Conversation.INSTANCE.getTARGET_ID(), targetId);
-                        intent.putExtra(IntentExtra.Conversation.INSTANCE.getTARGET_APP_KEY(), conv.getTargetAppKey());
+                        intent.putExtra(IMConstants.TARGET_ID, targetId);
+                        intent.putExtra(IMConstants.TARGET_APP_KEY, conv.getTargetAppKey());
                         Log.d("ConversationList", "Target app key from conversation: " + conv.getTargetAppKey());
-                        intent.putExtra(IntentExtra.Conversation.INSTANCE.getDRAFT(), getAdapter().getDraft(conv.getId()));
+                        intent.putExtra(IMConstants.DRAFT, getAdapter().getDraft(conv.getId
+                                ()));
                     }
                     intent.setClass(mContext.getActivity(), ChatActivity.class);
                     mContext.getActivity().startActivity(intent);

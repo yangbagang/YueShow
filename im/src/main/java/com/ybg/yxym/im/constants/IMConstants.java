@@ -41,4 +41,31 @@ public class IMConstants {
     public static final String DELETE_MODE = "deleteMode";
     public static final String MEMBERS_COUNT = "membersCount";
 
+    public static final int REQUEST_CODE_TAKE_PHOTO = 4;
+    public static final int REQUEST_CODE_SELECT_PICTURE = 6;
+    public static final int RESULT_CODE_SELECT_PICTURE = 8;
+    public static final int REQUEST_CODE_SELECT_ALBUM = 10;
+    public static final int RESULT_CODE_SELECT_ALBUM = 11;
+    public static final int REQUEST_CODE_BROWSER_PICTURE = 12;
+    public static final int RESULT_CODE_BROWSER_PICTURE = 13;
+    public static final int REQUEST_CODE_CHAT_DETAIL = 14;
+    public static final int RESULT_CODE_CHAT_DETAIL = 15;
+    public static final int REQUEST_CODE_FRIEND_INFO = 16;
+    public static final int RESULT_CODE_FRIEND_INFO = 17;
+    public static final int REQUEST_CODE_CROP_PICTURE = 18;
+    public static final int REQUEST_CODE_ME_INFO = 19;
+    public static final int RESULT_CODE_ME_INFO = 20;
+    public static final int REQUEST_CODE_ALL_MEMBER = 21;
+    public static final int RESULT_CODE_ALL_MEMBER = 22;
+    public static final int RESULT_CODE_SELECT_FRIEND = 23;
+    public static final int REQUEST_CODE_SEND_LOCATION = 24;
+    public static final int RESULT_CODE_SEND_LOCATION = 25;
+    public static final int REQUEST_CODE_SEND_FILE = 26;
+    public static final int RESULT_CODE_SEND_FILE = 27;
+    public static final int REQUEST_CODE_EDIT_NOTENAME = 28;
+    public static final int RESULT_CODE_EDIT_NOTENAME = 29;
+    public static final int REQUEST_CODE_AT_MEMBER = 30;
+    public static final int RESULT_CODE_AT_MEMBER = 31;
+    public static final int ON_GROUP_EVENT = 3004;
+
 }

@@ -16,13 +16,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.ybg.yxym.yueshow.R;
-import com.ybg.yxym.yueshow.app.ShowApplication;
+import com.ybg.yxym.im.R;
+import com.ybg.yxym.im.app.IMApplication;
+import com.ybg.yxym.im.chatting.CircleImageView;
 import com.ybg.yxym.im.chatting.utils.HandleResponseCode;
 import com.ybg.yxym.im.chatting.utils.TimeFormat;
 import com.ybg.yxym.im.tools.SortConversationList;
 import com.ybg.yxym.im.tools.ViewHolder;
-import com.ybg.yxym.yueshow.view.CircleImageView;
 
 import java.lang.ref.WeakReference;
 import java.util.Collections;
@@ -222,7 +222,7 @@ public class ConversationListAdapter extends BaseAdapter {
                     }
                 }
 
-                if (mArray.get(position) && ShowApplication.Companion.getInstance().isNeedAtMsg()) {
+                if (mArray.get(position) && IMApplication.getInstance().isNeedAtMsg()) {
                     //有人@我 文字提示
                     contentStr = mContext.getString(R.string.somebody_at_me) + contentStr;
                     SpannableStringBuilder builder = new SpannableStringBuilder(contentStr);
@@ -254,13 +254,13 @@ public class ConversationListAdapter extends BaseAdapter {
                         if (status == 0) {
                             headIcon.setImageBitmap(bitmap);
                         } else {
-                            headIcon.setImageResource(R.mipmap.default_avatar);
+                            headIcon.setImageResource(R.mipmap.jmui_head_icon);
                             HandleResponseCode.onHandle(mContext, status, false);
                         }
                     }
                 });
             } else {
-                headIcon.setImageResource(R.mipmap.default_avatar);
+                headIcon.setImageResource(R.mipmap.jmui_head_icon);
             }
         } else {
             headIcon.setImageResource(R.mipmap.group);

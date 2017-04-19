@@ -5,12 +5,12 @@
         <layer-list>
             <item>
                 <shape>
-                    <solid android:color="#5990e2" />
+                    <solid android:color="#5990e2"/>
                 </shape>
             </item>
             <item android:bottom="1dp">
                 <shape>
-                    <solid android:color="#FFFFFF" />
+                    <solid android:color="#FFFFFF"/>
                 </shape>
             </item>
         </layer-list>
@@ -20,12 +20,12 @@
         <layer-list>
             <item>
                 <shape>
-                    <solid android:color="#d3d3d3" />
+                    <solid android:color="#d3d3d3"/>
                 </shape>
             </item>
             <item android:bottom="1dp">
                 <shape>
-                    <solid android:color="#FFFFFF" />
+                    <solid android:color="#FFFFFF"/>
                 </shape>
             </item>
         </layer-list>

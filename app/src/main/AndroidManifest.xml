@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
     package="com.ybg.yxym.yueshow">
 
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
@@ -51,7 +52,8 @@
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:name">
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="56fbb4b567e58e5cb3002e02" />

@@ -27,6 +27,7 @@ import com.ybg.yxym.im.chatting.utils.HandleResponseCode;
 import com.ybg.yxym.im.chatting.utils.IdHelper;
 import com.ybg.yxym.im.chatting.utils.TimeFormat;
 import com.ybg.yxym.im.constants.IMConstants;
+import com.ybg.yxym.im.extra.UserInfoExtra;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -533,23 +534,8 @@ public class MsgListAdapter extends BaseAdapter {
 
                 @Override
                 public void onClick(View arg0) {
-                    Intent intent = new Intent();
-                    if (msg.getDirect() == MessageDirect.send) {
-                        intent.putExtra(IMConstants.TARGET_ID, JMessageClient.getMyInfo().getUserName());
-                        intent.setClass(mContext, MeInfoActivity.class);
-                        mContext.startActivity(intent);
-                    } else {
-                        String targetID = userInfo.getUserName();
-                        intent.putExtra(IMConstants.TARGET_ID, targetID);
-                        intent.putExtra(IMConstants.TARGET_APP_KEY, userInfo.getAppKey());
-                        intent.putExtra(IMConstants.GROUP_ID, mGroupId);
-                        if (userInfo.isFriend()) {
-                            intent.setClass(mContext, FriendInfoActivity.class);
-                        } else {
-                            intent.setClass(mContext, SearchFriendDetailActivity.class);
-                        }
-                        ((Activity) mContext).startActivityForResult(intent,
-                                JChatDemoApplication.REQUEST_CODE_FRIEND_INFO);
+                    if (userInfo != null) {
+                        UserInfoExtra.getInstance().clickOnAvatar(userInfo.getUserName());
                     }
                 }
             });

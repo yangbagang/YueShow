@@ -13,7 +13,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.ybg.yxym.yueshow.R;
+import com.ybg.yxym.im.R;
 
 public class ConversationListView {
 	

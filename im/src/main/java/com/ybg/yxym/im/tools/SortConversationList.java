@@ -3,11 +3,7 @@ package com.ybg.yxym.im.tools;
 import java.util.Comparator;
 
 import cn.jpush.im.android.api.model.Conversation;
-import cn.jpush.im.android.api.model.Message;
 
-/**
- * Created by Ken on 2015/1/28.
- */
 public class SortConversationList implements Comparator<Conversation> {
 
     @Override

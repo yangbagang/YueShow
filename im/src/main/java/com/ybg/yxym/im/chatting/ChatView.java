@@ -21,22 +21,19 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.ybg.yxym.im.activity.AtMemberActivity;
+import com.ybg.yxym.im.chatting.utils.IdHelper;
+import com.ybg.yxym.im.chatting.utils.SharePreferenceManager;
+import com.ybg.yxym.im.constants.IMConstants;
+
 import cn.jpush.im.android.api.enums.ConversationType;
 import cn.jpush.im.android.api.model.Conversation;
-import io.jchat.android.activity.AtMemberActivity;
-import io.jchat.android.application.JChatDemoApplication;
-import io.jchat.android.chatting.utils.IdHelper;
-import io.jchat.android.chatting.utils.SharePreferenceManager;
 
 public class ChatView extends RelativeLayout {
 
 	private LinearLayout mBackground;
 	private TableLayout mMoreMenuTl;
 	private DropDownListView mChatListView;
-	private ImageButton mReturnBtn;
-	private ImageButton mRightBtn;
-	private TextView mChatTitle;
-    private TextView mGroupNumTv;
 	private RecordVoiceButton mVoiceBtn;
 	public EditText mChatInputEt;
 	private ImageButton mSwitchIb;
@@ -63,21 +60,11 @@ public class ChatView extends RelativeLayout {
 
 	public ChatView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 		this.mContext = context;
 	}
 
 
 	public void initModule(float density, int densityDpi) {
-        mChatTitle = (TextView) findViewById(IdHelper.getViewID(mContext, "jmui_title"));
-        if (densityDpi <= 160) {
-            mChatTitle.setMaxWidth((int)(180 * density + 0.5f));
-        }else if (densityDpi <= 240) {
-            mChatTitle.setMaxWidth((int)(190 * density + 0.5f));
-        }else {
-            mChatTitle.setMaxWidth((int)(200 * density + 0.5f));
-        }
-        mReturnBtn = (ImageButton) findViewById(IdHelper.getViewID(mContext, "jmui_return_btn"));
         mChatListView = (DropDownListView) findViewById(IdHelper.getViewID(mContext, "jmui_chat_list"));
         mVoiceBtn = (RecordVoiceButton) findViewById(IdHelper.getViewID(mContext, "jmui_voice_btn"));
         mChatInputEt = (EditText) findViewById(IdHelper.getViewID(mContext, "jmui_chat_input_et"));
@@ -88,8 +75,6 @@ public class ChatView extends RelativeLayout {
         mSendMsgBtn = (Button) findViewById(IdHelper.getViewID(mContext, "jmui_send_msg_btn"));
         mBackground = (LinearLayout) findViewById(IdHelper.getViewID(mContext, "jmui_chat_background"));
         mMoreMenuTl = (TableLayout) findViewById(IdHelper.getViewID(mContext, "jmui_more_menu_tl"));
-        mRightBtn = (ImageButton) findViewById(IdHelper.getViewID(mContext, "jmui_right_btn"));
-        mGroupNumTv = (TextView) findViewById(IdHelper.getViewID(mContext, "jmui_group_num_tv"));
         mExpressionIb = (ImageButton) findViewById(IdHelper.getViewID(mContext, "jmui_expression_btn"));
         mLocationIb = (ImageButton) findViewById(IdHelper.getViewID(mContext, "jmui_send_location_btn"));
         mSendFileIb = (ImageButton) findViewById(IdHelper.getViewID(mContext, "jmui_send_file_btn"));
@@ -162,10 +147,6 @@ public class ChatView extends RelativeLayout {
         this.mListener = listener;
     }
 
-    public void dismissGroupNum() {
-        mGroupNumTv.setVisibility(View.GONE);
-    }
-
     public void setInputText(String text) {
         mChatInputEt.setText(text);
     }
@@ -206,7 +187,6 @@ public class ChatView extends RelativeLayout {
 		private CharSequence temp = "";
 		@Override
 		public void afterTextChanged(Editable arg0) {
-			// TODO Auto-generated method stub
 			if (temp.length() > 0) {
 				mAddFileIb.setVisibility(View.GONE);
 				mSendMsgBtn.setVisibility(View.VISIBLE);
@@ -219,21 +199,18 @@ public class ChatView extends RelativeLayout {
 
 		@Override
 		public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void onTextChanged(CharSequence s, int start, int count, int after) {
-			// TODO Auto-generated method stub
 			temp = s;
             if (s.length() > 0 && after >= 1 && s.subSequence(start, start + 1).charAt(0) == '@' && !mLongClick) {
                 if (null != mConv && mConv.getType() == ConversationType.group) {
                     mKeyboardListener.onKeyBoardStateChange(KEYBOARD_STATE_HIDE);
                     Intent intent = new Intent(mContext, AtMemberActivity.class);
-                    intent.putExtra(JChatDemoApplication.GROUP_ID, Long.parseLong(mConv.getTargetId()));
-                    ((Activity) mContext).startActivityForResult(intent, JChatDemoApplication
-                            .REQUEST_CODE_AT_MEMBER);
+                    intent.putExtra(IMConstants.GROUP_ID, Long.parseLong(mConv.getTargetId()));
+                    ((Activity) mContext).startActivityForResult(intent, IMConstants.REQUEST_CODE_AT_MEMBER);
                 }
             }
 		}
@@ -267,8 +244,6 @@ public class ChatView extends RelativeLayout {
     };
 
 	public void setListeners(OnClickListener onClickListener) {
-		mReturnBtn.setOnClickListener(onClickListener);
-		mRightBtn.setOnClickListener(onClickListener);
         mChatInputEt.setOnClickListener(onClickListener);
 		mSendMsgBtn.setOnClickListener(onClickListener);
 		mSwitchIb.setOnClickListener(onClickListener);
@@ -325,29 +300,6 @@ public class ChatView extends RelativeLayout {
 		return mChatInputEt.getText().toString();
 	}
 
-
-
-	public void setChatTitle(String title) {
-		mChatTitle.setText(title);
-	}
-
-    public void setChatTitle(int id) {
-        mChatTitle.setText(id);
-    }
-
-	//设置群聊名字
-	public void setChatTitle(String name, int count) {
-        mChatTitle.setText(name);
-        mGroupNumTv.setText("(" + count + ")");
-        mGroupNumTv.setVisibility(View.VISIBLE);
-	}
-
-    public void setChatTitle(int id, int count) {
-        mChatTitle.setText(id);
-        mGroupNumTv.setText("(" + count + ")");
-        mGroupNumTv.setVisibility(View.VISIBLE);
-    }
-
 	public void clearInput() {
 		mChatInputEt.setText("");
 	}
@@ -361,10 +313,6 @@ public class ChatView extends RelativeLayout {
             }
         });
     }
-
-	public void setGroupIcon() {
-		mRightBtn.setImageResource(IdHelper.getDrawable(mContext, "jmui_group_chat_detail"));
-	}
 
     public EditText getInputView() {
         return mChatInputEt;
@@ -385,14 +333,6 @@ public class ChatView extends RelativeLayout {
 	public void dismissMoreMenu() {
 		mMoreMenuTl.setVisibility(View.GONE);
 	}
-
-    public void dismissRightBtn() {
-        mRightBtn.setVisibility(View.GONE);
-    }
-
-    public void showRightBtn() {
-        mRightBtn.setVisibility(View.VISIBLE);
-    }
 
     public void dismissRecordDialog() {
      mVoiceBtn.dismissDialog();
