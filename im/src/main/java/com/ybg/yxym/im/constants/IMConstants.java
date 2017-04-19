@@ -22,6 +22,7 @@ public class IMConstants {
     //缓存的音频
     public static final String VOICE_CACHE_PATH = BasePath + "voicecache/";
 
+    public static final String JCHAT_CONFIGS = "JChat_configs";
     public static final String CONV_TITLE = "convTitle";
     public static final String TARGET_APP_KEY = "targetAppKey";
     public static final String TARGET_ID = "targetId";
