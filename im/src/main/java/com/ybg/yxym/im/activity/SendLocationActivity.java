@@ -47,7 +47,7 @@ import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
 
-public class SendLocationActivity extends BaseActivity {
+public class SendLocationActivity extends BaseActivity2 {
 
     private MapView mMapView;
     private ImageButton mReturnBtn;

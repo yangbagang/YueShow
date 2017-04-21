@@ -9,7 +9,7 @@ import com.ybg.yxym.im.R;
 import com.ybg.yxym.im.controller.SendFileController;
 import com.ybg.yxym.im.view.SendFileView;
 
-public class SendFileActivity extends FragmentActivity {
+public class SendFileActivity extends BaseActivity {
 
     private SendFileView mView;
     private SendFileController mController;
@@ -23,6 +23,7 @@ public class SendFileActivity extends FragmentActivity {
         mController = new SendFileController(this, mView);
         mView.setOnClickListener(mController);
         mView.setOnPageChangeListener(mController);
+        setCustomTitle("选择文件");
     }
 
     public FragmentManager getSupportFragmentManger() {

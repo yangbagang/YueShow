@@ -4,6 +4,8 @@
     android:orientation="vertical"
     android:background="#FFFFFF" >
 
+    <include layout="@layout/base_bar_without_title" />
+
     <GridView
         android:id="@+id/child_grid"
         android:padding="5dp"

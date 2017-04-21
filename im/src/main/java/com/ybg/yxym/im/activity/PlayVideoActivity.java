@@ -2,6 +2,8 @@ package com.ybg.yxym.im.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -10,7 +12,7 @@ import com.ybg.yxym.im.R;
 import java.io.File;
 import java.util.ArrayList;
 
-public class PlayVideoActivity extends BaseActivity {
+public class PlayVideoActivity extends BaseActivity2 {
 
     private VideoView mPlayVideoVV;
     private MediaController mController;
@@ -20,6 +22,9 @@ public class PlayVideoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams
+                .FLAG_FULLSCREEN);
         setContentView(R.layout.activity_play_video);
         mPlayVideoVV = (VideoView) findViewById(R.id.play_video_vv);
         mController = new MediaController(this);

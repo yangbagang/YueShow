@@ -29,7 +29,7 @@ import cn.jpush.im.android.api.content.ImageContent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 
-public class PickPictureActivity extends BaseActivity {
+public class PickPictureActivity extends BaseActivity2 {
 
     private GridView mGridView;
     //此相册下所有图片的路径集合
