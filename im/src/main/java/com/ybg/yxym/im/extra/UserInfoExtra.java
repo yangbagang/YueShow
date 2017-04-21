@@ -40,6 +40,12 @@ public class UserInfoExtra {
         });
     }
 
+    public void viewGroupInfo(Long groupId) {
+        if (userExtraOperation != null) {
+            userExtraOperation.viewGroupInfo(groupId);
+        }
+    }
+
     public void logout() {
         JMessageClient.logout();
     }
@@ -59,6 +65,7 @@ public class UserInfoExtra {
     public interface UserExtraOperation {
         void onAvatarClick(String userId);
         void onLoginCallback(int status, String desc);
+        void viewGroupInfo(Long groupId);
     }
 
 }

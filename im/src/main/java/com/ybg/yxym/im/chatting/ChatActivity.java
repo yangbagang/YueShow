@@ -42,6 +42,7 @@ import com.ybg.yxym.im.chatting.utils.SharePreferenceManager;
 import com.ybg.yxym.im.constants.IMConstants;
 import com.ybg.yxym.im.entity.Event;
 import com.ybg.yxym.im.entity.EventType;
+import com.ybg.yxym.im.extra.UserInfoExtra;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -255,9 +256,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     public boolean onOptionsItemSelected(MenuItem item) {
         int menuId = item.getItemId();
         if (menuId == R.id.action_friend_info) {
-
+            UserInfoExtra.getInstance().clickOnAvatar(mTargetId);
         } else if (menuId == R.id.action_group_info) {
-
+            UserInfoExtra.getInstance().viewGroupInfo(mGroupId);
         }
         return super.onOptionsItemSelected(item);
     }

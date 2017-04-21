@@ -4,12 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import com.google.gson.reflect.TypeToken
+import com.ybg.yxym.im.extra.UserInfoExtra
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.UserBase
-import com.ybg.yxym.yb.bean.UserMsg
 import com.ybg.yxym.yb.utils.UserBaseComparator
 import com.ybg.yxym.yueshow.R
-import com.ybg.yxym.yueshow.activity.AboutActivity
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.adapter.ContactAdapter
 import com.ybg.yxym.yueshow.http.SendRequest
@@ -48,6 +47,9 @@ class ContactActivity : BaseActivity() {
             }
         })
         getContactList()
+        lv_contact.setOnItemClickListener { parent, view, position, id ->
+            UserInfoExtra.getInstance().sendMsg(userList[position].ymCode)
+        }
     }
 
     private fun getContactList() {

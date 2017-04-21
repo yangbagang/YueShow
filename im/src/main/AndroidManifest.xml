@@ -102,7 +102,16 @@
             android:name="JPUSH_APPKEY"
             android:value="4c258e397c2605ddce2814a4" />
 
-
+        <activity android:name=".activity.AtMemberActivity" />
+        <activity android:name=".activity.BrowserViewPagerActivity" />
+        <activity android:name=".activity.ChatDetailActivity" />
+        <activity android:name=".activity.MembersInChatActivity" />
+        <activity android:name=".activity.PickPictureActivity" />
+        <activity android:name=".activity.PickPictureTotalActivity" />
+        <activity android:name=".activity.PlayVideoActivity" />
+        <activity android:name=".activity.SendFileActivity" />
+        <activity android:name=".activity.SendLocationActivity" />
+        <activity android:name=".chatting.ChatActivity" />
     </application>
 
 </manifest>

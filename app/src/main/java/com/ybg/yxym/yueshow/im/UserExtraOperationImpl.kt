@@ -3,6 +3,7 @@ package com.ybg.yxym.yueshow.im
 import com.ybg.yxym.im.extra.UserInfoExtra
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yueshow.activity.msg.FriendInfoActivity
+import com.ybg.yxym.yueshow.activity.msg.GroupInfoActivity
 import com.ybg.yxym.yueshow.activity.msg.UserInfoActivity
 import com.ybg.yxym.yueshow.activity.user.PersonCenterActivity
 import com.ybg.yxym.yueshow.app.ShowApplication
@@ -14,6 +15,13 @@ import com.ybg.yxym.yueshow.http.parser.OkStringParser
  * Created by yangbagang on 2017/4/20.
  */
 class UserExtraOperationImpl : UserInfoExtra.UserExtraOperation {
+
+    override fun viewGroupInfo(groupId: Long?) {
+        if (groupId == null) {
+            return
+        }
+        GroupInfoActivity.start(ShowApplication.instance!!, groupId)
+    }
 
     override fun onAvatarClick(userId: String?) {
         if (userId == null) {

@@ -227,6 +227,8 @@
         </activity>
         <activity android:name=".activity.msg.UserInfoActivity">
         </activity>
+        <activity android:name=".activity.msg.GroupInfoActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -4,19 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
-import com.google.gson.reflect.TypeToken
-import com.ybg.yxym.yb.bean.JSonResultBean
-import com.ybg.yxym.yb.bean.UserMsg
+import com.ybg.yxym.im.activity.ConversationListFragment
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
-import com.ybg.yxym.yueshow.adapter.FriendAdapter
-import com.ybg.yxym.yueshow.http.SendRequest
-import com.ybg.yxym.yueshow.http.callback.OkCallback
-import com.ybg.yxym.yueshow.http.parser.OkStringParser
-import com.ybg.yxym.im.activity.ConversationListFragment
-import com.ybg.yxym.yueshow.utils.ToastUtil
-import kotlinx.android.synthetic.main.activity_friend.*
-import java.util.*
 
 class FriendActivity : BaseActivity() {
 
@@ -33,6 +23,7 @@ class FriendActivity : BaseActivity() {
         val msgFragment = ConversationListFragment()
         transaction.replace(R.id.msgFragment, msgFragment)
         transaction.commit()
+        msgFragment.sortConvList()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
