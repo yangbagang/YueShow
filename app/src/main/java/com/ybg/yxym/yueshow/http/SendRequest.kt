@@ -540,27 +540,73 @@ object SendRequest {
     /**
      * 4.8 同意好友请求
      */
-    fun acceptFriendRequest(tag: Context, token: String, requestId: String, callback:
-    OkCallback<*>) {
+    fun acceptFriendRequest(tag: Context, token: String, requestId: String, callback: OkCallback<*>) {
         val params = mapOf<String, String>("token" to token, "requestId" to requestId)
         OkHttpProxy.post(HttpUrl.acceptFriendRequestUrl, tag, params, callback)
     }
 
     /**
-     * 4.9 同意好友请求
+     * 4.9 获取成员列表
      */
-    fun getMemberList(tag: Context, token: String, groupId: String, callback:
-    OkCallback<*>) {
+    fun getMemberList(tag: Context, token: String, groupId: String, callback: OkCallback<*>) {
         val params = mapOf<String, String>("token" to token, "groupId" to groupId)
         OkHttpProxy.post(HttpUrl.acceptFriendRequestUrl, tag, params, callback)
     }
 
     /**
-     * 5.1 获取融云token
+     * 4.10 查询是否是好友
      */
-    fun getRongCloudToken(tag: Context, token: String, callback: OkCallback<*>) {
-        val params = mapOf("token" to token)
-        OkHttpProxy.post(HttpUrl.rongCloudTokenUrl, tag, params, callback)
+    fun checkFriend(tag: Context, token: String, ymCode: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "ymCode" to ymCode)
+        OkHttpProxy.post(HttpUrl.checkFriendUrl, tag, params, callback)
+    }
+
+    /**
+     * 4.11 查看好友资料
+     */
+    fun getFriendInfo(tag: Context, token: String, ymCode: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "ymCode" to ymCode)
+        OkHttpProxy.post(HttpUrl.getFriendInfoUrl, tag, params, callback)
+    }
+
+    /**
+     * 4.12 查看用户资料
+     */
+    fun getUserDetailInfo(tag: Context, ymCode: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("ymCode" to ymCode)
+        OkHttpProxy.post(HttpUrl.getUserInfoUrl, tag, params, callback)
+    }
+
+    /**
+     * 4.13 改变提醒状态
+     */
+    fun changeDisturbState(tag: Context, token: String, friendId: Long, disturbing: Int, callback: OkCallback<*>) {
+        val params = mapOf<String, Any>("token" to token, "friendId" to friendId, "disturbing" to disturbing)
+        OkHttpProxy.post(HttpUrl.changeDisturbStateUrl, tag, params, callback)
+    }
+
+    /**
+     * 4.14 改变黑名单状态
+     */
+    fun changeBlackListState(tag: Context, token: String, friendId: Long, inBlacklist: Int, callback: OkCallback<*>) {
+        val params = mapOf<String, Any>("token" to token, "friendId" to friendId, "inBlacklist" to inBlacklist)
+        OkHttpProxy.post(HttpUrl.changeBlackListStateUrl, tag, params, callback)
+    }
+
+    /**
+     * 4.15 删除好友
+     */
+    fun deleteFriend(tag: Context, token: String, friendId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, Any>("token" to token, "friendId" to friendId)
+        OkHttpProxy.post(HttpUrl.deleteFriendUrl, tag, params, callback)
+    }
+
+    /**
+     * 4.16 请求添加好友
+     */
+    fun createFriendRequest(tag: Context, token: String, userId: Long, reason: String, callback: OkCallback<*>) {
+        val params = mapOf<String, Any>("token" to token, "userId" to userId, "reason" to reason)
+        OkHttpProxy.post(HttpUrl.createFriendRequestUrl, tag, params, callback)
     }
 
 }

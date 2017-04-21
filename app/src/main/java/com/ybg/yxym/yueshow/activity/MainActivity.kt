@@ -22,6 +22,7 @@ import com.google.gson.GsonBuilder
 import com.igexin.sdk.PushManager
 import com.pgyersdk.crash.PgyCrashManager
 import com.pgyersdk.update.PgyUpdateManager
+import com.ybg.yxym.im.extra.UserInfoExtra
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yb.utils.LogUtil
@@ -95,6 +96,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             PgyUpdateManager.unregister()
             PgyCrashManager.unregister()
         }
+        UserInfoExtra.getInstance().logout()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -253,6 +255,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         userName.text = "游客"
         userLevel.text = "悦美御秀"
+        showApplication.ymCode = ""
     }
 
     fun loadUserInfo() {
@@ -265,8 +268,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (jsonBean != null && jsonBean.isSuccess) {
                     //成功
                     val userBase = mGson.fromJson(jsonBean.data, UserBase::class.java)
+                    showApplication.ymCode = userBase.ymCode
                     setUserInfo(userBase)
-                    //TODO
+                    //登录第三方IM
+                    Thread {
+                        UserInfoExtra.getInstance().login(userBase.ymCode, token)
+                    }.start()
                 } else {
                     if (showApplication.checkNeedLogin(jsonBean?.message ?: "")) {
                         //登录凭证失效，需要重新登录。去除己经相关信息。
@@ -296,22 +303,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 OkCallback<String>(OkStringParser()){
             override fun onSuccess(code: Int, response: String) {
                 //nothing
-            }
-
-            override fun onFailure(e: Throwable) {
-                //nothing
-            }
-        })
-    }
-
-    private fun updateRCToken() {
-        SendRequest.getRongCloudToken(this@MainActivity, showApplication.token, object :
-                OkCallback<String>(OkStringParser()){
-            override fun onSuccess(code: Int, response: String) {
-                val jsonBean = JSonResultBean.fromJSON(response)
-                if (jsonBean != null && jsonBean.isSuccess) {
-                    showApplication.rcToken = jsonBean.data
-                }
             }
 
             override fun onFailure(e: Throwable) {

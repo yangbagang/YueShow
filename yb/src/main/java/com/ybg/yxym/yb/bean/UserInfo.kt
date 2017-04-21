@@ -8,6 +8,7 @@ import java.util.Date
  */
 
 class UserInfo : Serializable {
+    var id = 0L
     var birthday: String = ""//生日
     var sex: Int = 1//性别1男0女
     var position = "未选择"//职位

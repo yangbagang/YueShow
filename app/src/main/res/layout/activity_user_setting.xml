@@ -57,8 +57,7 @@
             android:textOff=""
             android:textOn=""
             android:thumb="@mipmap/ic_switch_thumb"
-            android:track="@drawable/selector_switch"
-            />
+            android:track="@drawable/selector_switch"/>
     </RelativeLayout>
 
     <RelativeLayout

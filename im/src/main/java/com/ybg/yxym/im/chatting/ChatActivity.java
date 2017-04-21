@@ -18,6 +18,8 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -25,6 +27,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.ybg.yxym.im.R;
 import com.ybg.yxym.im.activity.BaseActivity;
 import com.ybg.yxym.im.activity.ChatDetailActivity;
 import com.ybg.yxym.im.activity.PickPictureTotalActivity;
@@ -168,14 +171,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                             setChatTitle(IdHelper.getString(mContext, "group"),
                                     groupInfo.getGroupMembers().size());
                         }
-                        mChatView.showRightBtn();
+                        //mChatView.showRightBtn();
                     } else {
                         if (!TextUtils.isEmpty(groupInfo.getGroupName())) {
                             setChatTitle(mTitle);
                         } else {
                             setChatTitle(IdHelper.getString(mContext, "group"));
                         }
-                        mChatView.dismissRightBtn();
+                        //mChatView.dismissRightBtn();
                     }
                 } else {
                     mConv = Conversation.createGroupConversation(mGroupId);
@@ -204,7 +207,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
 
             }
             //聊天信息标志改变
-            mChatView.setGroupIcon();
+            //mChatView.setGroupIcon();
 
             //UIKit 直接用getGroupInfo更新标题,而不用考虑从创建群聊跳转过来
 //            JMessageClient.getGroupInfo(mGroupId, new GetGroupInfoCallback() {
@@ -239,6 +242,36 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         // 滑动到底部
         mChatView.setToBottom();
         mChatView.setConversation(mConv);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.chat_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int menuId = item.getItemId();
+        if (menuId == R.id.action_friend_info) {
+
+        } else if (menuId == R.id.action_group_info) {
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (!TextUtils.isEmpty(mTargetId)) {
+            menu.findItem(R.id.action_friend_info).setVisible(true);
+            menu.findItem(R.id.action_group_info).setVisible(false);
+        } else {
+            menu.findItem(R.id.action_friend_info).setVisible(false);
+            menu.findItem(R.id.action_group_info).setVisible(true);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     // 监听耳机插入
@@ -554,7 +587,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                         } else {
                             setChatTitle(title);
                         }
-                        mChatView.dismissGroupNum();
+                        //mChatView.dismissGroupNum();
                     }
 
                 } else {
@@ -725,10 +758,10 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                                 if (info != null) {
                                     activity.setChatTitle(activity.mTitle,
                                             activity.mGroupInfo.getGroupMembers().size());
-                                    activity.mChatView.showRightBtn();
+                                    //activity.mChatView.showRightBtn();
                                 } else {
                                     activity.setChatTitle(activity.mTitle);
-                                    activity.mChatView.dismissRightBtn();
+                                    //activity.mChatView.dismissRightBtn();
                                 }
                             }
                         }
@@ -814,7 +847,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mChatView.showRightBtn();
+                                    //mChatView.showRightBtn();
                                 }
                             });
                         }
@@ -828,14 +861,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mChatView.dismissRightBtn();
+                                    //mChatView.dismissRightBtn();
                                     GroupInfo groupInfo = (GroupInfo) mConv.getTargetInfo();
                                     if (TextUtils.isEmpty(groupInfo.getGroupName())) {
                                         setChatTitle(IdHelper.getString(mContext, "group"));
                                     } else {
                                         setChatTitle(groupInfo.getGroupName());
                                     }
-                                    mChatView.dismissGroupNum();
+                                    //mChatView.dismissGroupNum();
                                 }
                             });
                         } else {

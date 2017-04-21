@@ -275,7 +275,19 @@ object HttpUrl {
         get() = ROOT_URL + "/friendRequest/getRequestList"
     val acceptFriendRequestUrl: String
         get() = ROOT_URL + "/friendRequest/acceptFriendRequest"
+    val checkFriendUrl: String
+        get() = ROOT_URL + "/friend/check"
+    val getFriendInfoUrl: String
+        get() = ROOT_URL + "/friend/getFriend"
+    val getUserInfoUrl: String
+        get() = ROOT_URL + "/userBase/getUserBaseByYmCode"
+    val changeDisturbStateUrl: String
+        get() = ROOT_URL + "/friend/changeDisturbState"
+    val changeBlackListStateUrl: String
+        get() = ROOT_URL + "/friend/changeBlackListState"
+    val deleteFriendUrl: String
+        get() = ROOT_URL + "/friend/delete"
+    val createFriendRequestUrl: String
+        get() = ROOT_URL + "/friendRequest/createRequest"
 
-    val rongCloudTokenUrl: String
-        get() = ROOT_URL + "/IM/getIMToken"
 }

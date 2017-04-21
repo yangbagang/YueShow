@@ -1,6 +1,5 @@
 package com.ybg.yxym.im.chatting;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +21,9 @@ import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+import com.ybg.yxym.im.activity.BrowserViewPagerActivity;
+import com.ybg.yxym.im.activity.SendLocationActivity;
 import com.ybg.yxym.im.chatting.utils.FileHelper;
 import com.ybg.yxym.im.chatting.utils.HandleResponseCode;
 import com.ybg.yxym.im.chatting.utils.IdHelper;

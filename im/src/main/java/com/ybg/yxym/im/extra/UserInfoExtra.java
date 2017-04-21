@@ -1,5 +1,9 @@
 package com.ybg.yxym.im.extra;
 
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.model.Conversation;
+import cn.jpush.im.api.BasicCallback;
+
 /**
  * Created by yangbagang on 2017/4/17.
  */
@@ -25,11 +29,36 @@ public class UserInfoExtra {
         }
     }
 
+    public void login(String userid, String password) {
+        JMessageClient.login(userid, password, new BasicCallback() {
+            @Override
+            public void gotResult(int i, String s) {
+                if (userExtraOperation != null) {
+                    userExtraOperation.onLoginCallback(i, s);
+                }
+            }
+        });
+    }
+
+    public void logout() {
+        JMessageClient.logout();
+    }
+
+    public void sendMsg(String userId) {
+        Conversation.createSingleConversation(userId);
+    }
+
+    public boolean hasInit() {
+        return userExtraOperation != null;
+    }
+
     public void init(UserExtraOperation userExtraOperation) {
         this.userExtraOperation = userExtraOperation;
     }
 
     public interface UserExtraOperation {
         void onAvatarClick(String userId);
+        void onLoginCallback(int status, String desc);
     }
+
 }

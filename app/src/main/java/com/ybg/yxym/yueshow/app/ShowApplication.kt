@@ -8,8 +8,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType
 import com.pgyersdk.crash.PgyCrashManager
 import com.qiniu.pili.droid.streaming.StreamingEnv
+import com.ybg.yxym.im.extra.UserInfoExtra
 import com.ybg.yxym.yb.app.YbgAPP
 import com.ybg.yxym.yueshow.constant.AppConstants
+import com.ybg.yxym.yueshow.im.UserExtraOperationImpl
 import com.ybg.yxym.yueshow.picasso.OkHttp3Downloader
 import com.ybg.yxym.yueshow.picasso.Picasso
 import java.io.File
@@ -22,6 +24,7 @@ import java.io.File
 class ShowApplication : YbgAPP() {
 
     val TAG = "ShowApplication"
+    var ymCode = ""
 
     override fun onCreate() {
         super.onCreate()
@@ -69,7 +72,9 @@ class ShowApplication : YbgAPP() {
     }
 
     private fun initIM() {
-
+        if (!UserInfoExtra.getInstance().hasInit()) {
+            UserInfoExtra.getInstance().init(UserExtraOperationImpl())
+        }
     }
 
     companion object {
