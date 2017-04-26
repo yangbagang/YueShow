@@ -223,11 +223,48 @@
         <activity
             android:name=".activity.msg.GroupMemberActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.msg.FriendInfoActivity">
+        <activity
+            android:name=".activity.msg.FriendInfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.msg.UserInfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.msg.GroupInfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.gift.CardListActivity"
+            android:screenOrientation="portrait"/>
+
+        <!-- Ping++ SDK -->
+        <activity
+            android:name="com.pingplusplus.android.PaymentActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <!-- 微信支付 -->
+        <activity-alias
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:targetActivity="com.pingplusplus.android.PaymentActivity"/>
+
+        <!-- 支付宝 -->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:exported="false"
+            android:screenOrientation="behind"/>
+        <activity
+            android:name="com.alipay.sdk.auth.AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:exported="false"
+            android:screenOrientation="behind"/>
+        <activity android:name=".activity.gift.CardPaymentActivity">
         </activity>
-        <activity android:name=".activity.msg.UserInfoActivity">
+        <activity android:name=".activity.gift.GiftListActivity">
         </activity>
-        <activity android:name=".activity.msg.GroupInfoActivity">
+        <activity android:name=".activity.gift.SendGiftActivity">
         </activity>
     </application>
 

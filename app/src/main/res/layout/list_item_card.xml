@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_88"
+        android:gravity="center_vertical">
+        <ImageView
+            android:layout_width="@dimen/px_30"
+            android:layout_height="@dimen/px_30"
+            android:scaleType="fitXY"
+            android:layout_marginLeft="@dimen/px_30"
+            android:src="@mipmap/ic_entry_round_yellow"/>
+        <TextView
+            android:id="@+id/tv_card_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/px_30"
+            android:text="100"/>
+        <Button
+            android:id="@+id/bt_card_price"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/px_70"
+            android:layout_marginRight="@dimen/px_30"
+            android:background="@drawable/shape_bg_green_edge"
+            android:text="￥ 10.00"
+            android:textColor="@color/color_7dcf2c"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_1"
+        android:background="@color/color_line"/>
+</LinearLayout>

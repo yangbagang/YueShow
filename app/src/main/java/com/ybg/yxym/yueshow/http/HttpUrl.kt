@@ -275,6 +275,8 @@ object HttpUrl {
         get() = ROOT_URL + "/friendRequest/getRequestList"
     val acceptFriendRequestUrl: String
         get() = ROOT_URL + "/friendRequest/acceptFriendRequest"
+    val rejectFriendRequestUrl: String
+        get() = ROOT_URL + "/friendRequest/rejectFriendRequest"
     val checkFriendUrl: String
         get() = ROOT_URL + "/friend/check"
     val getFriendInfoUrl: String
@@ -289,5 +291,18 @@ object HttpUrl {
         get() = ROOT_URL + "/friend/delete"
     val createFriendRequestUrl: String
         get() = ROOT_URL + "/friendRequest/createRequest"
+
+    val getCardListUrl: String
+        get() = ROOT_URL + "/ruiCard/list"
+    val createOrderUrl: String
+        get() = ROOT_URL + "/orderInfo/createOrder"
+    val checkOrderStatusUrl: String
+        get() = ROOT_URL + "/orderInfo/queryOrderIsPay"
+    val createChargeUrl: String
+        get() = ROOT_URL + "/orderInfo/createPingPlusCharge"
+    val getGiftListUrl: String
+        get() = ROOT_URL + "/ruiGift/list"
+    val sendGiftUrl: String
+        get() = ROOT_URL + "/userGift/sendGift"
 
 }

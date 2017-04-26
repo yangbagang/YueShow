@@ -14,6 +14,7 @@ import java.io.File
 import java.util.IdentityHashMap
 
 object SendRequest {
+
     /**
      * 默认配置了 api_key 这个参数("api_key", "B8EA0154BFE72EFD720A")在post方法中
      * 所有请求都添加一个tag 这个tag 是Context类型的方便结束请求
@@ -546,6 +547,14 @@ object SendRequest {
     }
 
     /**
+     * 4.8 拒绝好友请求
+     */
+    fun rejectFriendRequest(tag: Context, token: String, requestId: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "requestId" to requestId)
+        OkHttpProxy.post(HttpUrl.rejectFriendRequestUrl, tag, params, callback)
+    }
+
+    /**
      * 4.9 获取成员列表
      */
     fun getMemberList(tag: Context, token: String, groupId: String, callback: OkCallback<*>) {
@@ -607,6 +616,54 @@ object SendRequest {
     fun createFriendRequest(tag: Context, token: String, userId: Long, reason: String, callback: OkCallback<*>) {
         val params = mapOf<String, Any>("token" to token, "userId" to userId, "reason" to reason)
         OkHttpProxy.post(HttpUrl.createFriendRequestUrl, tag, params, callback)
+    }
+
+    /**
+     * 5.1 获得充值卡
+     */
+    fun getCardList(tag: Context, callback: OkCallback<*>) {
+        val params = emptyMap<String, String>()
+        OkHttpProxy.post(HttpUrl.getCardListUrl, tag, params, callback)
+    }
+
+    /**
+     * 5.2 创建订单
+     */
+    fun createOrder(tag: Context, token: String, cardId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, Any>("token" to token, "cardId" to cardId)
+        OkHttpProxy.post(HttpUrl.createOrderUrl, tag, params, callback)
+    }
+
+    /**
+     * 5.3 查询订单状态
+     */
+    fun checkOrderStatus(tag: Context, orderNo: String, callback: OkCallback<*>) {
+        val params = mapOf<String, Any>("orderNo" to orderNo)
+        OkHttpProxy.post(HttpUrl.checkOrderStatusUrl, tag, params, callback)
+    }
+
+    /**
+     * 5.4 创建交易对象
+     */
+    fun createCharge(tag: Context, orderNo: String, payType: String,callback: OkCallback<*>) {
+        val params = mapOf("orderNo" to orderNo, "payType" to payType)
+        OkHttpProxy.post(HttpUrl.createChargeUrl, tag, params, callback)
+    }
+
+    /**
+     * 5.5 查询订单状态
+     */
+    fun getGiftList(tag: Context, pageNum: Int, pageSize: Int, callback: OkCallback<*>) {
+        val params = mapOf("pageNum" to pageNum, "pageSize" to pageSize)
+        OkHttpProxy.post(HttpUrl.getGiftListUrl, tag, params, callback)
+    }
+
+    /**
+     * 5.6 查询订单状态
+     */
+    fun sendGift(tag: Context, token: String, userId: Long, giftId: Long, callback: OkCallback<*>) {
+        val params = mapOf("token" to token, "userId" to userId, "giftId" to giftId)
+        OkHttpProxy.post(HttpUrl.getGiftListUrl, tag, params, callback)
     }
 
 }

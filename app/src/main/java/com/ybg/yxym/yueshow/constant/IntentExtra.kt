@@ -11,6 +11,8 @@ class IntentExtra {
         val REQUEST_CODE_REGISTER = 1005//注册完善资料
         val REQUEST_CODE_VIDEO = 2001//视频文件
         val REQUEST_CAPTURE_VIDEO = 2002//视频文件
+        val REQUEST_CHONG_ZHI = 3001//充值
+        val REQUEST_ZHI_FU = 3002//充值
     }
 
     companion object {

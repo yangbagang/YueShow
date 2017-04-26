@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken
 import com.igexin.sdk.PushConsts
 import com.ybg.yxym.yb.bean.LiveMsg
 import com.ybg.yxym.yb.bean.UserBase
+import com.ybg.yxym.yueshow.activity.gift.CardPaymentActivity
 import com.ybg.yxym.yueshow.activity.live.LivingActivity
 import com.ybg.yxym.yueshow.activity.live.ShowLiveActivity
 import org.json.JSONObject
@@ -20,6 +21,7 @@ class PushMsgReceiver : BroadcastReceiver() {
     private val USER_ENTER_LIVE = "user_enter_live"
     private val USER_LEAVE_LIVE = "user_leave_live"
     private val LIVE_MSG = "live_msg"
+    private val PAY_CALL_BACK = "pay_call_back"
 
     private val gson = Gson()
 
@@ -57,6 +59,9 @@ class PushMsgReceiver : BroadcastReceiver() {
                     val liveMsg = gson.fromJson<LiveMsg>(data, object : TypeToken<LiveMsg>(){}.type)
                     LivingActivity.instance?.addMsg(liveMsg)
                     ShowLiveActivity.instance?.addMsg(liveMsg)
+                }
+                PAY_CALL_BACK -> {
+                    CardPaymentActivity.instance?.payFinish()
                 }
                 else -> {
                     println("type=$type, data=$data")
