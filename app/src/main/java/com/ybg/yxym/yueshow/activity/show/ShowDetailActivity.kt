@@ -1,5 +1,6 @@
 package com.ybg.yxym.yueshow.activity.show
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -33,6 +34,7 @@ import com.ybg.yxym.yueshow.activity.base.BaseActivity
 import com.ybg.yxym.yueshow.activity.user.UserCenterActivity
 import com.ybg.yxym.yueshow.adapter.PingItemAdapter
 import com.ybg.yxym.yueshow.constant.AppConstants
+import com.ybg.yxym.yueshow.constant.IntentExtra
 import com.ybg.yxym.yueshow.decoration.SpaceItemDecoration
 import com.ybg.yxym.yueshow.http.HttpUrl
 import com.ybg.yxym.yueshow.http.SendRequest
@@ -104,8 +106,12 @@ class ShowDetailActivity : BaseActivity() {
             val showItem = intent.getSerializableExtra("show")
             if (showItem is YueShow) {
                 show = showItem
-                //开始展示美秀
-                displayRuiShow()
+                if (show.price > 0) {
+                    checkPayStatus()
+                } else {
+                    //开始展示美秀
+                    displayRuiShow()
+                }
                 //click event
                 iv_comment.setOnClickListener(commentOnClickListener)
                 iv_like.setOnClickListener(zanOnClickListener)
@@ -138,6 +144,32 @@ class ShowDetailActivity : BaseActivity() {
         } else {
             //
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == IntentExtra.RequestCode.REQUEST_PAY_NOTICE && resultCode == Activity.RESULT_OK) {
+            displayRuiShow()
+        }
+    }
+
+    private fun checkPayStatus() {
+        SendRequest.checkPayStatus(mContext!!, mApplication.token, show.id!!, object : OkCallback<String>(OkStringParser()){
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    if (jsonBean.data == "true") {
+                        displayRuiShow()
+                    } else if (jsonBean.data == "false") {
+                        PayNoticeActivity.start(mContext!!, show)
+                    }
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+
+            }
+        })
     }
 
     private fun displayRuiShow() {

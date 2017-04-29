@@ -25,10 +25,12 @@ class GiftListActivity : BaseActivity() {
         }
     }
 
-    fun start(context: Activity, userId: Long) {
-        val starter = Intent(context, GiftListActivity::class.java)
-        starter.putExtra("userId", userId)
-        context.startActivity(starter)
+    companion object {
+        fun start(context: Activity, userId: Long) {
+            val starter = Intent(context, GiftListActivity::class.java)
+            starter.putExtra("userId", userId)
+            context.startActivity(starter)
+        }
     }
 
 }

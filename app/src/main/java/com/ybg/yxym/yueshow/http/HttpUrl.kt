@@ -172,6 +172,12 @@ object HttpUrl {
     val fansNumUrl: String
         get() = ROOT_URL + "/follow/getFansNum"
 
+    val checkShowPayStatusUrl: String
+        get() = ROOT_URL + "/ruiShow/checkPayStatus"
+
+    val payForShowUrl: String
+        get() = ROOT_URL + "/ruiShow/payForShow"
+
 
     /**
      * @return 好友列表 url
@@ -190,6 +196,9 @@ object HttpUrl {
      */
     val zanLiveUrl: String
         get() = ROOT_URL + ZAN_LIVE
+
+    val checkFollowStatusUrl: String
+        get() = ROOT_URL + "/follow/checkFollowStatus"
 
 
     /**

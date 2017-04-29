@@ -29,7 +29,7 @@
             android:layout_height="@dimen/px_30"
             android:layout_marginLeft="@dimen/px_3"
             android:scaleType="fitXY"
-            android:src="@mipmap/ic_entry_round_yellow"/>
+            android:src="@mipmap/mei_piao"/>
     </LinearLayout>
 
     <LinearLayout

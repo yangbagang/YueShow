@@ -316,6 +316,16 @@ object SendRequest {
         OkHttpProxy.post(HttpUrl.shareLiveUrl, tag, params, callback)
     }
 
+    fun checkPayStatus(tag: Context, token: String, showId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("showId" to "$showId", "token" to token)
+        OkHttpProxy.post(HttpUrl.checkShowPayStatusUrl, tag, params, callback)
+    }
+
+    fun payForShow(tag: Context, token: String, showId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("showId" to "$showId", "token" to token)
+        OkHttpProxy.post(HttpUrl.payForShowUrl, tag, params, callback)
+    }
+
     /**
      * 2.7 获得板块列表
      */
@@ -344,6 +354,11 @@ object SendRequest {
     fun followUser(tag: Context, token: String, userId: Long, callback: OkCallback<*>) {
         val params = mapOf<String, String>("userId" to "$userId", "token" to token)
         OkHttpProxy.post(HttpUrl.followUserUrl, tag, params, callback)
+    }
+
+    fun checkFollowStatus(tag: Context, token: String, userId: Long, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("userId" to "$userId", "token" to token)
+        OkHttpProxy.post(HttpUrl.checkFollowStatusUrl, tag, params, callback)
     }
 
     /**

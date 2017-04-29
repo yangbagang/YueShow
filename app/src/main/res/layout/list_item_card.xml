@@ -13,7 +13,7 @@
             android:layout_height="@dimen/px_30"
             android:scaleType="fitXY"
             android:layout_marginLeft="@dimen/px_30"
-            android:src="@mipmap/ic_entry_round_yellow"/>
+            android:src="@mipmap/mei_piao"/>
         <TextView
             android:id="@+id/tv_card_price"
             android:layout_width="0dp"

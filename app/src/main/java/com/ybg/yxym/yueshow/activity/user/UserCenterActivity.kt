@@ -13,7 +13,9 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
+import com.ybg.yxym.im.extra.UserInfoExtra
 import com.ybg.yxym.yb.bean.BangItem
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.UserBase
@@ -22,6 +24,8 @@ import com.ybg.yxym.yb.utils.GsonUtil
 import com.ybg.yxym.yb.utils.MeiLiUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
+import com.ybg.yxym.yueshow.activity.gift.GiftListActivity
+import com.ybg.yxym.yueshow.activity.msg.DateInfoActivity
 import com.ybg.yxym.yueshow.adapter.HomeShowAdapter
 import com.ybg.yxym.yueshow.http.HttpUrl
 import com.ybg.yxym.yueshow.http.SendRequest
@@ -34,6 +38,7 @@ import com.ybg.yxym.yueshow.view.CircleImageView
 import com.ybg.yxym.yueshow.view.bgarefresh.BGANormalRefreshViewHolder
 import com.ybg.yxym.yueshow.view.bgarefresh.BGARefreshLayout
 import kotlinx.android.synthetic.main.activity_user_center_listview.*
+import org.json.JSONObject
 import java.util.*
 
 /**
@@ -66,11 +71,6 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
 
     private var userBase: UserBase? = null
 
-    private val TV_COLOR_SELECT = 0xFF545866.toInt()
-    private val TV_COLOR_NORMAL = 0xFFAFB6BC.toInt()
-    private val VL_COLOR_SELECT = 0xFFF84F21.toInt()
-    private val VL_COLOR_NORMAL = 0xFFecedf3.toInt()
-
     private var hasMore = true
     private val pageSize = 5//每页取5条
     private var pageNum = 1//页码
@@ -80,6 +80,9 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
 
     private lateinit var mAdapter: HomeShowAdapter
     private var userShowList: MutableList<YueShow> = ArrayList()
+
+    private var isFollowed = 0
+    private var isFriend = 0
 
     override fun setContentViewId(): Int {
         return R.layout.activity_user_center_listview
@@ -110,11 +113,33 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
 
         if (intent != null) {
             userBase = intent.extras.getSerializable("userBase") as UserBase
+            checkFollowStatus()
         }
 
         mAdapter = HomeShowAdapter(mContext!!)
         mAdapter.setDataList(userShowList)
         lv_user.adapter = mAdapter
+    }
+
+    private fun checkFollowStatus() {
+        SendRequest.checkFollowStatus(mContext!!, mApplication.token, userBase!!.id,
+            object : OkCallback<String>(OkStringParser()){
+                override fun onSuccess(code: Int, response: String) {
+                    val jsonBean = JSonResultBean.fromJSON(response)
+                    if (jsonBean != null && jsonBean.isSuccess) {
+                        val json = JSONObject(jsonBean.data)
+                        isFollowed = json.getInt("isFollowed")
+                        isFriend = json.getInt("isFriend")
+                        if (isFollowed > 0 || isFriend > 0) {
+                            ll_user_tool.visibility = View.VISIBLE
+                        }
+                    }
+                }
+
+                override fun onFailure(e: Throwable) {
+
+                }
+            })
     }
 
     /**
@@ -208,6 +233,23 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
             R.id.tv_go_mi_ai -> {
                 if (userBase != null) {
                     MiAiActivity.start(mContext!!, userBase!!.id, userBase!!.nickName)
+                }
+            }
+            R.id.tv_user_chat -> {
+                if (mApplication.hasLogin() && (isFollowed > 0 || isFriend > 0)) {
+                    if (userBase != null) {
+                        UserInfoExtra.getInstance().sendMsg(userBase!!.ymCode)
+                    }
+                }
+            }
+            R.id.tv_user_date -> {
+                if (mApplication.hasLogin() && userBase != null) {
+                    DateInfoActivity.start(mContext!!, userBase!!.id)
+                }
+            }
+            R.id.tv_user_gift -> {
+                if (mApplication.hasLogin() && userBase != null) {
+                    GiftListActivity.start(mContext!!, userBase!!.id)
                 }
             }
         }

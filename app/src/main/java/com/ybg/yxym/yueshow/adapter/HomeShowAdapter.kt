@@ -20,6 +20,7 @@ import com.ybg.yxym.yb.utils.MeiLiUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.live.ShowLiveActivity
 import com.ybg.yxym.yueshow.activity.show.ShowDetailActivity
+import com.ybg.yxym.yueshow.activity.user.UserCenterActivity
 import com.ybg.yxym.yueshow.app.ShowApplication
 import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.http.HttpUrl
@@ -89,10 +90,6 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
         val commentOnClickListener = BtnCommentOnClickListener(position)
         val zanOnClickListener = BtnZanOnClickListener(viewHolder, position)
         val transOnClickListener = BtnTransOnClickListener(position)
-        val photoOnClickListener = BtnPhotoOnClickListener(position)
-
-        //填充用户信息
-        viewHolder.iv_user_photo!!.setOnClickListener(photoOnClickListener)
 
         getAuthorInfo(mList!![position].id!!, viewHolder)
         //填充美秀信息
@@ -150,6 +147,7 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
             Picasso.with(mContext).load(HttpUrl.getImageUrl(userBase.avatar)).resize(100, 100).centerCrop()
                     .into(viewHolder.iv_user_photo)
         }
+        viewHolder.iv_user_photo!!.setOnClickListener(BtnPhotoOnClickListener(userBase))
 
         if (userBase.flag == 1) {
             viewHolder.btn_care!!.setBackgroundResource(R.drawable.shape_bg_green_edge)
@@ -371,6 +369,10 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
                                     viewHolder.btn_care!!.text = "已关注"
                                     viewHolder.btn_care!!.setTextColor(0Xff7dcf2c.toInt())
                                     viewHolder.btn_care!!.isEnabled = false
+                                } else {
+                                    resultBean?.let {
+                                        ToastUtil.show(resultBean.message)
+                                    }
                                 }
                             }
 
@@ -444,11 +446,10 @@ class HomeShowAdapter(private var mContext: Activity) : BaseAdapter() {
     /**
      * 头像点击事件
      */
-    private inner class BtnPhotoOnClickListener(internal var mPosition: Int) : View.OnClickListener {
+    private inner class BtnPhotoOnClickListener(internal var userBase: UserBase) : View.OnClickListener {
 
         override fun onClick(v: View) {
-            //TODO
-            //ToastUtil.show("头像 :" + mPosition)
+            UserCenterActivity.start(mContext, userBase)
         }
     }
 

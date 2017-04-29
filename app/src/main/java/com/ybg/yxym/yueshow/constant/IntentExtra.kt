@@ -13,6 +13,7 @@ class IntentExtra {
         val REQUEST_CAPTURE_VIDEO = 2002//视频文件
         val REQUEST_CHONG_ZHI = 3001//充值
         val REQUEST_ZHI_FU = 3002//充值
+        val REQUEST_PAY_NOTICE = 3003
     }
 
     companion object {

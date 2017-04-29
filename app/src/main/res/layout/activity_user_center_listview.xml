@@ -35,46 +35,54 @@
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/ll_user_tool"
         android:layout_width="match_parent"
         android:layout_height="@dimen/px_96"
         android:layout_alignParentBottom="true"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:visibility="gone">
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
         <TextView
+            android:id="@+id/tv_user_chat"
             android:layout_width="@dimen/px_132"
             android:layout_height="@dimen/px_84"
             android:gravity="center"
             android:background="@drawable/shape_bg_green_edge"
             android:text="聊一下"
             android:textColor="@color/color_7dcf2c"
-            android:textSize="@dimen/px_text_30"/>
+            android:textSize="@dimen/px_text_30"
+            android:onClick="onClick"/>
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
         <TextView
+            android:id="@+id/tv_user_date"
             android:layout_width="@dimen/px_132"
             android:layout_height="@dimen/px_84"
             android:gravity="center"
             android:background="@drawable/shape_bg_green_edge"
             android:text="约TA"
             android:textColor="@color/color_7dcf2c"
-            android:textSize="@dimen/px_text_30"/>
+            android:textSize="@dimen/px_text_30"
+            android:onClick="onClick"/>
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
         <TextView
+            android:id="@+id/tv_user_gift"
             android:layout_width="@dimen/px_132"
             android:layout_height="@dimen/px_84"
             android:gravity="center"
             android:background="@drawable/shape_bg_green_edge"
             android:text="送礼物"
             android:textColor="@color/color_7dcf2c"
-            android:textSize="@dimen/px_text_30"/>
+            android:textSize="@dimen/px_text_30"
+            android:onClick="onClick"/>
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"

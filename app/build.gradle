@@ -59,6 +59,9 @@ dependencies {
     compile project(':yb')
     compile project(':im')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    //必须添加
+    //使用支付宝时添加
+    //使用微信支付时添加
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'org.greenrobot:eventbus:3.0.0'
@@ -74,11 +77,8 @@ dependencies {
     compile 'com.getui:ext:2.0.3'
     compile 'com.pgyersdk:sdk:2.5.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    //必须添加
     compile 'com.pingxx:pingpp-core:2.1.9'
-    //使用支付宝时添加
     compile 'com.pingxx:pingpp-alipay:2.1.9'
-    //使用微信支付时添加
     compile 'com.pingxx:pingpp-wxpay:2.1.9'
     testCompile 'junit:junit:4.12'
 }
