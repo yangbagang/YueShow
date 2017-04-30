@@ -122,6 +122,11 @@ object SendRequest {
         OkHttpProxy.post(HttpUrl.updateUserInfoUrl, tag, params, callback)
     }
 
+    fun getUserId(tag: Context, ymCode: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("ymCode" to ymCode)
+        OkHttpProxy.post(HttpUrl.userIdUrl, tag, params, callback)
+    }
+
     /**
      * 1.7 补充用户个性化信息
      *

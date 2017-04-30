@@ -69,4 +69,8 @@ public class IMConstants {
     public static final int RESULT_CODE_AT_MEMBER = 31;
     public static final int ON_GROUP_EVENT = 3004;
 
+    public static final String JPUSH_APPKEY = "4c258e397c2605ddce2814a4";
+
+    public static final String FILE_SERVER_PREVIEW = "http://139.224.186.241:8080/fileserver/file/preview/";
+
 }

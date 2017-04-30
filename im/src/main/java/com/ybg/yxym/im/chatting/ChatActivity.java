@@ -370,7 +370,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 if (userInfo.isFriend()) {
                     JMessageClient.sendMessage(msg);
                 } else {
-                    Toast.makeText(ChatActivity.this, "对方不是你的好友.也可以发消息", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(ChatActivity.this, "对方不是你的好友.也可以发消息", Toast.LENGTH_SHORT).show();
                     JMessageClient.sendMessage(msg);
                 }
             } else {
@@ -442,6 +442,16 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 mChatView.setToPosition(position);
             } else {
                 mChatView.setToPosition(mAtMsgId + mUnreadMsgCnt - mConv.getLatestMessage().getId());
+            }
+        } else if (v.getId() == IdHelper.getViewID(mContext, "jmui_send_gift_btn")) {
+            //送礼
+            if (!TextUtils.isEmpty(mTargetId)) {
+                Activity giftActivity = UserInfoExtra.getInstance().getGiftActivity();
+                Intent intent = new Intent(mContext, giftActivity.getClass());
+                intent.putExtra("ymCode", mTargetId);
+                startActivity(intent);
+            } else {
+                Toast.makeText(mContext, "群聊不能送礼", Toast.LENGTH_SHORT).show();
             }
         }
     }

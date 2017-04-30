@@ -525,6 +525,66 @@ public class ChatItemController {
         }
     }
 
+    public void handleGiftMsg(final Message msg, final MsgListAdapter.ViewHolder holder, String giftName, String giftImgId) {
+        if (msg.getDirect() == MessageDirect.receive) {
+            holder.gift.setText("收到礼物"+giftName);
+            switch (msg.getStatus()) {
+                case receive_going:
+                    break;
+                case receive_success:
+
+                    break;
+                case receive_fail:
+                    break;
+            }
+
+        } else {
+            holder.gift.setText("送出礼物"+giftName);
+            switch (msg.getStatus()) {
+                case created:
+                    if (null != mUserInfo/* && !mUserInfo.isFriend()*/) {
+                        holder.sendingIv.setVisibility(View.GONE);
+                        holder.resend.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.sendingIv.setVisibility(View.VISIBLE);
+                        holder.resend.setVisibility(View.GONE);
+                    }
+                    break;
+                case send_going:
+                    sendingTextOrVoice(holder, msg);
+                    break;
+                case send_success:
+                    holder.sendingIv.clearAnimation();
+                    holder.sendingIv.setVisibility(View.GONE);
+                    holder.resend.setVisibility(View.GONE);
+                    break;
+                case send_fail:
+                    holder.sendingIv.clearAnimation();
+                    holder.sendingIv.setVisibility(View.GONE);
+                    holder.resend.setVisibility(View.VISIBLE);
+                    break;
+            }
+        }
+        if (holder.picture != null) {
+            Picasso.with(mContext).load(IMConstants.FILE_SERVER_PREVIEW + giftImgId).into(holder.picture);
+        }
+
+        if (holder.resend != null) {
+            holder.resend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (msg.getContent() != null) {
+                        mAdapter.showResendDialog(holder, msg);
+                    } else {
+                        Toast.makeText(mContext, mContext.getString(IdHelper.getString(mContext,
+                                "jmui_sdcard_not_exist_toast")),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
     //正在发送文字或语音
     private void sendingTextOrVoice(final MsgListAdapter.ViewHolder holder, Message msg) {
         holder.sendingIv.setVisibility(View.VISIBLE);

@@ -107,6 +107,9 @@ object HttpUrl {
     val userBaseUrl: String
         get() = ROOT_URL + GET_USER_BASE
 
+    val userIdUrl: String
+        get() = ROOT_URL + "/userBase/getUserIdByYmCode"
+
     val updateUserBaseUrl: String
         get() = ROOT_URL + UPDATE_USER_BASE
 

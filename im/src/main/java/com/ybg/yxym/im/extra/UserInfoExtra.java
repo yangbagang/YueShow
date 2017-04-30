@@ -1,7 +1,18 @@
 package com.ybg.yxym.im.extra;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+
+import com.ybg.yxym.im.chatting.ChatActivity;
+import com.ybg.yxym.im.constants.IMConstants;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.Conversation;
+import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.api.BasicCallback;
 
 /**
@@ -14,7 +25,10 @@ public class UserInfoExtra {
 
     private UserExtraOperation userExtraOperation = null;
 
-    private UserInfoExtra(){}
+    private Activity giftActivity = null;
+
+    private UserInfoExtra() {
+    }
 
     public static UserInfoExtra getInstance() {
         if (instance == null) {
@@ -46,12 +60,34 @@ public class UserInfoExtra {
         }
     }
 
+    public Activity getGiftActivity() {
+        return giftActivity;
+    }
+
+    public void setGiftActivity(Activity giftActivity) {
+        this.giftActivity = giftActivity;
+    }
+
     public void logout() {
         JMessageClient.logout();
     }
 
-    public void sendMsg(String userId) {
-        Conversation.createSingleConversation(userId);
+    public void sendGiftMsg(String userId, String giftName, String giftImgId) {
+        Conversation conversation = Conversation.createSingleConversation(userId);
+        Map<String, String> giftMap = new HashMap<String, String>();
+        giftMap.put("type", "gift");
+        giftMap.put("giftName", giftName);
+        giftMap.put("giftImgId", giftImgId);
+        Message message = conversation.createSendCustomMessage(giftMap);
+        JMessageClient.sendMessage(message);
+    }
+
+    public void openUserChatWin(Context context, String userId, String nickName) {
+        Intent intentChat = new Intent(context, ChatActivity.class);
+        intentChat.putExtra(IMConstants.CONV_TITLE, nickName);
+        intentChat.putExtra(IMConstants.TARGET_ID, userId);
+        intentChat.putExtra(IMConstants.TARGET_APP_KEY, IMConstants.JPUSH_APPKEY);
+        context.startActivity(intentChat);
     }
 
     public boolean hasInit() {
@@ -64,7 +100,9 @@ public class UserInfoExtra {
 
     public interface UserExtraOperation {
         void onAvatarClick(String userId);
+
         void onLoginCallback(int status, String desc);
+
         void viewGroupInfo(Long groupId);
     }
 

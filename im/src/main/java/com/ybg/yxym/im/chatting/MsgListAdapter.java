@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 import cn.jpush.im.android.api.JMessageClient;
@@ -82,6 +83,11 @@ public class MsgListAdapter extends BaseAdapter {
     //文件
     private final int TYPE_SEND_FILE = 12;
     private final int TYPE_RECEIVE_FILE = 13;
+
+    //自定义消息-送礼
+    private final int TYPE_SEND_GIFT = 100;
+    private final int TYPE_RECEIVE_GIFT = 101;
+
     //当前第0项消息的位置
     private int mStart;
     //上一页的消息数
@@ -356,6 +362,13 @@ public class MsgListAdapter extends BaseAdapter {
                         : TYPE_RECEIVE_FILE;
             case eventNotification:
                 return TYPE_GROUP_CHANGE;
+            case custom:
+                Map<String, String> map = msg.getContent().getStringExtras();
+                String type = map.get("type");
+                if ("gift".equals(type)) {
+                    return msg.getDirect() == MessageDirect.send ? TYPE_SEND_GIFT
+                        : TYPE_RECEIVE_GIFT;
+                }
             default:
                 return TYPE_CUSTOM_TXT;
         }
@@ -395,6 +408,14 @@ public class MsgListAdapter extends BaseAdapter {
                 return getItemViewType(position) == TYPE_SEND_TXT ? mInflater
                         .inflate(IdHelper.getLayout(mContext, "jmui_chat_item_send_text"), null) : mInflater
                         .inflate(IdHelper.getLayout(mContext, "jmui_chat_item_receive_text"), null);
+            case custom:
+                Map<String, String> map = msg.getContent().getStringExtras();
+                String type = map.get("type");
+                if ("gift".equals(type)) {
+                    return getItemViewType(position) == TYPE_SEND_GIFT ? mInflater
+                            .inflate(IdHelper.getLayout(mContext, "jmui_chat_item_send_gift"), null) : mInflater
+                            .inflate(IdHelper.getLayout(mContext, "jmui_chat_item_receive_gift"), null);
+                }
             default:
                 return mInflater.inflate(IdHelper.getLayout(mContext, "jmui_chat_item_group_change"), null);
         }
@@ -463,6 +484,15 @@ public class MsgListAdapter extends BaseAdapter {
                             .findViewById(IdHelper.getViewID(mContext, "jmui_picture_iv"));
                     break;
                 case custom:
+                    Map<String, String> map = msg.getContent().getStringExtras();
+                    String type = map.get("type");
+                    if ("gift".equals(type)) {
+                        holder.gift = (TextView) convertView
+                             .findViewById(IdHelper.getViewID(mContext, "jmui_gift_desc"));
+                        holder.picture = (ImageView) convertView
+                                .findViewById(IdHelper.getViewID(mContext, "jmui_gift_picture"));
+                    }
+                    break;
                 case eventNotification:
                     holder.groupChange = (TextView) convertView
                             .findViewById(IdHelper.getViewID(mContext, "jmui_group_content"));
@@ -564,6 +594,15 @@ public class MsgListAdapter extends BaseAdapter {
                 break;
             case eventNotification:
                 mController.handleGroupChangeMsg(msg, holder);
+                break;
+            case custom:
+                Map<String, String> map = msg.getContent().getStringExtras();
+                String type = map.get("type");
+                if ("gift".equals(type)) {
+                    String giftName = map.get("giftName");
+                    String giftImgId = map.get("giftImgId");
+                    mController.handleGiftMsg(msg, holder, giftName, giftImgId);
+                }
                 break;
             default:
                 mController.handleCustomMsg(msg, holder);
@@ -755,5 +794,6 @@ public class MsgListAdapter extends BaseAdapter {
         ImageView sendingIv;
         LinearLayout contentLl;
         TextView sizeTv;
+        TextView gift;
     }
 }
