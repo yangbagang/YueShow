@@ -74,8 +74,11 @@ class LiveMsgAdapter(private var mContext: Activity): BaseAdapter() {
         return convertView!!
     }
 
-    private fun setGiftMsg(viewHolder: ViewHolder, gitId: String) {
-        //TODO 实现礼物消息内容及图片
+    private fun setGiftMsg(viewHolder: ViewHolder, giftMsg: String) {
+        //实现礼物消息内容及图片
+        val info = giftMsg.split(",")
+        viewHolder.msgText?.text = info[0]
+        ImageLoaderUtils.instance.loadBitmap(viewHolder.liveGift!!, HttpUrl.getImageUrl(info[1]))
     }
 
     private fun initViewHolder(viewHolder: ViewHolder, convertView: View) {

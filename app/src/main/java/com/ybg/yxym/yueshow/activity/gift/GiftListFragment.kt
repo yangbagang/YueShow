@@ -16,7 +16,7 @@ import java.util.*
 /**
  * Created by yangbagang on 2017/4/25.
  */
-class GiftListFragment(var userId: Long) : BaseFragment() {
+class GiftListFragment(var userId: Long, var sendMsgFlag: Int, var ymCode: String) : BaseFragment() {
 
     private var giftList: MutableList<RuiGift> = ArrayList<RuiGift>()
     private lateinit var adapter: GiftItemAdapter
@@ -35,7 +35,8 @@ class GiftListFragment(var userId: Long) : BaseFragment() {
         getGiftInfoList()
 
         gv_gifts.setOnItemClickListener { parent, view, position, id ->
-            SendGiftActivity.start(mContext!!, userId, giftList[position].id)
+            val gift = giftList[position]
+            SendGiftActivity.start(mContext!!, userId, gift.id, sendMsgFlag, ymCode, gift.name, gift.image)
             mContext!!.finish()
         }
     }

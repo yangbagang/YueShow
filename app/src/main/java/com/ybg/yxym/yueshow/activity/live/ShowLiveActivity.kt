@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.ImageView
+import com.google.gson.jpush.reflect.TypeToken
 import com.pili.pldroid.player.AVOptions
 import com.pili.pldroid.player.PLMediaPlayer
 import com.pili.pldroid.player.widget.PLVideoView
@@ -11,11 +12,16 @@ import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yueshow.R
+import com.ybg.yxym.yueshow.activity.gift.GiftListActivity
+import com.ybg.yxym.yueshow.activity.gift.SendGiftActivity
+import com.ybg.yxym.yueshow.constant.MessageEvent
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.MediaController
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import java.io.Serializable
 
 class ShowLiveActivity : LivingBaseActivity() {
@@ -26,6 +32,8 @@ class ShowLiveActivity : LivingBaseActivity() {
     private lateinit var mCoverView: ImageView
 
     private val mIsLiveStreaming = 1
+
+    private var author: UserBase? = null
 
     override fun setContentViewId(): Int {
         return R.layout.activity_show_live
@@ -55,6 +63,9 @@ class ShowLiveActivity : LivingBaseActivity() {
     override fun init() {
         if (intent != null) {
             show = intent.extras.getSerializable("show") as YueShow
+            if (show != null) {
+                loadAuthorInfo()
+            }
             url = intent.extras.getString("url")
             val users = intent.extras.getSerializable("userList") as List<UserBase>
             mVideoView.setVideoPath(url)
@@ -65,6 +76,8 @@ class ShowLiveActivity : LivingBaseActivity() {
 
             mVideoView.setOnCompletionListener(VideoCompleteListener())
         }
+
+        EventBus.getDefault().register(this)
     }
 
     override fun onResume() {
@@ -83,10 +96,54 @@ class ShowLiveActivity : LivingBaseActivity() {
 
         leaveLiveShow()
         instance = null
+
+        EventBus.getDefault().unregister(this)
+    }
+
+    private fun loadAuthorInfo() {
+        if (show == null) {
+            return
+        }
+        SendRequest.getAuthorInfo(mContext!!, show!!.id!!, mApplication.token, object : OkCallback<String>(OkStringParser()){
+            override fun onSuccess(code: Int, response: String) {
+                val jsonBean = JSonResultBean.fromJSON(response)
+                if (jsonBean != null && jsonBean.isSuccess) {
+                    val user = mGson!!.fromJson<UserBase>(jsonBean.data, object : TypeToken<UserBase>(){}.type)
+                    author = user
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+
+            }
+        })
+    }
+
+    @Subscribe
+    fun onEvent(event: MessageEvent) {//处理EventBus 发送的消息的方法,具体操作在子类实现
+        if (event.what == MessageEvent.MESSAGE_SEND_GIFT) {
+            val msg = event.obj
+            if (msg != null && msg is String) {
+                SendRequest.sendLiveMsg(mContext!!, mApplication.token, "${show?.id}", "0", "1", msg,
+                        object : OkCallback<String>(OkStringParser()){
+                            override fun onSuccess(code: Int, response: String) {
+                                runOnUiThread {
+                                    msgText.setText("")
+                                    liveToolBar.visibility = View.VISIBLE
+                                    liveMsgTool.visibility = View.GONE
+                                }
+                            }
+
+                            override fun onFailure(e: Throwable) {
+
+                            }
+                        })
+            }
+        }
     }
 
     override fun sendLiveMsg(msg: String, flag: Int, call: () -> Unit) {
-        SendRequest.sendLiveMsg(mContext!!, mApplication.token, "${show?.id}", "$flag", msg,
+        SendRequest.sendLiveMsg(mContext!!, mApplication.token, "${show?.id}", "$flag", "2", msg,
                 object : OkCallback<String>(OkStringParser()) {
                     override fun onSuccess(code: Int, response: String) {
                         call()
@@ -96,6 +153,12 @@ class ShowLiveActivity : LivingBaseActivity() {
                         ToastUtil.show("发送失败，请稍候再试。")
                     }
                 })
+    }
+
+    override fun openGiftWin() {
+        if (author != null) {
+            GiftListActivity.start(mContext!!, author!!.id, author!!.ymCode, 0)
+        }
     }
 
     private fun setOptions(codecType: Int) {

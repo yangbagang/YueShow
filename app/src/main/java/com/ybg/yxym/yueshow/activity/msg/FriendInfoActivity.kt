@@ -68,7 +68,7 @@ class FriendInfoActivity : BaseActivity() {
                             swt_black_list.isChecked = friend.inBlacklist == 1
                         }
                         btn_send_msg.setOnClickListener {
-                            UserInfoExtra.getInstance().sendMsg(userBase.ymCode)
+                            UserInfoExtra.getInstance().openUserChatWin(mContext!!, userBase.ymCode, userBase.nickName)
                         }
                         btn_delete_friend.setOnClickListener {
                             deleteFriend(friend)

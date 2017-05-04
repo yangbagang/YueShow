@@ -62,7 +62,7 @@ class LivingActivity : LivingBaseActivity(), StreamingStateChangedListener {
     }
 
     override fun sendLiveMsg(msg: String, flag: Int, call: () -> Unit) {
-        SendRequest.sendLiveMsg(mContext!!, mApplication.token, "${show?.id}", "$flag", msg,
+        SendRequest.sendLiveMsg(mContext!!, mApplication.token, "${show?.id}", "$flag", "2", msg,
                 object : OkCallback<String>(OkStringParser()) {
                     override fun onSuccess(code: Int, response: String) {
                         call()

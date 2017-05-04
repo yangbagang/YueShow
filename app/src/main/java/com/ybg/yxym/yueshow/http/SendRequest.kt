@@ -481,8 +481,8 @@ object SendRequest {
     /**
      * 3.5 发送直播消息
      */
-    fun sendLiveMsg(tag: Context, token: String, showId: String, flag: String, content: String, callback: OkCallback<*>) {
-        val params = mapOf<String, String>("token" to token, "showId" to showId, "flag" to flag, "content" to content)
+    fun sendLiveMsg(tag: Context, token: String, showId: String, flag: String, type: String, content: String, callback: OkCallback<*>) {
+        val params = mapOf<String, String>("token" to token, "showId" to showId, "flag" to flag, "type" to type, "content" to content)
         OkHttpProxy.post(HttpUrl.sendLiveMsgUrl, tag, params, callback)
     }
 

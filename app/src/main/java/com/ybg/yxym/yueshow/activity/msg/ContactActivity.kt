@@ -48,7 +48,7 @@ class ContactActivity : BaseActivity() {
         })
         getContactList()
         lv_contact.setOnItemClickListener { parent, view, position, id ->
-            UserInfoExtra.getInstance().sendMsg(userList[position].ymCode)
+            UserInfoExtra.getInstance().openUserChatWin(mContext!!, userList[position].ymCode, userList[position].nickName)
         }
     }
 

@@ -12,6 +12,8 @@ import com.ybg.yxym.yueshow.http.parser.OkStringParser
 
 class GiftListActivity : BaseActivity() {
 
+    var sendMsgFlag = 1
+
     override fun setContentViewId(): Int {
         return R.layout.activity_gift_list
     }
@@ -24,9 +26,9 @@ class GiftListActivity : BaseActivity() {
         if (intent != null) {
             val userId = intent.extras.getLong("userId")
             val ymCode = intent.extras.getString("ymCode")
-            val sendMsgFlag = intent.extras.getInt("sendMsgFlag", 1)
+            sendMsgFlag = intent.extras.getInt("sendMsgFlag", 1)
             if (userId != null && userId != 0L) {
-                loadingGiftFragment(userId)
+                loadingGiftFragment(userId, ymCode)
             } else if (ymCode != null && ymCode != "") {
                 SendRequest.getUserId(mContext!!, ymCode, object : OkCallback<String>(OkStringParser()){
                     override fun onSuccess(code: Int, response: String) {
@@ -34,7 +36,7 @@ class GiftListActivity : BaseActivity() {
                         if (jsonBean != null && jsonBean.isSuccess) {
                             val uid = jsonBean.data.toLong()
                             runOnUiThread {
-                                loadingGiftFragment(uid)
+                                loadingGiftFragment(uid, ymCode)
                             }
                         }
                     }
@@ -47,17 +49,18 @@ class GiftListActivity : BaseActivity() {
         }
     }
 
-    private fun loadingGiftFragment(userId: Long) {
-        val giftListFragment = GiftListFragment(userId)
+    private fun loadingGiftFragment(userId: Long, ymCode: String) {
+        val giftListFragment = GiftListFragment(userId, sendMsgFlag, ymCode)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.giftFragment, giftListFragment)
         transaction.commit()
     }
 
     companion object {
-        fun start(context: Activity, userId: Long, sendMsgFlag: Int) {
+        fun start(context: Activity, userId: Long, ymCode: String, sendMsgFlag: Int) {
             val starter = Intent(context, GiftListActivity::class.java)
             starter.putExtra("userId", userId)
+            starter.putExtra("ymCode", ymCode)
             starter.putExtra("sendMsgFlag", sendMsgFlag)
             context.startActivity(starter)
         }

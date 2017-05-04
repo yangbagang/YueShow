@@ -238,7 +238,7 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
             R.id.tv_user_chat -> {
                 if (mApplication.hasLogin() && (isFollowed > 0 || isFriend > 0)) {
                     if (userBase != null) {
-                        UserInfoExtra.getInstance().sendMsg(userBase!!.ymCode)
+                        UserInfoExtra.getInstance().openUserChatWin(mContext!!, userBase!!.ymCode, userBase!!.nickName)
                     }
                 }
             }
@@ -249,7 +249,7 @@ class UserCenterActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.tv_user_gift -> {
                 if (mApplication.hasLogin() && userBase != null) {
-                    GiftListActivity.start(mContext!!, userBase!!.id)
+                    GiftListActivity.start(mContext!!, userBase!!.id, userBase!!.ymCode, 1)
                 }
             }
         }

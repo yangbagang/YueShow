@@ -16,6 +16,7 @@ import com.ybg.yxym.yb.bean.LiveMsg
 import com.ybg.yxym.yb.bean.UserBase
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
+import com.ybg.yxym.yueshow.activity.gift.GiftListActivity
 import com.ybg.yxym.yueshow.adapter.LiveMsgAdapter
 import com.ybg.yxym.yueshow.adapter.UserAvatarAdapter
 import com.ybg.yxym.yueshow.app.ShowApplication
@@ -124,6 +125,7 @@ abstract class LivingBaseActivity : Activity() {
 
         giftImage.setOnClickListener {
             //送礼
+            openGiftWin()
         }
 
         sendMsg.setOnClickListener {
@@ -133,9 +135,11 @@ abstract class LivingBaseActivity : Activity() {
                 ToastUtil.show("消息内容不能为空。")
             } else {
                 sendLiveMsg(msg, 0, {
-                    msgText.setText("")
-                    liveToolBar.visibility = View.VISIBLE
-                    liveMsgTool.visibility = View.GONE
+                    runOnUiThread {
+                        msgText.setText("")
+                        liveToolBar.visibility = View.VISIBLE
+                        liveMsgTool.visibility = View.GONE
+                    }
                 })
             }
         }
@@ -168,6 +172,8 @@ abstract class LivingBaseActivity : Activity() {
             }
         }
     }
+
+    open fun openGiftWin(){}
 
     abstract fun sendLiveMsg(msg: String, flag: Int, call: () -> Unit)
 }
