@@ -35,8 +35,8 @@ import java.util.*
  */
 class CompleteDataActivity : BaseActivity() {
 
-    private var mNickName: String = ""//昵称
-    private var mAvatar: String = ""//头像
+    private var mNickName = ""//昵称
+    private var mAvatar = "c2hvdy9iYXNlL2F2YXRhci9kZWZhdWx0LnBuZw=="//头像
     private var mSex = -1//性别
     private var mBirthday: String? = null//生日
 
