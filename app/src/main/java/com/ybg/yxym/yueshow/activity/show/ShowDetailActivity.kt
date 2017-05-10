@@ -31,6 +31,7 @@ import com.ybg.yxym.yb.bean.*
 import com.ybg.yxym.yb.utils.DateUtil
 import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseActivity
+import com.ybg.yxym.yueshow.activity.gift.GiftListActivity
 import com.ybg.yxym.yueshow.activity.user.UserCenterActivity
 import com.ybg.yxym.yueshow.adapter.PingItemAdapter
 import com.ybg.yxym.yueshow.constant.AppConstants
@@ -211,6 +212,9 @@ class ShowDetailActivity : BaseActivity() {
                     val userBase = mGson.fromJson(jsonBean.data, UserBase::class.java)
                     user = userBase
                     loadInfo(userBase)
+                    iv_gift.setOnClickListener {
+                        GiftListActivity.start(mContext!!, userBase.id, userBase.ymCode, 1)
+                    }
                 } else {
                     jsonBean?.let {
                         ToastUtil.show(jsonBean.message)

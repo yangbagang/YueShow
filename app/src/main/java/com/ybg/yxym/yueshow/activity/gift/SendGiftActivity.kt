@@ -74,6 +74,7 @@ class SendGiftActivity : BaseActivity() {
                     } else {
                         //非直播内调用消息模块发送消息
                         UserInfoExtra.getInstance().sendGiftMsg(ymCode, giftName, giftImgId)
+                        ToastUtil.show("礼品己发送")
                     }
                     finish()
                 } else {
