@@ -42,10 +42,11 @@
             android:textSize="@dimen/px_text_30"
             android:textColor="#545866"/>
     </LinearLayout>
-    <android.support.v4.app.Fragment
+    <fragment
         android:id="@+id/msgFragment"
+        android:name="com.ybg.yxym.im.activity.ConversationListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v4.app.Fragment>
+    </fragment>
 </LinearLayout>

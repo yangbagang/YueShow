@@ -29,6 +29,8 @@ import com.ybg.yxym.im.constants.IMConstants;
 import com.ybg.yxym.im.controller.ChatDetailController;
 import com.ybg.yxym.im.view.ChatDetailView;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -288,6 +290,7 @@ public class ChatDetailActivity extends BaseActivity2 {
      *
      * @param event 消息事件
      */
+    @Subscribe
     public void onEvent(MessageEvent event) {
         final cn.jpush.im.android.api.model.Message msg = event.getMessage();
         if (msg.getContentType() == ContentType.eventNotification) {

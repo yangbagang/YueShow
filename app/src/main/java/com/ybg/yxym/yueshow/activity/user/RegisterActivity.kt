@@ -33,7 +33,7 @@ class RegisterActivity : BaseActivity() {
     }
 
     override fun setUpView() {
-
+        setCustomTitle("注册")
     }
 
     override fun init() {
@@ -134,7 +134,6 @@ class RegisterActivity : BaseActivity() {
                 val resultBean = mGson!!.fromJson(response, JSonResultBean::class.java)
                 if (resultBean.isSuccess) {
                     mApplication.token = resultBean.data
-                    println("token=${mApplication.token}")
                     MainActivity.instance?.loadUserInfo()
                     MainActivity.instance?.updateClientId()
                     CompleteDataActivity.start(mContext!!)

@@ -45,6 +45,7 @@ import com.ybg.yxym.im.entity.EventType;
 import com.ybg.yxym.im.extra.UserInfoExtra;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -838,6 +839,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
      *
      * @param event 消息事件
      */
+    @Subscribe
     public void onEvent(MessageEvent event) {
         final Message msg = event.getMessage();
         //若为群聊相关事件，如添加、删除群成员

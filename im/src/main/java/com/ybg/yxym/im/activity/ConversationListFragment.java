@@ -27,6 +27,7 @@ import com.ybg.yxym.im.entity.Event;
 import com.ybg.yxym.im.view.ConversationListView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.GetAvatarBitmapCallback;
@@ -116,6 +117,7 @@ public class ConversationListFragment extends BaseFragment {
      *
      * @param event 消息事件
      */
+    @Subscribe
     public void onEvent(MessageEvent event) {
         Message msg = event.getMessage();
         Log.d(TAG, "收到消息：msg = " + msg.toString());

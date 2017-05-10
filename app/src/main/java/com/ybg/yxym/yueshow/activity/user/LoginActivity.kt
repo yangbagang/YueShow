@@ -36,7 +36,7 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun setUpView() {
-
+        setCustomTitle("登录")
     }
 
     override fun init() {

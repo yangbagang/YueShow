@@ -132,7 +132,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     @Subscribe
-    fun onEvent(event: MessageEvent) {//处理EventBus 发送的消息的方法,具体操作在子类实现
+    open fun onEvent(event: MessageEvent) {//处理EventBus 发送的消息的方法,具体操作在子类实现
 
     }
 

@@ -8,6 +8,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType
 import com.pgyersdk.crash.PgyCrashManager
 import com.qiniu.pili.droid.streaming.StreamingEnv
+import com.ybg.yxym.im.app.IMApplication
 import com.ybg.yxym.im.extra.UserInfoExtra
 import com.ybg.yxym.yb.app.YbgAPP
 import com.ybg.yxym.yueshow.constant.AppConstants
@@ -72,6 +73,7 @@ class ShowApplication : YbgAPP() {
     }
 
     private fun initIM() {
+        IMApplication.initIM(instance)
         if (!UserInfoExtra.getInstance().hasInit()) {
             UserInfoExtra.getInstance().init(UserExtraOperationImpl())
         }

@@ -19,11 +19,11 @@ class FriendActivity : BaseActivity() {
     }
 
     override fun init() {
-        val transaction = supportFragmentManager.beginTransaction()
-        val msgFragment = ConversationListFragment()
-        transaction.replace(R.id.msgFragment, msgFragment)
-        transaction.commit()
-        msgFragment.sortConvList()
+        //val transaction = supportFragmentManager.beginTransaction()
+        //val msgFragment = ConversationListFragment()
+        //transaction.replace(R.id.msgFragment, msgFragment)
+        //transaction.commit()
+        //msgFragment.sortConvList()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

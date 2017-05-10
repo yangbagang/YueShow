@@ -47,7 +47,7 @@ class CompleteDataActivity : BaseActivity() {
     }
 
     override fun setUpView() {
-
+        setCustomTitle("填写资料")
     }
 
     override fun init() {

@@ -8,6 +8,7 @@ import android.view.MenuItem
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.YueShow
 import com.ybg.yxym.yueshow.R
+import com.ybg.yxym.yueshow.constant.MessageEvent
 import com.ybg.yxym.yueshow.http.Model.Progress
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_show_post.*
 import kotlinx.android.synthetic.main.activity_video_post.*
 import okhttp3.Call
 import okhttp3.Response
+import org.greenrobot.eventbus.EventBus
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
@@ -204,6 +206,7 @@ class VideoPostActivity : PostShowActivity() {
                         if (resultBean != null && resultBean.isSuccess) {
                             //创建完成
                             println("添加视频文件完成...")
+                            EventBus.getDefault().post(MessageEvent(MessageEvent.MESSAGE_SHOW_POST))
                         } else {
                             resultBean?.let {
                                 checkUserValid(resultBean.message)

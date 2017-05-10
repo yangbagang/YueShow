@@ -11,11 +11,13 @@ import cn.jpush.im.android.api.JMessageClient;
 /**
  * Created by yangbagang on 2017/4/17.
  */
-public class IMApplication extends Application {
+public class IMApplication {
 
     private static IMApplication instance = null;
 
     private boolean needAtMsg = true;
+
+    private static Application mApplication;
 
     public boolean isNeedAtMsg() {
         return needAtMsg;
@@ -25,19 +27,23 @@ public class IMApplication extends Application {
         this.needAtMsg = needAtMsg;
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        instance = this;
+    public static void initIM(Application application) {
+        if (instance == null) {
+            instance = new IMApplication();
+        }
 
-        //初始化JMessage-sdk，第二个参数表示开启漫游
-        JMessageClient.setDebugMode(true);
-        JMessageClient.init(getApplicationContext(), true);
-        SharePreferenceManager.init(getApplicationContext(), IMConstants.JCHAT_CONFIGS);
-        //设置Notification的模式
-        JMessageClient.setNotificationMode(JMessageClient.NOTI_MODE_DEFAULT);
-        //注册Notification点击的接收器
-        new NotificationClickEventReceiver(getApplicationContext());
+        mApplication = application;
+
+        if (mApplication != null) {
+            //初始化JMessage-sdk，第二个参数表示开启漫游
+            JMessageClient.setDebugMode(true);
+            JMessageClient.init(mApplication, true);
+            SharePreferenceManager.init(mApplication, IMConstants.JCHAT_CONFIGS);
+            //设置Notification的模式
+            JMessageClient.setNotificationMode(JMessageClient.NOTI_MODE_DEFAULT);
+            //注册Notification点击的接收器
+            new NotificationClickEventReceiver(mApplication);
+        }
     }
 
     public static IMApplication getInstance() {

@@ -16,6 +16,7 @@ import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.adapter.SelectedImageAdapter
 import com.ybg.yxym.yueshow.constant.AppConstants
 import com.ybg.yxym.yueshow.constant.IntentExtra
+import com.ybg.yxym.yueshow.constant.MessageEvent
 import com.ybg.yxym.yueshow.http.Model.Progress
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
@@ -29,6 +30,7 @@ import kotlinx.android.synthetic.main.activity_photo_post.*
 import kotlinx.android.synthetic.main.activity_show_post.*
 import okhttp3.Call
 import okhttp3.Response
+import org.greenrobot.eventbus.EventBus
 import org.json.JSONObject
 import java.io.File
 import java.io.FileInputStream
@@ -314,6 +316,7 @@ class PhotoPostActivity : PostShowActivity() {
                         //创建完成
                         //ToastUtil.show("创建完成。")
                         //finish()
+                        EventBus.getDefault().post(MessageEvent(MessageEvent.MESSAGE_SHOW_POST))
                     } else {
                         resultBean?.let {
                             checkUserValid(resultBean.message)

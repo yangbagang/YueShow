@@ -109,7 +109,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (id == R.id.action_msg) {
             //跳转到消息页面
-            FriendActivity.start(this@MainActivity)
+            if (showApplication.hasLogin()) {
+                FriendActivity.start(this@MainActivity)
+            } else {
+                LoginActivity.start(this@MainActivity)
+            }
             return true
         }
 
@@ -132,6 +136,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (id == R.id.nav_about) {
             AboutActivity.start(this@MainActivity)
+        } else if (id == R.id.nav_msg) {
+            if (showApplication.hasLogin()) {
+                FriendActivity.start(this@MainActivity)
+            } else {
+                LoginActivity.start(this@MainActivity)
+            }
         }
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
@@ -210,7 +220,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (showApplication.hasLogin()) {
                     EntryActivity.start(this@MainActivity)
                 } else {
-                    ToastUtil.show("你还没有登录，请先登录。")
+                    //ToastUtil.show("你还没有登录，请先登录。")
+                    LoginActivity.start(this@MainActivity)
                 }
             }
         }

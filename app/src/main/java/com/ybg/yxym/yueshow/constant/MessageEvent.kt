@@ -27,5 +27,6 @@ class MessageEvent {
         val MESSAGE_USER_LOGOUT = 1
         val MESSAGE_USREINFO_CHANGE = 2
         val MESSAGE_SEND_GIFT = 10
+        val MESSAGE_SHOW_POST = 20
     }
 }

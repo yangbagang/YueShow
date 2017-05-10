@@ -73,7 +73,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     @Subscribe
-    fun onEvent(event: MessageEvent) {
+    open fun onEvent(event: MessageEvent) {
 
     }
 }

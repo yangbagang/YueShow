@@ -12,12 +12,14 @@ import com.ybg.yxym.yueshow.R
 import com.ybg.yxym.yueshow.activity.base.BaseFragment
 import com.ybg.yxym.yueshow.activity.show.ShowDetailActivity
 import com.ybg.yxym.yueshow.adapter.HomeShowAdapter
+import com.ybg.yxym.yueshow.constant.MessageEvent
 import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.ToastUtil
 import com.ybg.yxym.yueshow.view.bgarefresh.BGANormalRefreshViewHolder
 import com.ybg.yxym.yueshow.view.bgarefresh.BGARefreshLayout
+import org.greenrobot.eventbus.Subscribe
 import java.util.*
 
 class FreshFragment : BaseFragment() {
@@ -52,6 +54,14 @@ class FreshFragment : BaseFragment() {
         mAdapter = HomeShowAdapter(mContext!!)
         mAdapter.setDataList(hotEntityList)
         mListView.adapter = mAdapter
+    }
+
+    @Subscribe
+    override fun onEvent(event: MessageEvent) {
+        super.onEvent(event)
+        if (event.what == MessageEvent.MESSAGE_SHOW_POST) {
+            mRefreshLayout.beginRefreshing()
+        }
     }
 
     private fun getHomeNewInfo() {
