@@ -527,7 +527,7 @@ public class ChatItemController {
 
     public void handleGiftMsg(final Message msg, final MsgListAdapter.ViewHolder holder, String giftName, String giftImgId) {
         if (msg.getDirect() == MessageDirect.receive) {
-            holder.gift.setText("收到礼物"+giftName);
+            holder.gift.setText("收到礼物["+giftName+"]");
             switch (msg.getStatus()) {
                 case receive_going:
                     break;
@@ -539,7 +539,7 @@ public class ChatItemController {
             }
 
         } else {
-            holder.gift.setText("送出礼物"+giftName);
+            holder.gift.setText("送出礼物["+giftName+"]");
             switch (msg.getStatus()) {
                 case created:
                     if (null != mUserInfo/* && !mUserInfo.isFriend()*/) {

@@ -683,7 +683,7 @@ object SendRequest {
      */
     fun sendGift(tag: Context, token: String, userId: Long, giftId: Long, callback: OkCallback<*>) {
         val params = mapOf("token" to token, "userId" to userId, "giftId" to giftId)
-        OkHttpProxy.post(HttpUrl.getGiftListUrl, tag, params, callback)
+        OkHttpProxy.post(HttpUrl.sendGiftUrl, tag, params, callback)
     }
 
 }

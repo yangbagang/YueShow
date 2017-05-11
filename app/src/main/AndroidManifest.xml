@@ -213,7 +213,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.msg.FriendActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activity.msg.DateDetailActivity"
             android:screenOrientation="portrait" />

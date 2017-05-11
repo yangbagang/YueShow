@@ -22,12 +22,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.ybg.yxym.im.chatting.utils.DialogCreator;
 import com.ybg.yxym.im.chatting.utils.HandleResponseCode;
 import com.ybg.yxym.im.chatting.utils.IdHelper;
 import com.ybg.yxym.im.chatting.utils.TimeFormat;
 import com.ybg.yxym.im.constants.IMConstants;
 import com.ybg.yxym.im.extra.UserInfoExtra;
+import com.ybg.yxym.im.tools.AvatarUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +41,7 @@ import java.util.Queue;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.GetAvatarBitmapCallback;
 import cn.jpush.im.android.api.callback.ProgressUpdateCallback;
+import cn.jpush.im.android.api.content.CustomContent;
 import cn.jpush.im.android.api.enums.ContentType;
 import cn.jpush.im.android.api.enums.ConversationType;
 import cn.jpush.im.android.api.enums.MessageDirect;
@@ -363,8 +366,8 @@ public class MsgListAdapter extends BaseAdapter {
             case eventNotification:
                 return TYPE_GROUP_CHANGE;
             case custom:
-                Map<String, String> map = msg.getContent().getStringExtras();
-                String type = map.get("type");
+                CustomContent customContent = (CustomContent) msg.getContent();
+                String type = customContent.getStringValue("type");
                 if ("gift".equals(type)) {
                     return msg.getDirect() == MessageDirect.send ? TYPE_SEND_GIFT
                         : TYPE_RECEIVE_GIFT;
@@ -409,8 +412,8 @@ public class MsgListAdapter extends BaseAdapter {
                         .inflate(IdHelper.getLayout(mContext, "jmui_chat_item_send_text"), null) : mInflater
                         .inflate(IdHelper.getLayout(mContext, "jmui_chat_item_receive_text"), null);
             case custom:
-                Map<String, String> map = msg.getContent().getStringExtras();
-                String type = map.get("type");
+                CustomContent customContent = (CustomContent) msg.getContent();
+                String type = customContent.getStringValue("type");
                 if ("gift".equals(type)) {
                     return getItemViewType(position) == TYPE_SEND_GIFT ? mInflater
                             .inflate(IdHelper.getLayout(mContext, "jmui_chat_item_send_gift"), null) : mInflater
@@ -484,8 +487,8 @@ public class MsgListAdapter extends BaseAdapter {
                             .findViewById(IdHelper.getViewID(mContext, "jmui_picture_iv"));
                     break;
                 case custom:
-                    Map<String, String> map = msg.getContent().getStringExtras();
-                    String type = map.get("type");
+                    CustomContent customContent = (CustomContent) msg.getContent();
+                    String type = customContent.getStringValue("type");
                     if ("gift".equals(type)) {
                         holder.gift = (TextView) convertView
                              .findViewById(IdHelper.getViewID(mContext, "jmui_gift_desc"));
@@ -542,21 +545,21 @@ public class MsgListAdapter extends BaseAdapter {
 
         //显示头像
         if (holder.headIcon != null) {
-            if (userInfo != null && !TextUtils.isEmpty(userInfo.getAvatar())) {
-                userInfo.getAvatarBitmap(new GetAvatarBitmapCallback() {
+            if (userInfo != null && !TextUtils.isEmpty(userInfo.getUserName())) {
+                AvatarUtil.getAvatarId(userInfo.getUserName(), new AvatarUtil.GetAvatarCallback() {
                     @Override
-                    public void gotResult(int status, String desc, Bitmap bitmap) {
-                        if (status == 0) {
-                            holder.headIcon.setImageBitmap(bitmap);
-                        } else {
-                            holder.headIcon.setImageResource(IdHelper.getDrawable(mContext,
-                                    "jmui_head_icon"));
-                            HandleResponseCode.onHandle(mContext, status, false);
-                        }
+                    public void displayAvatar(final String avatarId) {
+                        mActivity.runOnUiThread(new Thread(){
+                            @Override
+                            public void run() {
+                                super.run();
+                                Picasso.with(mContext).load(IMConstants.FILE_SERVER_PREVIEW + avatarId).into(holder.headIcon);
+                            }
+                        });
                     }
                 });
             } else {
-                holder.headIcon.setImageResource(IdHelper.getDrawable(mContext, "jmui_head_icon"));
+                holder.headIcon.setImageResource(IdHelper.getMipmap(mContext, "jmui_head_icon"));
             }
 
             // 点击头像跳转到个人信息界面
@@ -596,11 +599,11 @@ public class MsgListAdapter extends BaseAdapter {
                 mController.handleGroupChangeMsg(msg, holder);
                 break;
             case custom:
-                Map<String, String> map = msg.getContent().getStringExtras();
-                String type = map.get("type");
+                CustomContent customContent = (CustomContent) msg.getContent();
+                String type = customContent.getStringValue("type");
                 if ("gift".equals(type)) {
-                    String giftName = map.get("giftName");
-                    String giftImgId = map.get("giftImgId");
+                    String giftName = customContent.getStringValue("giftName");
+                    String giftImgId = customContent.getStringValue("giftImgId");
                     mController.handleGiftMsg(msg, holder, giftName, giftImgId);
                 }
                 break;

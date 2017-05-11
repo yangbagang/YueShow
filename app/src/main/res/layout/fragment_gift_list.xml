@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:horizontalSpacing="3dp"
-        android:numColumns="4"
+        android:numColumns="3"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:scrollbars="none"

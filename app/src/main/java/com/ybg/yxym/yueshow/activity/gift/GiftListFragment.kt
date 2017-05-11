@@ -1,5 +1,6 @@
 package com.ybg.yxym.yueshow.activity.gift
 
+import android.widget.GridView
 import com.google.gson.reflect.TypeToken
 import com.ybg.yxym.yb.bean.JSonResultBean
 import com.ybg.yxym.yb.bean.RuiGift
@@ -10,7 +11,6 @@ import com.ybg.yxym.yueshow.http.SendRequest
 import com.ybg.yxym.yueshow.http.callback.OkCallback
 import com.ybg.yxym.yueshow.http.parser.OkStringParser
 import com.ybg.yxym.yueshow.utils.ToastUtil
-import kotlinx.android.synthetic.main.fragment_gift_list.*
 import java.util.*
 
 /**
@@ -21,20 +21,22 @@ class GiftListFragment(var userId: Long, var sendMsgFlag: Int, var ymCode: Strin
     private var giftList: MutableList<RuiGift> = ArrayList<RuiGift>()
     private lateinit var adapter: GiftItemAdapter
 
+    private lateinit var giftView: GridView
+
     override fun setContentViewId(): Int {
         return R.layout.fragment_gift_list
     }
 
     override fun setUpView() {
-
+        giftView = mRootView!!.findViewById(R.id.gv_gifts) as GridView
     }
 
     override fun init() {
         adapter = GiftItemAdapter(mContext!!)
-        gv_gifts.adapter = adapter
+        giftView.adapter = adapter
         getGiftInfoList()
 
-        gv_gifts.setOnItemClickListener { parent, view, position, id ->
+        giftView.setOnItemClickListener { parent, view, position, id ->
             val gift = giftList[position]
             SendGiftActivity.start(mContext!!, userId, gift.id, sendMsgFlag, ymCode, gift.name, gift.image)
             mContext!!.finish()

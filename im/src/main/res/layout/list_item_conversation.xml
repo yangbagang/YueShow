@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/jmui_list_item_bg">
-
+    android:background="@drawable/jmui_list_item_bg"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/msg_item_ll"
@@ -12,17 +11,17 @@
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:orientation="horizontal"
+        android:paddingBottom="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
+        android:paddingTop="5dp">
 
         <FrameLayout
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical">
 
-            <com.ybg.yxym.yueshow.view.CircleImageView
+            <com.ybg.yxym.im.chatting.CircleImageView
                 android:id="@+id/msg_item_head_icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -43,9 +42,9 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="2dp">
+            android:layout_marginTop="2dp"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:id="@+id/title_layout"
@@ -57,8 +56,8 @@
                 <TextView
                     android:id="@+id/conv_item_name"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:singleLine="true"
                     android:textColor="#3f80dc"
                     android:textSize="18sp" />
@@ -67,8 +66,8 @@
                     android:id="@+id/msg_item_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="top"
                     android:layout_marginRight="5dp"
+                    android:gravity="top"
                     android:textColor="#808080" />
 
             </LinearLayout>
@@ -80,8 +79,8 @@
                 android:layout_below="@+id/title_layout"
                 android:ems="10"
                 android:maxLines="1"
-                android:textSize="16sp"
-                android:textColor="#808080" />
+                android:textColor="#808080"
+                android:textSize="16sp" />
         </RelativeLayout>
     </LinearLayout>
 

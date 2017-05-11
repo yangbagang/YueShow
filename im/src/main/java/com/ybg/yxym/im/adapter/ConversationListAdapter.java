@@ -16,11 +16,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.ybg.yxym.im.R;
 import com.ybg.yxym.im.app.IMApplication;
 import com.ybg.yxym.im.chatting.CircleImageView;
 import com.ybg.yxym.im.chatting.utils.HandleResponseCode;
 import com.ybg.yxym.im.chatting.utils.TimeFormat;
+import com.ybg.yxym.im.constants.IMConstants;
+import com.ybg.yxym.im.tools.AvatarUtil;
 import com.ybg.yxym.im.tools.SortConversationList;
 import com.ybg.yxym.im.tools.ViewHolder;
 
@@ -205,7 +208,12 @@ public class ConversationListAdapter extends BaseAdapter {
                         }/* else if (notFriendFlag != null && notFriendFlag) {
                             contentStr = mContext.getString(R.string.send_target_is_not_friend);
                         } */ else {
-                            contentStr = mContext.getString(R.string.type_custom);
+                            String type = customContent.getStringValue("type");
+                            if ("gift".equals(type)) {
+                                contentStr = mContext.getString(R.string.type_gift);
+                            } else {
+                                contentStr = mContext.getString(R.string.type_custom);
+                            }
                         }
                         break;
                     default:
@@ -247,16 +255,17 @@ public class ConversationListAdapter extends BaseAdapter {
         if (convItem.getType().equals(ConversationType.single)) {
             convName.setText(convItem.getTitle());
             UserInfo userInfo = (UserInfo) convItem.getTargetInfo();
-            if (userInfo != null && !TextUtils.isEmpty(userInfo.getAvatar())) {
-                userInfo.getAvatarBitmap(new GetAvatarBitmapCallback() {
+            if (userInfo != null && !TextUtils.isEmpty(userInfo.getUserName())) {
+                AvatarUtil.getAvatarId(userInfo.getUserName(), new AvatarUtil.GetAvatarCallback() {
                     @Override
-                    public void gotResult(int status, String desc, Bitmap bitmap) {
-                        if (status == 0) {
-                            headIcon.setImageBitmap(bitmap);
-                        } else {
-                            headIcon.setImageResource(R.mipmap.jmui_head_icon);
-                            HandleResponseCode.onHandle(mContext, status, false);
-                        }
+                    public void displayAvatar(final String avatarId) {
+                        mContext.runOnUiThread(new Thread(){
+                            @Override
+                            public void run() {
+                                super.run();
+                                Picasso.with(mContext).load(IMConstants.FILE_SERVER_PREVIEW + avatarId).into(headIcon);
+                            }
+                        });
                     }
                 });
             } else {

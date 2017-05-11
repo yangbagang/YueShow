@@ -125,7 +125,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            moveTaskToBack(false)
+//            val startMain = Intent(Intent.ACTION_MAIN) //指定跳到系统桌面
+//            startMain.addCategory(Intent.CATEGORY_HOME)
+//            startMain.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //清除上一步缓存
+//            startActivity(startMain)
         }
     }
 
@@ -226,6 +230,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
     }
+
+
 
     /*修改点击是下面四个tab状态*/
     private fun changeTabState(position: Int) {

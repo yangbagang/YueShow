@@ -31,7 +31,7 @@ class SendGiftActivity : BaseActivity() {
     }
 
     override fun setUpView() {
-
+        setCustomTitle("正在发送礼物")
     }
 
     override fun init() {
@@ -43,6 +43,8 @@ class SendGiftActivity : BaseActivity() {
             giftName = intent.extras.getString("giftName")
             giftImgId = intent.extras.getString("giftImgId")
             sendGift()
+        } else {
+            println("intent is null")
         }
     }
 
@@ -61,6 +63,7 @@ class SendGiftActivity : BaseActivity() {
     }
 
     private fun sendGift() {
+        println("send gift ...")
         SendRequest.sendGift(mContext!!, mApplication.token, userId, giftId, object :
                 OkCallback<String>(OkStringParser()){
             override fun onSuccess(code: Int, response: String) {
@@ -81,6 +84,10 @@ class SendGiftActivity : BaseActivity() {
                     if (jsonBean != null && jsonBean.errorCode == "4") {
                         //余额不足，转向充值
                         CardListActivity.start(mContext!!)
+                    } else {
+                        jsonBean?.let {
+                            ToastUtil.show(jsonBean.data)
+                        }
                     }
                 }
             }
