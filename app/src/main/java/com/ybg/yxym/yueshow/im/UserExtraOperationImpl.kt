@@ -53,6 +53,9 @@ class UserExtraOperationImpl : UserInfoExtra.UserExtraOperation {
 
     override fun onLoginCallback(status: Int, desc: String?) {
         println("status=$status, desc=$desc")
+        if (status == 0) {
+            ShowApplication.instance?.imHasLogin = true
+        }
     }
 
 }

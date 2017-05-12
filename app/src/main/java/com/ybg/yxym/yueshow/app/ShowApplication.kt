@@ -26,6 +26,7 @@ class ShowApplication : YbgAPP() {
 
     val TAG = "ShowApplication"
     var ymCode = ""
+    var imHasLogin = false
 
     override fun onCreate() {
         super.onCreate()

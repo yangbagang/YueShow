@@ -110,7 +110,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (id == R.id.action_msg) {
             //跳转到消息页面
             if (showApplication.hasLogin()) {
-                FriendActivity.start(this@MainActivity)
+                if (showApplication.imHasLogin) {
+                    FriendActivity.start(this@MainActivity)
+                } else {
+                    ToastUtil.show("数据正在载入中，请稍后再试。")
+                }
             } else {
                 LoginActivity.start(this@MainActivity)
             }
@@ -142,7 +146,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             AboutActivity.start(this@MainActivity)
         } else if (id == R.id.nav_msg) {
             if (showApplication.hasLogin()) {
-                FriendActivity.start(this@MainActivity)
+                if (showApplication.imHasLogin) {
+                    FriendActivity.start(this@MainActivity)
+                } else {
+                    ToastUtil.show("数据正在载入中，请稍后再试。")
+                }
             } else {
                 LoginActivity.start(this@MainActivity)
             }
