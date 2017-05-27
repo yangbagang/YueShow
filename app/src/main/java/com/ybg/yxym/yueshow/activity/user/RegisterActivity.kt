@@ -94,6 +94,9 @@ class RegisterActivity : BaseActivity() {
             override fun onSuccess(code: Int, response: String) {
                 LogUtil.d(TAG + ":get message success " + response)
                 ToastUtil.show("验证码已发送到您手机")
+                runOnUiThread {
+                    et_register_captcha.setText("1234")
+                }
             }
 
             override fun onFailure(e: Throwable) {
