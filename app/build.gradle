@@ -39,6 +39,7 @@ android {
                 GETUI_APP_SECRET: "xiyCyCdQ8s5eYyzyS78Dc9",
                 PACKAGE_NAME    : applicationId
         ]
+        multiDexEnabled true
     }
     buildTypes {
         release {
