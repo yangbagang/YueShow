@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
+//import com.nineoldandroids.animation.AnimatorSet;
+//import com.nineoldandroids.animation.ObjectAnimator;
 
 import com.squareup.picasso.Picasso;
 import com.ybg.yxym.im.R;
@@ -106,12 +106,12 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     private void addAnimation(View view) {
-        float[] vaules = new float[]{0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f, 1.1f, 1.2f, 1.3f, 1.25f, 1.2f, 1.15f, 1.1f, 1.0f};
-        AnimatorSet set = new AnimatorSet();
-        set.playTogether(ObjectAnimator.ofFloat(view, "scaleX", vaules),
-                ObjectAnimator.ofFloat(view, "scaleY", vaules));
-        set.setDuration(150);
-        set.start();
+//        float[] vaules = new float[]{0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f, 1.1f, 1.2f, 1.3f, 1.25f, 1.2f, 1.15f, 1.1f, 1.0f};
+//        AnimatorSet set = new AnimatorSet();
+//        set.playTogether(ObjectAnimator.ofFloat(view, "scaleX", vaules),
+//                ObjectAnimator.ofFloat(view, "scaleY", vaules));
+//        set.setDuration(150);
+//        set.start();
     }
 
     public void setUpdateListener(UpdateSelectedStateListener listener) {
