@@ -13,7 +13,8 @@ object HttpUrl {
     //生产服务器地址
     val API_HOST_PRODUCT = "http://139.224.186.241:8080/ma"
     //上传
-    val FILE_SERVER_UPLOAD = "http://139.224.186.241:8080/fileserver/file/upload3"
+    val FILE_SERVER_PIC_UPLOAD = "http://139.224.186.241:8080/fileserver/file/upload3"
+    val FILE_SERVER_VIDEO_UPLOAD = "http://139.224.186.241:8080/fileserver/file/upload"
     //预览
     val FILE_SERVER_PREVIEW = "http://139.224.186.241:8080/fileserver/file/preview"
     //下载

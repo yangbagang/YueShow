@@ -400,9 +400,20 @@ object SendRequest {
     /**
      * 上传文件
      */
-    fun uploadFile(tag: Context, folder: String, file: File, uploadListener: UploadListener) {
+    fun uploadPicFile(tag: Context, folder: String, file: File, uploadListener: UploadListener) {
         try {
-            val uploadBuilder = OkHttpProxy.upload().url(HttpUrl.FILE_SERVER_UPLOAD).tag(tag)
+            val uploadBuilder = OkHttpProxy.upload().url(HttpUrl.FILE_SERVER_PIC_UPLOAD).tag(tag)
+            uploadBuilder.addParams("folder", folder)
+                    .file(Pair("Filedata", file))
+                    .start(uploadListener)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun uploadVideoFile(tag: Context, folder: String, file: File, uploadListener: UploadListener) {
+        try {
+            val uploadBuilder = OkHttpProxy.upload().url(HttpUrl.FILE_SERVER_VIDEO_UPLOAD).tag(tag)
             uploadBuilder.addParams("folder", folder)
                     .file(Pair("Filedata", file))
                     .start(uploadListener)

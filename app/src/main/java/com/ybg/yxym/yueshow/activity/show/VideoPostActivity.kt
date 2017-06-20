@@ -138,7 +138,7 @@ class VideoPostActivity : PostShowActivity() {
 
         private fun uploadPic() {
             println("开始上传缩略图...")
-            SendRequest.uploadFile(mContext!!, "show", File(pic), object : UploadListener() {
+            SendRequest.uploadPicFile(mContext!!, "show", File(pic), object : UploadListener() {
                 override fun onFailure(call: Call?, e: IOException?) {
                     e?.let { onFailure(e) }
                 }
@@ -168,7 +168,7 @@ class VideoPostActivity : PostShowActivity() {
 
         private fun uploadVideo() {
             println("开始上传视频文件...")
-            SendRequest.uploadFile(mContext!!, "show", File(video), object : UploadListener() {
+            SendRequest.uploadVideoFile(mContext!!, "show", File(video), object : UploadListener() {
                 override fun onFailure(call: Call?, e: IOException?) {
                     e?.let { onFailure(e) }
                 }

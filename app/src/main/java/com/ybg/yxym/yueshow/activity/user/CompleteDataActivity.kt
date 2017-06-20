@@ -137,7 +137,7 @@ class CompleteDataActivity : BaseActivity() {
         //上传头像
         btn_complete_register.isEnabled = false
         btn_complete_register.loadingText = "准备上传头像..."
-        SendRequest.uploadFile(mContext!!, "avatar", File(path), object: UploadListener(){
+        SendRequest.uploadPicFile(mContext!!, "avatar", File(path), object: UploadListener(){
             override fun onResponse(call: Call?, response: Response?) {
                 response?.let { onSuccess(response) }
             }

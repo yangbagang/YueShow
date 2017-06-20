@@ -302,7 +302,7 @@ class MyInformationActivity : BaseActivity() {
     }
 
     private fun uploadAvatar(path: String) {
-        SendRequest.uploadFile(mContext!!, "avatar", File(path), object: UploadListener(){
+        SendRequest.uploadPicFile(mContext!!, "avatar", File(path), object: UploadListener(){
             override fun onResponse(call: Call?, response: Response?) {
                 response?.let { onSuccess(response) }
             }

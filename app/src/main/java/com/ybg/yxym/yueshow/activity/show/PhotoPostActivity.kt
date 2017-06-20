@@ -191,7 +191,7 @@ class PhotoPostActivity : PostShowActivity() {
 
     private fun uploadThumbnail() {
         println("开始上传缩略图")
-        SendRequest.uploadFile(mContext!!, "show", File(mThumbnail), object : UploadListener(){
+        SendRequest.uploadPicFile(mContext!!, "show", File(mThumbnail), object : UploadListener(){
             override fun onResponse(call: Call?, response: Response?) {
                 response?.let { onSuccess(response) }
             }
@@ -240,7 +240,7 @@ class PhotoPostActivity : PostShowActivity() {
     private fun uploadPic(pic: String) {
         //val file = pic.substring(7)
         println("开始上传图片: $pic")
-        SendRequest.uploadFile(mContext!!, "show", File(pic), object : UploadListener(){
+        SendRequest.uploadPicFile(mContext!!, "show", File(pic), object : UploadListener(){
             override fun onFailure(call: Call?, e: IOException?) {
                 e?.let { onFailure(e) }
             }
